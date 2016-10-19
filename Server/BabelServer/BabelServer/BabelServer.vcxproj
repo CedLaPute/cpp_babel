@@ -120,6 +120,10 @@
   <ItemGroup>
     <ClCompile Include="Common\Sources\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Unix\Headers\Unix.h" />
+    <ClInclude Include="Windows\Headers\Windows.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
