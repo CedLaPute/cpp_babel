@@ -4,16 +4,18 @@
 # include "../../Unix/Headers/Unix.h"
 #endif
 
+# include "../Headers/AConnexion.h"
+
 int main()
 {
 
 	// Déclaration du pointeur sur interface de connexion
-	// AConnexion *absConnexion = NULL;
+	AConnexion *absConnexion;
 
 #ifdef WIN32
 
 	// Assignation de absConnexion pour Windows
-	// absConnexion = new WinConnexion();
+	absConnexion = new WinConnexion();
 
 #else
 

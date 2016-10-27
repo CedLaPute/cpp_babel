@@ -119,8 +119,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Common\Sources\main.cpp" />
+    <ClCompile Include="Unix\Sources\Unix.cpp" />
+    <ClCompile Include="Windows\Sources\Windows.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common\Headers\AConnexion.h" />
     <ClInclude Include="Unix\Headers\Unix.h" />
     <ClInclude Include="Windows\Headers\Windows.h" />
   </ItemGroup>
