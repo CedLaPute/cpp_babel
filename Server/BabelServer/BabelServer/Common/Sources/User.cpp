@@ -2,7 +2,7 @@
 // Created by lemonti on 11/3/16.
 //
 
-#include "User.hh"
+#include "../Headers/User.hh"
 
 User::User()
 {
@@ -28,7 +28,7 @@ User::~User()
 
 int   User::addContact(const std::string contact)
 {
-  auto it = this->_contactList;
+  auto it = this->_contactList.begin();
 
   while (it != this->_contactList.end())
   {

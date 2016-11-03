@@ -26,7 +26,7 @@ private:
 	SOCKET listenSocket;
 	SOCKET clientSocket;
 	SOCKET readSocket;
-	struct addrinfo *addressResult = NULL;
+	struct addrinfo *addressResult;
 	struct addrinfo addressResources;
 	int iResult;
 

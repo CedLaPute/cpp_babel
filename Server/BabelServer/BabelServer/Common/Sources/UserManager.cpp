@@ -2,7 +2,7 @@
 // Created by lemonti on 11/3/16.
 //
 
-#include "UserManager.hh"
+#include "../Headers/UserManager.hh"
 
 UserManager::UserManager()
 {
@@ -17,6 +17,7 @@ int UserManager::addUser(int fd, const std::string &name)
   User *newUser = new User(fd, name);
 
   this->_users.push_back(newUser);
+  return (0);
 }
 
 void UserManager::removeUser(const std::string &name)
@@ -45,4 +46,5 @@ User *UserManager::getUser(const std::string &name)
 	  return (*it);
 	it++;
   }
+  return (*it);
 }

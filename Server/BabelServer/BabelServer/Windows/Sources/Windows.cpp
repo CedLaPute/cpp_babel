@@ -16,15 +16,32 @@ WinConnexion::WinConnexion()
 	addressResources.ai_protocol = IPPROTO_TCP;
 	addressResources.ai_flags = AI_PASSIVE;
 
+	listenSocket = INVALID_SOCKET;
+	clientSocket = INVALID_SOCKET;
+	readSocket = INVALID_SOCKET;
+	addressResult = NULL;
+
 	/* Resoudre addresse - port */
-	iResult = getaddrinfo(NULL, "4242", &addressResources, &addressResult);
+	iResult = getaddrinfo(NULL, "2727", &addressResources, &addressResult);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
 		// throw exception
 	}
-
 	printf("getaddrinfo : ok\n");
+
+	// Création de la socket
+	listenSocket = socket(addressResult->ai_family, addressResult->ai_socktype, addressResult->ai_protocol);
+	if (listenSocket == INVALID_SOCKET)
+	{
+		printf("socket failed with error : %d\n", WSAGetLastError());
+		freeaddrinfo(addressResult);
+		WSACleanup();
+		return;
+		// throw exception
+	}
+
+	printf("socket : ok\n");
 
 	/* Configuration de listenSocket */
 	iResult = bind(listenSocket, addressResult->ai_addr, (int)addressResult->ai_addrlen);
@@ -34,6 +51,7 @@ WinConnexion::WinConnexion()
 		freeaddrinfo(addressResult);
 		closesocket(listenSocket);
 		WSACleanup();
+		return;
 		// throw exception
 	}
 
@@ -45,6 +63,7 @@ WinConnexion::WinConnexion()
 		printf("listen failed with error : %ld\n", WSAGetLastError());
 		closesocket(listenSocket);
 		WSACleanup();
+		return;
 		// throw exception
 	}
 
@@ -53,16 +72,20 @@ WinConnexion::WinConnexion()
 	clientSocket = INVALID_SOCKET;
 
 	/* Acceptation d'un client */
-	clientSocket = accept(listenSocket, NULL, NULL);
-	if (clientSocket == INVALID_SOCKET)
+	while (clientSocket == INVALID_SOCKET)
 	{
-		printf("accept failed with error : %d\n", WSAGetLastError());
-		closesocket(listenSocket);
-		WSACleanup();
-		// throw exception
+		clientSocket = accept(listenSocket, NULL, NULL);
+		if (clientSocket != INVALID_SOCKET)
+		{
+			printf("accept : ok\n");
+//			printf("accept failed with error : %d\n", WSAGetLastError());
+	//		closesocket(listenSocket);
+		//	WSACleanup();
+			// throw exception
+		}
 	}
 
-	printf("accept : ok\n");
+	WSACleanup();
 }
 
 WinConnexion::~WinConnexion()
