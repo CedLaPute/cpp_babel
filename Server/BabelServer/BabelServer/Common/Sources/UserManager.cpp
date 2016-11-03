@@ -28,6 +28,7 @@ void UserManager::removeUser(const std::string &name)
 	if ((*it)->getName() == name)
 	{
 	  delete (*it);
+	  this->_users.erase(it);
 	  break;
 	}
 	it++;
