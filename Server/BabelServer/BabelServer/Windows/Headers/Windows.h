@@ -7,7 +7,7 @@
 
 # include "../../Common/Headers/AConnexion.h"
 # include <Windows.h>
-# include <winsock.h>
+# include <WinSock2.h>
 # include <WS2tcpip.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -19,11 +19,12 @@
 // Utilisation de WSAStartup et d'un handle
 */
 
-class WinConnexion : AConnexion
+class WinConnexion : public AConnexion
 {
 private:
 	WSADATA wsaData;
 	SOCKET listenSocket;
+	SOCKET clientSocket;
 	SOCKET readSocket;
 	struct addrinfo *addressResult = NULL;
 	struct addrinfo addressResources;
@@ -39,4 +40,4 @@ public:
 	virtual bool disconnect();
 };
 
-#endif /* !WINDOWS_H_ */
+#endif //WINDOWS_H_

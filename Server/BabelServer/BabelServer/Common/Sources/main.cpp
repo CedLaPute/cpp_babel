@@ -1,6 +1,6 @@
-#ifdef WIN32
+#ifdef _WIN32
 # include "../../Windows/Headers/Windows.h"
-#else
+#elif __linux__
 # include "../../Unix/Headers/Unix.h"
 #endif
 
@@ -10,14 +10,15 @@ int main()
 {
 
 	// Déclaration du pointeur sur interface de connexion
-	AConnexion *absConnexion;
+	AConnexion *absConnexion = NULL;
 
-#ifdef WIN32
+#ifdef _WIN32
 
 	// Assignation de absConnexion pour Windows
+	printf("windows detected, launching winsock\n");
 	absConnexion = new WinConnexion();
 
-#else
+#elif __linux__
 
 	// Assignation de absConnexion pour Linux
 	// absConnexion = new LinConnexion();

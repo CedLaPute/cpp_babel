@@ -10,7 +10,7 @@
 // Utilisation des sockets et d'un file descriptor
 */
 
-class LinConnexion : AConnexion
+class LinConnexion : public AConnexion
 {
 private:
 	int serverFD;
