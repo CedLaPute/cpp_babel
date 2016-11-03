@@ -1,0 +1,25 @@
+#include <WinNetwork.hh>
+
+WinNetwork::WinNetwork()
+{
+}
+
+WinNetwork::~WinNetwork()
+{
+}
+
+void		WinNetwork::connection()
+{
+}
+
+void		WinNetwork::close()
+{
+}
+
+std::string	WinNetwork::read()
+{
+}
+
+void		WinNetwork:: write(std::string const)
+{
+}

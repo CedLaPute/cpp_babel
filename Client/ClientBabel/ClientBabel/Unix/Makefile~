@@ -1,0 +1,22 @@
+SRC		= WinNetwork.cpp \
+		  LinNetwork.cpp \
+		  main.cpp
+
+OBJ		= $(SRC:.cpp=.o)
+
+CXXFLAGS	= -I./Headers/ -W -Wall -Wextra -Werror -std=c++11
+
+NAME		= Babel
+
+all:		$(NAME)
+
+$(NAME): $(OBJ)
+		g++ -o $(NAME) $(OBJ)
+
+clean:
+		rm -f $(OBJ)
+
+fclean: clean
+		rm -f $(NAME)
+
+re:		fclean all

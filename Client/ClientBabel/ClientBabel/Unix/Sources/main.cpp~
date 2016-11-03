@@ -1,0 +1,9 @@
+#include <INetwork.hh>
+
+int	main(int, char **)
+{
+  LinNetwork	tmp;
+
+  tmp->connection();
+  return 0;
+}
