@@ -35,7 +35,7 @@ public:
 	~WinConnexion();
 
 	virtual int receive(const std::string &buff, int len) const;
-	virtual int send(const std::string &buff) const;
+	virtual int sendTo(const std::string &buff);
 	virtual bool connect();
 	virtual bool disconnect();
 };

@@ -69,6 +69,51 @@ WinConnexion::WinConnexion()
 
 	printf("listen : ok\n");
 
+}
+
+WinConnexion::~WinConnexion()
+{
+
+}
+
+int WinConnexion::receive(const std::string &, int len) const
+{
+	char recvbuff[44000];
+	int recvbufflen = 44000;
+	int result;;
+
+	do
+	{
+		result = recv(clientSocket, recvbuff, recvbufflen, 0);
+		if (result > 0)
+			printf("Bytes received : %d\n", result);
+		else if (result < 0)
+		{
+			printf("recv failed : %d\n", result);
+			WSACleanup();
+		}
+	} while (result > 0);
+	return (0);
+}
+
+int WinConnexion::sendTo(const std::string &buff)
+{
+	char *sendbuff = "Hello world!";
+	int result;
+
+	result = send(clientSocket, sendbuff, (int)strlen(sendbuff), 0);
+	if (result == SOCKET_ERROR)
+	{
+		printf("send failed with error : %d\n", result);
+		closesocket(clientSocket);
+		WSACleanup();
+	}
+	return (0);
+}
+
+bool WinConnexion::connect()
+{
+
 	clientSocket = INVALID_SOCKET;
 
 	/* Acceptation d'un client */
@@ -78,34 +123,13 @@ WinConnexion::WinConnexion()
 		if (clientSocket != INVALID_SOCKET)
 		{
 			printf("accept : ok\n");
-//			printf("accept failed with error : %d\n", WSAGetLastError());
-	//		closesocket(listenSocket);
-		//	WSACleanup();
+			//			printf("accept failed with error : %d\n", WSAGetLastError());
+			//		closesocket(listenSocket);
+			//	WSACleanup();
 			// throw exception
 		}
 	}
-
-	WSACleanup();
-}
-
-WinConnexion::~WinConnexion()
-{
-
-}
-
-int WinConnexion::receive(const std::string &buff, int len) const
-{
-	return (0);
-}
-
-int WinConnexion::send(const std::string &buff) const
-{
-	return (0);
-}
-
-bool WinConnexion::connect()
-{
-	return (false);
+	return (true);
 }
 
 bool WinConnexion::disconnect()

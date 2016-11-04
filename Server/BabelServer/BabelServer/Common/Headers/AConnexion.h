@@ -15,7 +15,7 @@ public:
 	virtual ~AConnexion() {};
 
 	virtual int receive(const std::string &buff, int len) const = 0;
-	virtual int send(const std::string &buff) const = 0;
+	virtual int sendTo(const std::string &buff) = 0;
 	virtual bool connect() = 0;
 	virtual bool disconnect() = 0;
 };
