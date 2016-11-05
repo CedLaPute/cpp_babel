@@ -5,6 +5,7 @@
 #ifndef WINDOWS_H_
 # define WINDOWS_H_
 
+# include "../../Common/Headers/UserManager.hh"
 # include "../../Common/Headers/AConnexion.h"
 # include "../../Common/Headers/Message.hh"
 # include <Windows.h>
@@ -30,15 +31,17 @@ private:
 	struct addrinfo *addressResult;
 	struct addrinfo addressResources;
 	int iResult;
+	UserManager	*manager;
 
 public:
 	WinConnexion();
 	~WinConnexion();
 
-	virtual int receive(const std::string &buff, int len) const;
+	virtual int receive() const;
 	virtual int sendTo(const std::string &buff);
 	virtual bool connect();
 	virtual bool disconnect();
+	void setSocket(SOCKET s);
 };
 
 #endif //WINDOWS_H_

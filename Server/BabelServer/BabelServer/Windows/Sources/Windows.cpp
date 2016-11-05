@@ -6,6 +6,82 @@
 /* Démarrage du serveur */
 WinConnexion::WinConnexion()
 {
+	manager = new UserManager();
+}
+
+WinConnexion::~WinConnexion()
+{
+	WSACleanup();
+}
+
+int WinConnexion::receive() const
+{
+	char recvbuff[44000];
+	int recvbufflen = 44000;
+	int result = 1;
+
+	do
+	{
+		memset(recvbuff, '\0', 44000);
+		result = recv(clientSocket, recvbuff, recvbufflen, 0);
+		if (result > 0)
+		{
+			recvbuff[result] = '\0';
+			printf("Bytes received : %d\n", result);
+			printf("String received : %s--\n", recvbuff);
+		}
+		else if (result < 0)
+		{
+			printf("recv failed : %d\n", result);
+			WSACleanup();
+			// throw
+		}
+	} while (result > 0);
+	return (0);
+}
+
+int WinConnexion::sendTo(const std::string &buff)
+{
+	/*char *sendbuff = "Hello world!";*/
+	int result;
+
+	result = send(clientSocket, (char *)buff.c_str(), (int)strlen((char *)buff.c_str()), 0);
+	if (result == SOCKET_ERROR)
+	{
+		printf("send failed with error : %d\n", result);
+		closesocket(clientSocket);
+		WSACleanup();
+		throw ("send failed");
+	}
+
+	Message		message(0, buff);
+	return (0);
+}
+
+DWORD WINAPI	ProcessClient(LPVOID lpParameter)
+{
+	try
+	{
+		SOCKET			clientSocket = (SOCKET)lpParameter;
+		WinConnexion	*server = new WinConnexion();
+
+		printf("client added\n");
+		server->setSocket(clientSocket);
+		server->sendTo("HelloWorld!");
+		while (1)
+		{
+			server->receive();
+		}
+	}
+	catch (const std::string &err)
+	{
+		std::cerr << err << std::endl;
+	}
+	return (0);
+}
+
+bool WinConnexion::connect()
+{
 	std::stringstream	errStringStream;
 
 	printf("initializing the winconnexion class\n");
@@ -68,67 +144,9 @@ WinConnexion::WinConnexion()
 		WSACleanup();
 		throw (errStringStream.str());
 	}
-
 	printf("listen : ok\n");
 	printf("server boot : ok\n");
 
-}
-
-WinConnexion::~WinConnexion()
-{
-	WSACleanup();
-}
-
-int WinConnexion::receive(const std::string &, int len) const
-{
-	char recvbuff[44000];
-	int recvbufflen = 44000;
-	int result;;
-
-	do
-	{
-		result = recv(clientSocket, recvbuff, recvbufflen, 0);
-		if (result > 0)
-			printf("Bytes received : %d\n", result);
-		else if (result < 0)
-		{
-			printf("recv failed : %d\n", result);
-			WSACleanup();
-			// throw
-		}
-	} while (result > 0);
-	return (0);
-}
-
-int WinConnexion::sendTo(const std::string &buff)
-{
-	/*char *sendbuff = "Hello world!";
-	int result;*/
-
-/*	result = send(clientSocket, sendbuff, (int)strlen(sendbuff), 0);
-	if (result == SOCKET_ERROR)
-	{
-		printf("send failed with error : %d\n", result);
-		closesocket(clientSocket);
-		WSACleanup();
-		// throw 
-	}*/
-
-	Message		message(0, buff);
-
-	return (0);
-}
-
-DWORD WINAPI	ProcessClient(LPVOID lpParameter)
-{
-	SOCKET		clientSocket = (SOCKET)lpParameter;
-
-	printf("client added\n");
-	return (0);
-}
-
-bool WinConnexion::connect()
-{
 	/* Acceptation d'un client */
 	while (1)
 	{
@@ -153,4 +171,9 @@ bool WinConnexion::connect()
 bool WinConnexion::disconnect()
 {
 	return (false);
+}
+
+void WinConnexion::setSocket(SOCKET s)
+{
+	clientSocket = s;
 }
