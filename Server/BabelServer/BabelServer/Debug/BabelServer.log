@@ -1,14 +1,18 @@
-﻿La génération a démarré 04/11/2016 19:58:14.
+﻿La génération a démarré 05/11/2016 14:30:39.
      1>Projet "C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Server\BabelServer\BabelServer\BabelServer.vcxproj" sur le nœud 2 (Rebuild cible(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Common\Sources\main.cpp Common\Sources\User.cpp Common\Sources\UserManager.cpp Windows\Sources\Windows.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Common\Sources\main.cpp Common\Sources\Mallocator.cpp Common\Sources\Message.cpp Common\Sources\User.cpp Common\Sources\UserManager.cpp Windows\Sources\Windows.cpp
          Windows.cpp
          UserManager.cpp
          User.cpp
+         Message.cpp
+         Mallocator.cpp
          main.cpp
          Génération de code en cours...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Server\BabelServer\Debug\BabelServer.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Server\BabelServer\Debug\BabelServer.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Server\BabelServer\Debug\BabelServer.lib" /MACHINE:X86 Debug\main.obj
+         Debug\Mallocator.obj
+         Debug\Message.obj
          Debug\User.obj
          Debug\UserManager.obj
          Debug\Windows.obj
@@ -17,4 +21,4 @@
 
 La génération a réussi.
 
-Temps écoulé 00:00:02.53
+Temps écoulé 00:00:03.37

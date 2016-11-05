@@ -6,6 +6,7 @@
 # define WINDOWS_H_
 
 # include "../../Common/Headers/AConnexion.h"
+# include "../../Common/Headers/Message.hh"
 # include <Windows.h>
 # include <WinSock2.h>
 # include <WS2tcpip.h>

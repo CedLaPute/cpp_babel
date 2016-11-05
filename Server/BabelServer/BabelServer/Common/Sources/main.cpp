@@ -4,6 +4,7 @@
 # include "../../Unix/Headers/Unix.h"
 #endif
 
+# include <iostream>
 # include "../Headers/AConnexion.h"
 
 int main()
@@ -14,10 +15,18 @@ int main()
 
 #ifdef _WIN32
 
-	// Assignation de absConnexion pour Windows
-	printf("windows detected, launching winsock\n");
-	absConnexion = new WinConnexion();
-
+	try
+	{
+		// Assignation de absConnexion pour Windows
+		printf("windows detected, launching winsock\n");
+		absConnexion = new WinConnexion();
+		absConnexion->sendTo("Hello world!");
+		absConnexion->connect();
+	}
+	catch (const std::string &err)
+	{
+		std::cerr << "An error occured : " << err << std::endl;
+	}
 #elif __linux__
 
 	// Assignation de absConnexion pour Linux

@@ -1,14 +1,19 @@
-#include "../Headers/Windows.h"
+# include "../Headers/Windows.h"
+# include <sstream>
+# include <string>
+# include <iostream>
 
 /* Démarrage du serveur */
 WinConnexion::WinConnexion()
 {
+	std::stringstream	errStringStream;
+
 	printf("initializing the winconnexion class\n");
 	/* Initialisation de la Winsock */
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
-		printf("WSAStartup failed with error: %d\n", iResult);
-		// throw exception
+		errStringStream << "WSAStartup failed with error : " << iResult;
+		throw (errStringStream.str());
 	}
 	ZeroMemory(&addressResources, sizeof(addressResources));
 	addressResources.ai_family = AF_INET;
@@ -24,9 +29,9 @@ WinConnexion::WinConnexion()
 	/* Resoudre addresse - port */
 	iResult = getaddrinfo(NULL, "2727", &addressResources, &addressResult);
 	if (iResult != 0) {
-		printf("getaddrinfo failed with error: %d\n", iResult);
+		errStringStream << "getaddrinfo failed with error : " << iResult;
 		WSACleanup();
-		// throw exception
+		throw (errStringStream.str());
 	}
 	printf("getaddrinfo : ok\n");
 
@@ -34,11 +39,10 @@ WinConnexion::WinConnexion()
 	listenSocket = socket(addressResult->ai_family, addressResult->ai_socktype, addressResult->ai_protocol);
 	if (listenSocket == INVALID_SOCKET)
 	{
-		printf("socket failed with error : %d\n", WSAGetLastError());
+		errStringStream << "socket failed with error : " << WSAGetLastError();
 		freeaddrinfo(addressResult);
 		WSACleanup();
-		return;
-		// throw exception
+		throw (errStringStream.str());
 	}
 
 	printf("socket : ok\n");
@@ -47,12 +51,11 @@ WinConnexion::WinConnexion()
 	iResult = bind(listenSocket, addressResult->ai_addr, (int)addressResult->ai_addrlen);
 	if (iResult == SOCKET_ERROR)
 	{
-		printf("bind failed with error : %d\n", WSAGetLastError());
+		errStringStream << "bind failed with error : " << WSAGetLastError();
 		freeaddrinfo(addressResult);
 		closesocket(listenSocket);
 		WSACleanup();
-		return;
-		// throw exception
+		throw (errStringStream.str());
 	}
 
 	printf("bind : ok\n");
@@ -60,20 +63,20 @@ WinConnexion::WinConnexion()
 	/* Ecoute */
 	if (listen(listenSocket, SOMAXCONN) == SOCKET_ERROR)
 	{
-		printf("listen failed with error : %ld\n", WSAGetLastError());
+		errStringStream << "listen failed with error : " << WSAGetLastError();
 		closesocket(listenSocket);
 		WSACleanup();
-		return;
-		// throw exception
+		throw (errStringStream.str());
 	}
 
 	printf("listen : ok\n");
+	printf("server boot : ok\n");
 
 }
 
 WinConnexion::~WinConnexion()
 {
-
+	WSACleanup();
 }
 
 int WinConnexion::receive(const std::string &, int len) const
@@ -91,6 +94,7 @@ int WinConnexion::receive(const std::string &, int len) const
 		{
 			printf("recv failed : %d\n", result);
 			WSACleanup();
+			// throw
 		}
 	} while (result > 0);
 	return (0);
@@ -98,36 +102,50 @@ int WinConnexion::receive(const std::string &, int len) const
 
 int WinConnexion::sendTo(const std::string &buff)
 {
-	char *sendbuff = "Hello world!";
-	int result;
+	/*char *sendbuff = "Hello world!";
+	int result;*/
 
-	result = send(clientSocket, sendbuff, (int)strlen(sendbuff), 0);
+/*	result = send(clientSocket, sendbuff, (int)strlen(sendbuff), 0);
 	if (result == SOCKET_ERROR)
 	{
 		printf("send failed with error : %d\n", result);
 		closesocket(clientSocket);
 		WSACleanup();
-	}
+		// throw 
+	}*/
+
+	Message		message(0, buff);
+
+	return (0);
+}
+
+DWORD WINAPI	ProcessClient(LPVOID lpParameter)
+{
+	SOCKET		clientSocket = (SOCKET)lpParameter;
+
+	printf("client added\n");
 	return (0);
 }
 
 bool WinConnexion::connect()
 {
-
-	clientSocket = INVALID_SOCKET;
-
 	/* Acceptation d'un client */
-	while (clientSocket == INVALID_SOCKET)
+	while (1)
 	{
-		clientSocket = accept(listenSocket, NULL, NULL);
+
+		clientSocket = INVALID_SOCKET;
+		while (clientSocket == INVALID_SOCKET)
+		{
+			clientSocket = accept(listenSocket, NULL, NULL);
+		}
+
 		if (clientSocket != INVALID_SOCKET)
 		{
 			printf("accept : ok\n");
-			//			printf("accept failed with error : %d\n", WSAGetLastError());
-			//		closesocket(listenSocket);
-			//	WSACleanup();
-			// throw exception
 		}
+
+		DWORD		dwIthreadId;
+		CreateThread(NULL, 0, ProcessClient, (LPVOID)clientSocket, 0, &dwIthreadId);
 	}
 	return (true);
 }
@@ -136,4 +154,3 @@ bool WinConnexion::disconnect()
 {
 	return (false);
 }
-
