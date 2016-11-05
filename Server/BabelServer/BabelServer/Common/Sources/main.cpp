@@ -20,7 +20,6 @@ int main()
 		// Assignation de absConnexion pour Windows
 		printf("windows detected, launching winsock\n");
 		absConnexion = new WinConnexion();
-		absConnexion->sendTo("Hello world!");
 		absConnexion->connect();
 	}
 	catch (const std::string &err)
