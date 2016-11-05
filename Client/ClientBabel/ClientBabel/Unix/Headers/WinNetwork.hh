@@ -12,8 +12,8 @@ public:
   
   virtual void		connection();
   virtual void		close();
-  virtual std::string	read();
-  virtual void		write(std::string const);
+  virtual std::string	readIn();
+  virtual void		writeOut(std::string const);
 };
   
 #endif /* !WINNETWORK_HH_ */

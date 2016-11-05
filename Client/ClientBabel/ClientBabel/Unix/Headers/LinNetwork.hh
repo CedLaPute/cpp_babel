@@ -21,6 +21,7 @@ private:
   struct sockaddr_in	_sIn;
 
   bool			init();
+  void			reset();
 public:
 
   LinNetwork();
@@ -28,8 +29,10 @@ public:
 
   virtual void		connection();
   virtual void		close();
-  virtual std::string	read();
-  virtual void		write(std::string const);
+  virtual std::string	readIn();
+  virtual void		writeOut(std::string const);
+
+  void			loop();
 };
 
 #endif /* !LINNETWORK_HH_ */

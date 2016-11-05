@@ -16,11 +16,11 @@ void		WinNetwork::close()
 {
 }
 
-std::string	WinNetwork::read()
+std::string	WinNetwork::readIn()
 {
   return "fdp";
 }
 
-void		WinNetwork:: write(std::string const)
+void		WinNetwork:: writeOut(std::string const)
 {
 }
