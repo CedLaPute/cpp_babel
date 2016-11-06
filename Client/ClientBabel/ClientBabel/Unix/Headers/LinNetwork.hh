@@ -27,10 +27,13 @@ public:
   LinNetwork();
   virtual ~LinNetwork();
 
-  virtual void		connection();
-  virtual void		close();
+  virtual void		connection(std::string const, std::string const);
+  virtual void		connectClient();
+
   virtual std::string	readIn();
   virtual void		writeOut(std::string const);
+
+  virtual void		close();
 
   void			loop();
 };

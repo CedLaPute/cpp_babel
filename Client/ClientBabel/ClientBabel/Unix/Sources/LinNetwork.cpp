@@ -21,11 +21,11 @@ bool		LinNetwork::init()
   return true;
 }
 
-void		LinNetwork::connection()
+void		LinNetwork::connection(std::string const port, std::string const ip)
 {
   _sIn.sin_family = AF_INET;
-  _sIn.sin_port = htons(2727);
-  _sIn.sin_addr.s_addr = inet_addr("192.168.1.91");
+  _sIn.sin_port = htons(std::atoi(port.c_str()));
+  _sIn.sin_addr.s_addr = inet_addr(ip.c_str());
 
   if (connect(_sock, (struct sockaddr *)&(_sIn), sizeof(_sIn)) == -1)
     {
@@ -35,6 +35,16 @@ void		LinNetwork::connection()
 
   std::cout << "connected to server" << std::endl;
   return ;
+}
+
+void		LinNetwork::connectClient()
+{
+  socklen_t	size;
+
+  size = sizeof(_sIn);
+  accept(_sock, (struct sockaddr *)&_sIn, &size);
+
+  std::cout << "client accepted" << std::endl;
 }
 
 void		LinNetwork::reset()
