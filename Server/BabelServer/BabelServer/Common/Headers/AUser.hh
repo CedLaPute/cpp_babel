@@ -2,29 +2,22 @@
 // Created by lemonti on 11/3/16.
 //
 
-#ifndef CPP_BABEL_USER_HH
-#define CPP_BABEL_USER_HH
+#ifndef CPP_BABEL_AUSER_HH
+#define CPP_BABEL_AUSER_HH
 
 # include <string>
 # include <vector>
 
-class User
+class AUser
 {
   public:
-	User();
-	User(int fd);
-	User(int fd, const std::string name);
-	~User();
+	virtual ~AUser();
 	std::string 		getName() const;
 	void 				setName(const std::string name);
-	int 				getFD() const;
-	void 				setFD(int fd);
 	int 				addContact(const std::string contact);
 
-
-  private:
+  protected:
 	std::string					_name;
-	int							_fd;
 	std::vector<std::string>	_contactList;
 };
 

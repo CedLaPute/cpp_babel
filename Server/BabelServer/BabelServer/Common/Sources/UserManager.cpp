@@ -3,6 +3,8 @@
 //
 
 #include "../Headers/UserManager.hh"
+#include "../Headers/LinUser.hh"
+#include "../Headers/WinUser.hh"
 
 UserManager::UserManager()
 {
@@ -12,12 +14,22 @@ UserManager::~UserManager()
 {
 }
 
-int UserManager::addUser(int fd, const std::string &name)
+AUser *UserManager::addUser(const std::string &name)
 {
-  User *newUser = new User(fd, name);
+  AUser *newUser;
+
+  #ifdef _WIN32
+
+  newUser = new WinUser(name);
+
+  #elif __linux__
+
+  newUser = new LinUser(name);
+
+  #endif
 
   this->_users.push_back(newUser);
-  return (0);
+  return (newUser);
 }
 
 void UserManager::removeUser(const std::string &name)
@@ -36,7 +48,7 @@ void UserManager::removeUser(const std::string &name)
   }
 }
 
-User *UserManager::getUser(const std::string &name)
+AUser *UserManager::getUser(const std::string &name)
 {
   auto it = this->_users.begin();
 
