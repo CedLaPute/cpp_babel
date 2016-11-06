@@ -5,7 +5,12 @@
 #ifndef CPP_BABEL_WINUSER_HH
 #define CPP_BABEL_WINUSER_HH
 
-#include "../Headers/AUser.hh"
+# include "../Headers/AUser.hh"
+# include <Windows.h>
+# include <WinSock2.h>
+# include <WS2tcpip.h>
+# include <stdlib.h>
+# include <stdio.h>
 
 class WinUser : public AUser
 {

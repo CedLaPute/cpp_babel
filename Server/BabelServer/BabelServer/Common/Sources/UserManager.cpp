@@ -2,9 +2,13 @@
 // Created by lemonti on 11/3/16.
 //
 
+#ifdef _WIN32
+# include "../Headers/WinUser.hh"
+#elif __linux__
+# include "../Headers/LinUser.hh"
+#endif
+
 #include "../Headers/UserManager.hh"
-#include "../Headers/LinUser.hh"
-#include "../Headers/WinUser.hh"
 
 UserManager::UserManager()
 {

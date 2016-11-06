@@ -9,7 +9,7 @@ Msg		*Mallocator::MallocateMessage(Msg *message, int size, const std::string &da
 	
 	if ((message = (Msg *)malloc(sizeof(struct Msg) + size)) == NULL)
 	{
-		return (false);
+		return (NULL);
 	}
 	message->header.size = size;
 	while (i < size)

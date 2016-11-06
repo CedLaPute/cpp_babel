@@ -2,7 +2,7 @@
 // Created by lemonti on 11/3/16.
 //
 
-#include "../Headers/User.hh"
+#include "../Headers/AUser.hh"
 
 AUser::~AUser()
 {

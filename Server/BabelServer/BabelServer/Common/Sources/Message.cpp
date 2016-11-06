@@ -10,7 +10,7 @@ Message::Message(const int cmd, const std::string &message)
 		Mallocator *m = new Mallocator();
 
 		_message = m->MallocateMessage(_message, size, message);
-		_message->header.cmd = 101;
+		_message->header.cmd = cmd;
 		printf("Message header cmd : %d\n", _message->header.cmd);
 	}
 	catch (const std::string &err)

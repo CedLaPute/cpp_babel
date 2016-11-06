@@ -9,7 +9,6 @@
 
 int main()
 {
-
 	// Déclaration du pointeur sur interface de connexion
 	AConnexion *absConnexion = NULL;
 
@@ -26,11 +25,21 @@ int main()
 	{
 		std::cerr << "An error occured : " << err << std::endl;
 	}
+
 #elif __linux__
 
-	// Assignation de absConnexion pour Linux
-	// absConnexion = new LinConnexion();
-
+	try
+	{
+		// Assignation de absConnexion pour Linux
+		printf("unix detected, launching sockets\n");
+		absConnexion = new LinConnexion();
+		absConnexion->connect();
+	}
+	catch (const std::string &err)
+	{
+		std::cerr << "An error occured : " << err << std::endl;
+	}
+	
 #endif
 
 	return (0);

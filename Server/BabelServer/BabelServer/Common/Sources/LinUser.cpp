@@ -10,7 +10,7 @@ LinUser::LinUser()
   this->_name = "undefined";
 }
 
-LinUser::LinUser(iconst std::string& name)
+LinUser::LinUser(const std::string& name)
 {
   this->_sock = -1;
   this->_name = name;

@@ -3,7 +3,6 @@
 //
 
 #include "../Headers/WinUser.hh"
-#include "../../Headers/"
 
 WinUser::WinUser()
 {
