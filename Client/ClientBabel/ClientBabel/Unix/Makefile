@@ -1,10 +1,9 @@
-SRC		= Sources/WinNetwork.cpp \
-		  Sources/LinNetwork.cpp \
-		  Sources/main.cpp
+SRC		= Sources/LinNetwork.cpp \
+		  ../Common/Sources/main.cpp
 
 OBJ		= $(SRC:.cpp=.o)
 
-CXXFLAGS	= -I./Headers/ -W -Wall -Wextra -Werror -std=c++11
+CXXFLAGS	= -I./Headers/ -I../Windows/Headers/ -I../Common/Headers/ -W -Wall -Wextra -Werror -std=c++11
 
 NAME		= Babel
 

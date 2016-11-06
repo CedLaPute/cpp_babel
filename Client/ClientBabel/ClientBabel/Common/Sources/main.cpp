@@ -1,26 +1,21 @@
-#ifdef WIN32
-# include "../../Windows/Headers/Windows.h"
-#else
-# include "../../Unix/Headers/Unix.h"
+#include <INetwork.hh>
+
+#ifdef _WIN32
+#include <WinNetwork.hh>
+
+#elif __linux__
+#include <LinNetwork.hh>
 #endif
 
-int main()
+int	main(int , char **)
 {
+  LinNetwork	*tmp = new LinNetwork;
 
-	// Déclaration pointeur sur interface de connexion
-	// AConnection *absConnexion = NULL;
+  tmp->connection("2727", "10.14.59.65");
 
-#ifdef WIN32
-
-	// Assignation de absConnexion pour Windows
-	// absConnexion = new WinConnexion(); 
-
-#else
-
-	// Assignation de absConnexion pour Unix
-	// absConnexion = new LinConnexion();
-
-#endif
-
-	return (0);
+  while (1)
+    {
+      tmp->loop();
+    }
+  return 0;
 }
