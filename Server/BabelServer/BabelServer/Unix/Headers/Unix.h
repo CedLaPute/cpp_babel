@@ -3,31 +3,48 @@
 
 # include "../../Common/Headers/AConnexion.h"
 # include <stdio.h>
+# include <netdb.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <sys/types.h>
+# include <sys/time.h>
+# include <string.h>
 
 /*
 // Version Unix du serveur
-// Utilisation des sockets et d'un file descriptor
+// Utilisation des file descriptor
 */
+
+# define MAXFD 255
 
 class LinConnexion : public AConnexion
 {
 private:
 	int serverFD;
-	int newSocketFD;
-	int portNumber;
+	int clientFD;
 	int clientLen;
-	struct sockaddr_in *serverAddress;
-	struct sockaddr_in *clientAdress;
+	struct sockaddr_in serverAddress;
+	struct sockaddr_in clientAddress;
+	struct timeval tv;
+	struct protoent *pe;
+
+	int 	fdType[MAXFD];
+	char 	*fdBuff[MAXFD];
 
 public:
 	LinConnexion();
-	~LinConnexion();
+	~LinConnexion() {};
 
-	virtual int receive(const std::string &buff, int len) const;
-	virtual int send(const std::string &buff) const;
-	virtual bool connect();
+	virtual int receive() const;
+	virtual int sendTo(const std::string &buff);
 	virtual bool disconnect();
+
+	bool selectLoop();
+
+	virtual bool connect();
 };
 
 #endif /* !UNIX_H_ */

@@ -35,47 +35,11 @@ bool	LinConnexion::disconnect()
 	return (false);
 }
 
-bool	LinConnexion::connect()
+bool	LinConnexion::selectLoop()
 {
 	fd_set fd_read;
 	fd_set fd_write;
 	int fd_max;
-
-	printf("initializing linux server\n");
-	/* Création de la socket */
-	serverFD = socket(AF_INET, SOCK_STREAM, 0);
-	if (serverFD == -1)
-	{
-		throw "socket failed";
-	}
-
-	fdType[serverFD] = 1;
-	printf("fdType[%d] = %d\n", serverFD, fdType[serverFD]);
-
-	printf("socket ok\n");
-
-	/* Préparation des ressources */
-	tv.tv_sec = 0;
-	tv.tv_usec = 1;
-	pe = getprotobyname("TCP");
-	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_addr.s_addr = INADDR_ANY;
-	serverAddress.sin_port = htons(2727);
-
-	/* Bind */
-	if (bind(serverFD, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0)
-	{
-		throw "bind failed";
-	}
-	printf("bind ok\n");
-
-	/* Listen */
-	if (listen(serverFD, MAXFD) < 0)
-	{
-		throw "listen failed";
-	}
-
-	printf("listen ok\n");
 
 	while (1)
 	{
@@ -132,5 +96,47 @@ bool	LinConnexion::connect()
 			}
 		}
 	}
+}
+
+bool	LinConnexion::connect()
+{
+	printf("initializing linux server\n");
+	/* Création de la socket */
+	serverFD = socket(AF_INET, SOCK_STREAM, 0);
+	if (serverFD == -1)
+	{
+		throw "socket failed";
+	}
+
+	fdType[serverFD] = 1;
+	printf("fdType[%d] = %d\n", serverFD, fdType[serverFD]);
+
+	printf("socket ok\n");
+
+	/* Préparation des ressources */
+	tv.tv_sec = 0;
+	tv.tv_usec = 1;
+	pe = getprotobyname("TCP");
+	serverAddress.sin_family = AF_INET;
+	serverAddress.sin_addr.s_addr = INADDR_ANY;
+	serverAddress.sin_port = htons(2727);
+
+	/* Bind */
+	if (bind(serverFD, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0)
+	{
+		throw "bind failed";
+	}
+	printf("bind ok\n");
+
+	/* Listen */
+	if (listen(serverFD, MAXFD) < 0)
+	{
+		throw "listen failed";
+	}
+
+	printf("listen ok\n");
+
+	selectLoop();
+
 	return (true);
 }
