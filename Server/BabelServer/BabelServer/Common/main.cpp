@@ -18,6 +18,7 @@ int main(int ac, char **av)
 	std::cout << "usage: ./babel_server port" << std::endl;
 	return (0);
   }
+
   SocketManager sm((short) atoi(av[1]));
   int i = -1;
 
