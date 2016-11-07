@@ -22,6 +22,7 @@ class LinSocket : public ASocket
 	virtual bool Connect(const std::string& ip, short port);
 	virtual char *Receive() const;
 	virtual bool Send(const char *message) const;
+	virtual unsigned int getSocket() const;
 
   private:
 	struct sockaddr_in _saddr;

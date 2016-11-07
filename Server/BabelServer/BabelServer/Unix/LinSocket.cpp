@@ -13,7 +13,7 @@ LinSocket::LinSocket(short port)
   this->_fd = socket(AF_INET, SOCK_STREAM, pe->p_proto);
   this->_port = port;
   if (this->_fd == -1)
-  	throw "socket failed";
+	throw "socket failed";
 }
 
 LinSocket::LinSocket(int fd, struct sockaddr_in *saddr)
@@ -43,9 +43,10 @@ ASocket *LinSocket::Accept()
   ASocket *newSocket;
   struct sockaddr_in saddr;
   int clientFD;
+  socklen_t len;
 
-  if ((clientFD = accept(this->_fd, reinterpret_cast<struct sockaddr *>(&saddr), NULL)) < 0)
-  	throw "accept failed";
+  if ((clientFD = accept(this->_fd, reinterpret_cast<struct sockaddr *>(&saddr), &len)) < 0)
+	throw "accept failed";
   newSocket = new LinSocket(clientFD, &saddr);
   return (newSocket);
 }
@@ -77,4 +78,9 @@ bool LinSocket::Send(const char *message) const
   if (write(this->_fd, message, strlen(message)) < 0)
 	throw "write failed";
   return (true);
+}
+
+unsigned int LinSocket::getSocket() const
+{
+  return (this->_fd);
 }

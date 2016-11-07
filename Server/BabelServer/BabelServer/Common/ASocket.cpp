@@ -10,18 +10,19 @@
 
 # include "ASocket.hh"
 
-ASocket *ASocket::getSocket()
+ASocket *ASocket::getNewSocket(short port)
 {
+  (void)port;
   ASocket *ptr = NULL;
 
   #ifdef _WIN32
 
-  ptr = new WinSocket(2727);
+  ptr = new WinSocket(port);
 
   #elif __linux__
 
   printf("__linux__ detected, initializing LinSocket\n");
-  ptr = new LinSocket(2727);
+  ptr = new LinSocket(port);
 
   #endif
 
