@@ -10,14 +10,15 @@
 class ASocket
 {
   public:
-  virtual ~ASocket() {};
+	virtual ~ASocket() {};
 
 	virtual bool Listen() = 0;
 	virtual ASocket *Accept() = 0;
-	virtual bool Connect(const std::string& ip, short port) = 0;
+	virtual bool Connect(const std::string &ip, short port) = 0;
 	virtual char *Receive() const = 0;
 	virtual bool Send(const char *message) const = 0;
-	static ASocket *getSocket();
+	virtual unsigned int getSocket() const = 0;
+	static ASocket *getNewSocket(short port);
 };
 
 
