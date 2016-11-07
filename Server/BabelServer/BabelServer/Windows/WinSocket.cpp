@@ -5,11 +5,22 @@
 #include <string.h>
 #include <sstream>
 #include <iostream>
+#include <sstream>
+#include "../Common/ASocket.hh"
 #include "WinSocket.hh"
 
 WinSocket::WinSocket(short port)
 {
-  std::stringstream errStringStream;
+  int	i;
+  WSAData wsaData;
+  std::ostringstream oss;
+  std::string portString;
+
+  i = WSAStartup(MAKEWORD(2, 2), &wsaData);
+  if (i != 0)
+  {
+	  throw "WSAStartup failed";
+  }
 
   ZeroMemory(&(this->_resources), sizeof(this->_resources));
   this->_resources.ai_family = AF_INET;
@@ -18,24 +29,26 @@ WinSocket::WinSocket(short port)
   this->_resources.ai_flags = AI_PASSIVE;
   this->_port = port;
   this->_socket = INVALID_SOCKET;
-  if (getaddrinfo(NULL, this->_port, &(this->_resources), &(this->_result)) == SOCKET_ERROR)
+  oss << this->_port;
+  portString = oss.str();
+  if ((i = getaddrinfo(NULL, (char *)portString.c_str(), &(this->_resources), &(this->_result))) != 0)
   {
     WSACleanup();
     throw "getaddrinfo failed";
   }
-  this->_socket = socket(this->_result.ai_family, this->_result.ai_socktype,
-                         this->_result.ai_protocol);
+  this->_socket = socket(this->_result->ai_family, this->_result->ai_socktype,
+                         this->_result->ai_protocol);
   if (this->_socket == SOCKET_ERROR)
   {
     WSACleanup();
-    throw "socket failed"
+	throw "socket failed";
   }
 }
 
-WinSocket::WinSocket(int socket, struct addrinfo *result)
+WinSocket::WinSocket(SOCKET sock, struct addrinfo *saddr)
 {
-  this->_socket = socket;
-  this->_result = *result;
+  this->_socket = sock;
+  this->_result = saddr;
 }
 
 WinSocket::~WinSocket()
@@ -44,51 +57,46 @@ WinSocket::~WinSocket()
 
 bool WinSocket::Listen()
 {
-  (void)port;
-  if (bind(this->_socket, this->_result.ai_addr, this->_result.ai_addrlen) < 0)
+  int i;
+
+  (void)_port;
+  if ((i = bind(this->_socket, this->_result->ai_addr, this->_result->ai_addrlen))  == SOCKET_ERROR)
 	throw "bind failed";
-  if (listen(this->_fd, 255) < 0)
-	throw "listen failed";
+  if (listen(this->_socket, SOMAXCONN) == SOCKET_ERROR)
+		throw "listen failed";
   return (true);
 }
 
-LinSocket *LinSocket::Accept()
+ASocket *WinSocket::Accept()
 {
-  LinSocket *newSocket;
-  struct sockaddr_in saddr;
-  int clientFD;
+  ASocket *newSocket = NULL;
+  struct addrinfo *saddr = NULL;
+  SOCKET client = INVALID_SOCKET;
 
-  if ((clientFD = accept(this->_fd, reinterpret_cast<struct sockaddr *>(&saddr), NULL)) < 0)
-	throw "accept failed";
-  newSocket = new LinSocket(clientFD, saddr);
-  return (newSocket);
+  if ((client = accept(this->_socket, saddr->ai_addr, NULL)) < 0)
+	  return NULL;
+  newSocket = new WinSocket(client, saddr);
+  return newSocket;
 }
 
-bool LinSocket::Connect(const std::string &ip, short port)
+bool WinSocket::Connect(const std::string &ip, short port)
 {
-  struct sockaddr_in saddr;
-
-  saddr.sin_family = AF_INET;
-  saddr.sin_addr = inet_addr(ip.c_str());
-  saddr.sin_port = htons(port);
-  if (connect(this->_fd, reinterpret_cast<struct sockaddr *>(&(this->_saddr)), sizeof(struct sockaddr_in)) < 0)
-	throw "connect failed";
   return (true);
 }
 
-char *LinSocket::Receive() const
+char *WinSocket::Receive() const
 {
   char *buff = new char[256];
 
   memset(buff, 0, 256);
-  if (read(this->_fd, buff, 255) < 0)
+  if (recv(this->_socket, buff, 255, 0) < 0)
 	throw "read failed";
   return (buff);
 }
 
-bool LinSocket::Send(const char *message) const
+bool WinSocket::Send(const char *message) const
 {
-  if (write(this->_fd, message, strlen(messge)) < 0)
+  if (send(this->_socket, message, (int)strlen(message), 0) < 0)
 	throw "write failed";
   return (true);
 }
