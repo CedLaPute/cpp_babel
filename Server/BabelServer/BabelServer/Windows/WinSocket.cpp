@@ -100,3 +100,8 @@ bool WinSocket::Send(const char *message) const
 	throw "write failed";
   return (true);
 }
+
+unsigned int WinSocket::getSocket() const
+{
+	return (unsigned int)this->_socket;
+}

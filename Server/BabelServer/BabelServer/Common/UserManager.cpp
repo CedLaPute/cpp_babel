@@ -3,12 +3,12 @@
 //
 
 #ifdef _WIN32
-# include "../Headers/WinUser.hh"
+# include "../Windows/WinUser.hh"
 #elif __linux__
-# include "LinUser.hh"
+# include "../Unix/LinUser.hh"
 #endif
 
-#include "../Headers/UserManager.hh"
+#include "UserManager.hh"
 
 UserManager::UserManager()
 {
