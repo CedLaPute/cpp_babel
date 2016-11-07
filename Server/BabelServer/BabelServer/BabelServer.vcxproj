@@ -120,20 +120,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Common\Sources\main.cpp" />
-    <ClCompile Include="Common\Sources\Mallocator.cpp" />
-    <ClCompile Include="Common\Sources\Message.cpp" />
-    <ClCompile Include="Common\Sources\User.cpp" />
-    <ClCompile Include="Common\Sources\UserManager.cpp" />
-    <ClCompile Include="Windows\Sources\Windows.cpp" />
+    <ClCompile Include="Common\ASocket.cpp" />
+    <ClCompile Include="Common\main.cpp" />
+    <ClCompile Include="Common\SocketManager.cpp" />
+    <ClCompile Include="Windows\WinSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common\Headers\AConnexion.h" />
-    <ClInclude Include="Common\Headers\Mallocator.hh" />
-    <ClInclude Include="Common\Headers\Message.hh" />
-    <ClInclude Include="Common\Headers\User.hh" />
-    <ClInclude Include="Common\Headers\UserManager.hh" />
-    <ClInclude Include="Windows\Headers\Windows.h" />
+    <ClInclude Include="Common\ASocket.hh" />
+    <ClInclude Include="Common\SocketManager.hh" />
+    <ClInclude Include="Windows\WinSocket.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
