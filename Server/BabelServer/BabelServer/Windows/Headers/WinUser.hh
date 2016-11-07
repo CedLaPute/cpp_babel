@@ -5,7 +5,7 @@
 #ifndef CPP_BABEL_WINUSER_HH
 #define CPP_BABEL_WINUSER_HH
 
-# include "../Headers/AUser.hh"
+# include "AUser.hh"
 # include <Windows.h>
 # include <WinSock2.h>
 # include <WS2tcpip.h>

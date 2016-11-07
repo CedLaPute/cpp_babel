@@ -5,7 +5,7 @@
 #ifndef CPP_BABEL_LINUSER_HH
 #define CPP_BABEL_LINUSER_HH
 
-#include "../Headers/AUser.hh"
+#include "AUser.hh"
 
 class LinUser : public AUser
 {

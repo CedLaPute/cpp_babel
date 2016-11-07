@@ -5,7 +5,7 @@
 #ifdef _WIN32
 # include "../Headers/WinUser.hh"
 #elif __linux__
-# include "../Headers/LinUser.hh"
+# include "LinUser.hh"
 #endif
 
 #include "../Headers/UserManager.hh"

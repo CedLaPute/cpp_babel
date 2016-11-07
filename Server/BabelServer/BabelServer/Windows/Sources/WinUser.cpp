@@ -2,7 +2,7 @@
 // Created by lemonti on 11/6/16.
 //
 
-#include "../Headers/WinUser.hh"
+#include "WinUser.hh"
 
 WinUser::WinUser()
 {
