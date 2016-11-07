@@ -70,12 +70,12 @@ bool WinSocket::Listen()
 ASocket *WinSocket::Accept()
 {
   ASocket *newSocket = NULL;
-  struct addrinfo *saddr = NULL;
+//  struct addrinfo *saddr = NULL;
   SOCKET client = INVALID_SOCKET;
 
-  if ((client = accept(this->_socket, saddr->ai_addr, NULL)) < 0)
+  if ((client = accept(this->_socket, NULL, NULL)) < 0)
 	  return NULL;
-  newSocket = new WinSocket(client, saddr);
+//  newSocket = new WinSocket(client, NULL);
   return newSocket;
 }
 
