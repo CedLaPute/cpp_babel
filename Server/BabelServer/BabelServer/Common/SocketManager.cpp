@@ -7,13 +7,13 @@
 
 SocketManager::SocketManager(short port)
 {
-  #ifdef _WIN32
+/*  #ifdef _WIN32
 
   WSAData wsaData;
-  WSAStartup(MakeWord(2, 2), &wsaData);
+  WSAStartup(MAKEWORD(2, 2), &wsaData);
 
   #endif
-
+  */
   this->_listener = ASocket::getNewSocket(port);
   this->_listener->Listen();
 }

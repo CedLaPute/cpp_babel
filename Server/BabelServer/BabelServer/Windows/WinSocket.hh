@@ -31,6 +31,7 @@ class WinSocket : public ASocket
 	bool Connect(const std::string& ip, short port);
 	char *Receive() const;
 	bool Send(const char *message) const;
+	unsigned int getSocket() const;
 
   private:
 	short	_port;

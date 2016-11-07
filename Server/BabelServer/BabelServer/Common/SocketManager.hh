@@ -6,7 +6,13 @@
 #define CPP_BABEL_SOCKETMANAGER_HH
 
 #include <vector>
-#include <sys/select.h>
+
+#ifdef _WIN32
+#include <WinSock2.h>
+#elif __linux__
+	#include <sys/select.h>
+#endif
+
 #include "ASocket.hh"
 
 
