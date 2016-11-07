@@ -42,7 +42,7 @@ WinSocket::~WinSocket()
 {
 }
 
-bool WinSocket::listen()
+bool WinSocket::Listen()
 {
   (void)port;
   if (bind(this->_socket, this->_result.ai_addr, this->_result.ai_addrlen) < 0)
@@ -52,7 +52,7 @@ bool WinSocket::listen()
   return (true);
 }
 
-LinSocket *LinSocket::accept()
+LinSocket *LinSocket::Accept()
 {
   LinSocket *newSocket;
   struct sockaddr_in saddr;
@@ -64,7 +64,7 @@ LinSocket *LinSocket::accept()
   return (newSocket);
 }
 
-bool LinSocket::connect(const std::string &ip, short port)
+bool LinSocket::Connect(const std::string &ip, short port)
 {
   struct sockaddr_in saddr;
 
@@ -76,7 +76,7 @@ bool LinSocket::connect(const std::string &ip, short port)
   return (true);
 }
 
-char *LinSocket::receive() const
+char *LinSocket::Receive() const
 {
   char *buff = new char[256];
 
@@ -86,7 +86,7 @@ char *LinSocket::receive() const
   return (buff);
 }
 
-bool LinSocket::send(const char *message) const
+bool LinSocket::Send(const char *message) const
 {
   if (write(this->_fd, message, strlen(messge)) < 0)
 	throw "write failed";

@@ -5,6 +5,8 @@
 #ifndef CPP_BABEL_SOCKETMANAGER_HH
 #define CPP_BABEL_SOCKETMANAGER_HH
 
+# include "ASocket.hh"
+# include <vector>
 
 class SocketManager
 {
@@ -17,7 +19,6 @@ class SocketManager
 
   private:
 	std::vector<ASocket *> _sockList;
-
 };
 
 

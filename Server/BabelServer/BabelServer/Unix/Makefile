@@ -5,22 +5,19 @@
 ## Login   <montav_c@epitech.eu>
 ## 
 ## Started on  Sat Nov  5 16:52:52 2016 Cedric MONTAVON
-## Last update Sun Nov  6 16:03:22 2016 Cedric MONTAVON
+## Last update Mon Nov  7 14:40:21 2016 Cedric MONTAVON
 ##
 
-SRC			= ../Common/Sources/main.cpp \
-			../Common/Sources/Mallocator.cpp \
-			../Common/Sources/Message.cpp \
-			../Common/Sources/AUser.cpp \
-			../Common/Sources/LinUser.cpp \
-			../Common/Sources/UserManager.cpp \
-			Sources/Unix.cpp
+SRC			= ../Common/main.cpp \
+			../Common/ASocket.cpp \
+			../Common/SocketManager.cpp \
+			LinSocket.cpp
 
 OBJ 		= $(SRC:.cpp=.o)
 
 NAME 		= babel_server
 
-CXXFLAGS 	= -I./Headers/ -W -Wall -Wextra -Werror -std=c++11
+CXXFLAGS 	= -W -Wall -Wextra -Werror -std=c++11
 
 all: $(NAME)
 

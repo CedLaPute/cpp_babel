@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include "ASocket.hh"
+#include "../Common/ASocket.hh"
 
 class WinSocket : public ASocket
 {
@@ -16,15 +16,15 @@ class WinSocket : public ASocket
 	WinSocket(short port);
 	WinSocket(SOCKET sock, struct addrinfo saddr);
 	virtual ~WinSocket();
-	bool listen();
-	WinSocket *accept();
-	bool connect(const std::string& ip, short port);
-	char *receive() const;
-	bool send(const char *message) const;
+	bool Listen();
+	WinSocket *Accept();
+	bool Connect(const std::string& ip, short port);
+	char *Receive() const;
+	bool Send(const char *message) const;
 
   private:
 	struct addrinfo _resources;
-	struct addrinfo _result;
+	struct addrinfo *_result;
 	SOCKET _socket;
 };
 

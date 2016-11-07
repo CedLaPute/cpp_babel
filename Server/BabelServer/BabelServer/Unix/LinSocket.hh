@@ -8,19 +8,20 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include "ASocket.hh"
+#include <unistd.h>
+#include "../Common/ASocket.hh"
 
 class LinSocket : public ASocket
 {
   public:
-	LinSocket();
+	LinSocket(short port);
 	LinSocket(int fd, struct sockaddr_in *saddr);
 	virtual ~LinSocket();
-	bool listen();
-	LinSocket *accept();
-	bool connect(const std::string& ip, short port);
-	char *receive() const;
-	bool send(const char *message) const;
+	virtual bool Listen();
+	virtual ASocket *Accept();
+	virtual bool Connect(const std::string& ip, short port);
+	virtual char *Receive() const;
+	virtual bool Send(const char *message) const;
 
   private:
 	struct sockaddr_in _saddr;
