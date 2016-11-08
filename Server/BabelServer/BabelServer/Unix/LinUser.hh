@@ -5,7 +5,7 @@
 #ifndef CPP_BABEL_LINUSER_HH
 #define CPP_BABEL_LINUSER_HH
 
-# include "../../Common/Headers/AUser.hh"
+# include "../Common/AUser.hh"
 # include <stdio.h>
 # include <netdb.h>
 # include <stdlib.h>

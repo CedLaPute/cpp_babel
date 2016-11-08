@@ -5,13 +5,16 @@
 ## Login   <montav_c@epitech.eu>
 ## 
 ## Started on  Sat Nov  5 16:52:52 2016 Cedric MONTAVON
-## Last update Mon Nov  7 14:40:21 2016 Cedric MONTAVON
+## Last update Tue Nov  8 08:11:45 2016 Cedric MONTAVON
 ##
 
 SRC			= ../Common/main.cpp \
+			../Common/AUser.cpp \
+			../Common/UserManager.cpp \
 			../Common/ASocket.cpp \
 			../Common/SocketManager.cpp \
-			LinSocket.cpp
+			LinSocket.cpp \
+			LinUser.cpp
 
 OBJ 		= $(SRC:.cpp=.o)
 

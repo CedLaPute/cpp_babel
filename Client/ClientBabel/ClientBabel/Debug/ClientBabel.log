@@ -1,0 +1,14 @@
+﻿La génération a démarré 08/11/2016 09:38:15.
+     1>Projet "C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Client\ClientBabel\ClientBabel\ClientBabel.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Common\Sources\main.cpp Windows\Sources\WinNetwork.cpp
+         WinNetwork.cpp
+     1>c:\users\héhéhéhéhéhéhéhé\documents\cpp_babel\client\clientbabel\clientbabel\windows\sources\winnetwork.cpp(1): fatal error C1083: Impossible d'ouvrir le fichier include : 'WinNetwork.hh' : No such file or directory
+         main.cpp
+     1>c:\users\héhéhéhéhéhéhéhé\documents\cpp_babel\client\clientbabel\clientbabel\windows\headers\winnetwork.hh(4): fatal error C1083: Impossible d'ouvrir le fichier include : 'INetwork.hh' : No such file or directory
+         Génération de code en cours...
+     1>Génération du projet "C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Client\ClientBabel\ClientBabel\ClientBabel.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:02.19

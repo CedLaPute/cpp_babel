@@ -22,6 +22,8 @@ WinSocket::WinSocket(short port)
 	  throw "WSAStartup failed";
   }
 
+  std::cout << "WSAStartup ok" << std::endl;
+
   ZeroMemory(&(this->_resources), sizeof(this->_resources));
   this->_resources.ai_family = AF_INET;
   this->_resources.ai_socktype = SOCK_STREAM;
@@ -36,8 +38,14 @@ WinSocket::WinSocket(short port)
     WSACleanup();
     throw "getaddrinfo failed";
   }
+
+  std::cout << "getaddrinfo ok" << std::endl;
+
   this->_socket = socket(this->_result->ai_family, this->_result->ai_socktype,
                          this->_result->ai_protocol);
+
+  std::cout << "socket ok" << std::endl;
+
   if (this->_socket == SOCKET_ERROR)
   {
     WSACleanup();
@@ -53,6 +61,7 @@ WinSocket::WinSocket(SOCKET sock, struct addrinfo *saddr)
 
 WinSocket::~WinSocket()
 {
+	WSACleanup();
 }
 
 bool WinSocket::Listen()
@@ -62,8 +71,14 @@ bool WinSocket::Listen()
   (void)_port;
   if ((i = bind(this->_socket, this->_result->ai_addr, this->_result->ai_addrlen))  == SOCKET_ERROR)
 	throw "bind failed";
+
+  std::cout << "bind ok" << std::endl;
+
   if (listen(this->_socket, SOMAXCONN) == SOCKET_ERROR)
 		throw "listen failed";
+
+  std::cout << "listen ok" << std::endl;
+
   return (true);
 }
 
@@ -74,9 +89,13 @@ ASocket *WinSocket::Accept()
   SOCKET client = INVALID_SOCKET;
 
   if ((client = accept(this->_socket, saddr->ai_addr, NULL)) < 0)
-	  return NULL;
-  newSocket = new WinSocket(client, saddr);
-  return newSocket;
+	  throw "Accept failed";
+  if (client != INVALID_SOCKET)
+  {
+	  newSocket = new WinSocket(client, saddr);
+	  return newSocket;
+  }
+  return (NULL);
 }
 
 bool WinSocket::Connect(const std::string &ip, short port)

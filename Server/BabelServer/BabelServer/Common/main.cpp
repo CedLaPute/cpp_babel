@@ -13,6 +13,7 @@
 
 int main(int ac, char **av)
 {
+
   if (ac != 2)
   {
 	std::cout << "usage: ./babel_server port" << std::endl;
@@ -57,6 +58,4 @@ int main(int ac, char **av)
 //	{
 //		std::cerr << err << std::endl;
 //	}
-
-  return (0);
 }

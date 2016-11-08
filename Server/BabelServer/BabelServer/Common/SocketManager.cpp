@@ -7,13 +7,6 @@
 
 SocketManager::SocketManager(short port)
 {
-/*  #ifdef _WIN32
-
-  WSAData wsaData;
-  WSAStartup(MAKEWORD(2, 2), &wsaData);
-
-  #endif
-  */
   this->_listener = ASocket::getNewSocket(port);
   this->_listener->Listen();
 }
@@ -52,6 +45,7 @@ unsigned int SocketManager::_fillFDSet(FDSetType set)
 int SocketManager::Select()
 {
   unsigned int nfd;
+  ASocket *newSocket = NULL;
 
   nfd = this->_fillFDSet(&(this->_sets[READ])) + 1;
   return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), &(this->_sets[ERR]), NULL));

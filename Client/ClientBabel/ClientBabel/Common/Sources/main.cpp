@@ -1,7 +1,7 @@
-#include <INetwork.hh>
+#include "../Headers/INetwork.hh"
 
 #ifdef _WIN32
-#include <WinNetwork.hh>
+#include "../../Windows/Headers/WinNetwork.hh"
 
 #elif __linux__
 #include <LinNetwork.hh>
@@ -9,9 +9,13 @@
 
 int	main(int , char **)
 {
-  LinNetwork	*tmp = new LinNetwork;
+  #ifdef _WIN32
+  	WinNetwork *tmp = new WinNetwork;
+  #elif __linux__
+    LinNetwork *tmp = new LinNetwork;
+  #endif
 
-  tmp->connection("2727", "10.14.59.65");
+  tmp->connection("2727", "10.14.58.115");
 
   while (1)
     {
