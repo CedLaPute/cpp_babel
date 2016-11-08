@@ -7,7 +7,8 @@
 
 SocketManager::SocketManager(short port)
 {
-  this->_listener = ASocket::getNewSocket(port);
+  this->_listener = ASocket::getNewSocket(port, "TCP");
+  this->_listener->Bind();
   this->_listener->Listen();
 }
 
