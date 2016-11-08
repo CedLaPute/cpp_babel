@@ -3,6 +3,7 @@
 //
 
 #include <string.h>
+#include <iostream>
 #include "LinSocket.hh"
 
 LinSocket::LinSocket(short port)
@@ -14,6 +15,7 @@ LinSocket::LinSocket(short port)
   this->_port = port;
   if (this->_fd == -1)
 	throw "socket failed";
+  std::cout << "socket ok" << std::endl;
 }
 
 LinSocket::LinSocket(int fd, struct sockaddr_in *saddr)
@@ -33,8 +35,10 @@ bool LinSocket::Listen()
   this->_saddr.sin_port = htons(this->_port);
   if (bind(this->_fd, reinterpret_cast<struct sockaddr *>(&(this->_saddr)), sizeof(struct sockaddr_in)) < 0)
 	throw "bind failed";
+  std::cout << "bind ok" << std::endl;
   if (listen(this->_fd, 255) < 0)
 	throw "listen failed";
+  std::cout << "listen ok" << std::endl;
   return (true);
 }
 
@@ -47,8 +51,13 @@ ASocket *LinSocket::Accept()
 
   if ((clientFD = accept(this->_fd, reinterpret_cast<struct sockaddr *>(&saddr), &len)) < 0)
 	throw "accept failed";
-  newSocket = new LinSocket(clientFD, &saddr);
-  return (newSocket);
+  if (clientFD > 0)
+  {
+    newSocket = new LinSocket(clientFD, &saddr);
+    std::cout << "accept ok" << std::endl;
+    return (newSocket);
+  }
+  return (NULL);
 }
 
 bool LinSocket::Connect(const std::string &ip, short port)
