@@ -22,9 +22,8 @@ int main(int ac, char **av)
   try
   {
     SocketManager sm((short) atoi(av[1]));
-    int i = -1;
-
-    while (++i < 5)
+  
+    while (1)
     	sm.Select();
   }
   catch (const std::string &err)

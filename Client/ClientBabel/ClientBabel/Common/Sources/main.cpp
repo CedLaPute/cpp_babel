@@ -11,7 +11,7 @@ int	main(int , char **)
 {
   LinNetwork	*tmp = new LinNetwork;
 
-  tmp->connection("2727", "10.14.59.65");
+  tmp->connection("2828", "10.14.58.115");
 
   while (1)
     {
