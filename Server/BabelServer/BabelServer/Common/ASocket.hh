@@ -12,13 +12,14 @@ class ASocket
   public:
 	virtual ~ASocket() {};
 
+	virtual bool Bind() = 0;
 	virtual bool Listen() = 0;
 	virtual ASocket *Accept() = 0;
 	virtual bool Connect(const std::string &ip, short port) = 0;
 	virtual char *Receive() const = 0;
 	virtual bool Send(const char *message) const = 0;
 	virtual unsigned int getSocket() const = 0;
-	static ASocket *getNewSocket(short port);
+	static ASocket *getNewSocket(short port, const char *protocol);
 };
 
 

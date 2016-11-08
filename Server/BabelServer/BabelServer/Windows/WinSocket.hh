@@ -23,9 +23,10 @@
 class WinSocket : public ASocket
 {
   public:
-	WinSocket(short port);
+	WinSocket(short port, const char *protocol);
 	WinSocket(SOCKET sock, struct addrinfo *saddr);
 	virtual ~WinSocket();
+	bool Bind();
 	bool Listen();
 	ASocket *Accept();
 	bool Connect(const std::string& ip, short port);
