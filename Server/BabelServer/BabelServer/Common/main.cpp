@@ -20,11 +20,25 @@ int main(int ac, char **av)
   }
 
   SocketManager sm((short) atoi(av[1]));
+  ASocket *newConnection;
+  UserManager um;
   int i = -1;
 
-  while (++i < 5)
-	sm.Select();
+  while (sm.Select() != -1)
+  {
 
+	/*
+	 * command handling here
+	 */
+
+	um.handlePendingAuth(sm);
+	newConnection = sm.tryNewConnection();
+	if (newConnection)
+	{
+	  um.addPendingAuth(newConnection);
+	  newConnection = NULL;
+	}
+  }
 //	try
 //	{
 //		std::vector<ASocket *>	_sockets; // TEST

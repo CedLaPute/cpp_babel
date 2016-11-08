@@ -5,6 +5,7 @@
 #ifndef CPP_BABEL_USERMANAGER_HH
 #define CPP_BABEL_USERMANAGER_HH
 
+#include "SocketManager.hh"
 #include "AUser.hh"
 
 class UserManager
@@ -12,12 +13,15 @@ class UserManager
   public:
 	UserManager();
 	~UserManager();
-	AUser *addUser(const std::string &name);
+	User *addUser(const std::string &name, ASocket *socket);
 	void removeUser(const std::string &name);
-	AUser *getUser(const std::string &name);
+	User *getUser(const std::string &name);
+	void addPendingAuth(ASocket *socket);
+	void handlePendingAuth(SocketManager &sm);
 
   private:
-	std::vector<AUser *> _users;
+	std::vector<ASocket *> _pendingAuth;
+	std::vector<User *> _users;
 };
 
 

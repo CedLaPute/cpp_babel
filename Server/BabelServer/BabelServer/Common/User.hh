@@ -7,25 +7,25 @@
 
 # include <string>
 # include <vector>
+# include "ASocket.hh"
 
 class User
 {
   public:
-	User();
-	User(int fd);
-	User(int fd, const std::string name);
+	User(const std::string& name, ASocket *socket);
 	~User();
-	std::string 		getName() const;
-	void 				setName(const std::string name);
-	int 				getFD() const;
-	void 				setFD(int fd);
-	int 				addContact(const std::string contact);
+	std::string getName() const;
+	void setName(const std::string name);
+	int addContact(const std::string contact);
+	void goOnline(ASocket *socket);
+	void goOffline();
+	const ASocket *getSocket() const;
 
-
-  private:
-	std::string					_name;
-	int							_fd;
-	std::vector<std::string>	_contactList;
+  protected:
+	std::string _name;
+	ASocket *_socket;
+	bool _isOnline;
+	std::vector<std::string> _contactList;
 };
 
 

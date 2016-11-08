@@ -32,35 +32,56 @@ bool SocketManager::removeSocket()
   return (true);
 }
 
-unsigned int SocketManager::_fillFDSet(fd_set *set)
+unsigned int SocketManager::_fillFDSet(FDSetType set)
 {
   unsigned int maxfd;
+  unsigned int tmp;
 
-  if (!set)
-	return (-1);
-  FD_ZERO(set);
-  FD_SET(this->_listener->getSocket(), set);
+  FD_ZERO(&(this->_sets[set]));
+  FD_SET(this->_listener->getSocket(), &(this->_sets[set]));
   maxfd = this->_listener->getSocket();
   for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
   {
-	FD_SET((*it)->getSocket(), set);
-	if ((*it)->getSocket() > maxfd)
-	  maxfd = (*it)->getSocket();
+	FD_SET((tmp = (*it)->getSocket()), &(this->_sets[set]));
+	if (tmp > maxfd)
+	  maxfd = tmp;
   }
   return (maxfd);
 }
 
-void SocketManager::Select()
+int SocketManager::Select()
 {
   unsigned int nfd;
 
-  nfd = this->_fillFDSet(&(this->_read)) + 1;
-  this->_fillFDSet(&(this->_write));
-  this->_fillFDSet(&(this->_err));
-  select(nfd, &(this->_read), &(this->_write), &(this->_err), NULL);
-  if (FD_ISSET(this->_listener->getSocket(), &(this->_read)))
-  {
-	this->_listener->Accept();
-	std::cout << "connexiiiiiiiiiiiiiiion" << std::endl;
-  }
+  nfd = this->_fillFDSet(&(this->_sets[READ])) + 1;
+  return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), &(this->_sets[ERR]), NULL));
 }
+
+ASocket *SocketManager::tryNewConnection()
+{
+  ASocket *newSocket;
+
+  if (FD_ISSET(this->_listener->getSocket(), this->_read))
+  {
+	newSocket = this->_listener->Accept();
+	this->_sockList.push_back(newSocket);
+	this->addToFDSet(newSocket, WRITE);
+	return (newSocket);
+  }
+  return (NULL);
+}
+
+void SocketManager::addToFDSet(ASocket *socket, FDSetType set)
+{
+  if (!socket)
+	throw "null pointer";
+  FD_SET(socket->getSocket(), &(this->_sets[set]));
+}
+
+bool SocketManager::isSocketAvailable(ASocket *socket, FDSetType set) const
+{
+  if (!socket)
+	return (false);
+  return (FD_ISSET(socket->getSocket(), &(this->_sets[set])));
+}
+
