@@ -7,13 +7,6 @@
 
 SocketManager::SocketManager(short port)
 {
-/*  #ifdef _WIN32
-
-  WSAData wsaData;
-  WSAStartup(MAKEWORD(2, 2), &wsaData);
-
-  #endif
-  */
   this->_listener = ASocket::getNewSocket(port);
   this->_listener->Listen();
 }
@@ -43,9 +36,9 @@ unsigned int SocketManager::_fillFDSet(fd_set *set)
   maxfd = this->_listener->getSocket();
   for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
   {
-	FD_SET((*it)->getSocket(), set);
-	if ((*it)->getSocket() > maxfd)
-	  maxfd = (*it)->getSocket();
+  	FD_SET((*it)->getSocket(), set);
+	  if ((*it)->getSocket() > maxfd)
+	    maxfd = (*it)->getSocket();
   }
   return (maxfd);
 }
@@ -53,6 +46,7 @@ unsigned int SocketManager::_fillFDSet(fd_set *set)
 void SocketManager::Select()
 {
   unsigned int nfd;
+  ASocket *newSocket = NULL;
 
   nfd = this->_fillFDSet(&(this->_read)) + 1;
   this->_fillFDSet(&(this->_write));
@@ -60,7 +54,11 @@ void SocketManager::Select()
   select(nfd, &(this->_read), &(this->_write), &(this->_err), NULL);
   if (FD_ISSET(this->_listener->getSocket(), &(this->_read)))
   {
-	this->_listener->Accept();
-	std::cout << "connexiiiiiiiiiiiiiiion" << std::endl;
+  	newSocket = this->_listener->Accept();
+    if (newSocket != NULL)
+    {
+      this->_sockList.push_back(newSocket);
+	    std::cout << "connexion" << std::endl;
+    }
   }
 }
