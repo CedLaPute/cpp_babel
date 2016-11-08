@@ -1,4 +1,4 @@
-﻿La génération a démarré 07/11/2016 18:41:20.
+﻿La génération a démarré 08/11/2016 09:46:08.
      1>Projet "C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Server\BabelServer\BabelServer\BabelServer.vcxproj" sur le nœud 2 (Rebuild cible(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Common\ASocket.cpp Common\AUser.cpp Common\main.cpp Common\SocketManager.cpp Common\UserManager.cpp Windows\WinSocket.cpp Windows\WinUser.cpp
@@ -23,4 +23,4 @@
 
 La génération a réussi.
 
-Temps écoulé 00:00:04.66
+Temps écoulé 00:00:04.60

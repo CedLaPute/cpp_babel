@@ -1,7 +1,8 @@
 #ifndef WINNETWORK_HH_
 # define WINNETWORK_HH_
 
-# include <INetwork.hh>
+# include "../../Common/Headers/INetwork.hh"
+# include <string>
 
 class	WinNetwork : public INetwork
 {
