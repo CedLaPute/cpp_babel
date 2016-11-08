@@ -47,10 +47,10 @@ ASocket *LinSocket::Accept()
   ASocket *newSocket;
   struct sockaddr_in saddr;
   int clientFD;
-  socklen_t len;
+  socklen_t len = sizeof(saddr);
 
-  if ((clientFD = accept(this->_fd, reinterpret_cast<struct sockaddr *>(&saddr), &len)) < 0)
-	throw "accept failed";
+  if ((clientFD = accept(this->_fd, (struct sockaddr *)(&saddr), &len)) < 0)
+	  throw "accept failed";
   if (clientFD > 0)
   {
     newSocket = new LinSocket(clientFD, &saddr);
@@ -74,12 +74,13 @@ bool LinSocket::Connect(const std::string &ip, short port)
 
 char *LinSocket::Receive() const
 {
-  char *buff = new char[256];
+  char *buff = new char[44000];
+  int   i;
 
-  memset(buff, 0, 256);
-  if (read(this->_fd, buff, 255) < 0)
-	throw "read failed";
-  return (buff);
+  memset(buff, 0, 44000);
+  if ((i = read(this->_fd, buff, 43999)) < 0)
+  	throw "read failed";
+  return buff;
 }
 
 bool LinSocket::Send(const char *message) const
