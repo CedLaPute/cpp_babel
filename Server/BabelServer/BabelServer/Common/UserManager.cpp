@@ -56,14 +56,13 @@ void UserManager::addPendingAuth(ASocket *socket)
 
 void UserManager::handlePendingAuth(SocketManager &sm)
 {
-  char *
   if (!this->_pendingAuth.size())
 	return;
   for (auto it = this->_pendingAuth.begin(); it != this->_pendingAuth.end(); it++)
   {
-	if (sm.isSocketAvailable(*it, SocketManager::WRITE));
+	if (sm.isSocketAvailable(*it, SocketManager::WRITE)){}
 	  // 101 "Hello"
-	else if (sm.isSocketAvailable(*it, SocketManager::READ));
+	else if (sm.isSocketAvailable(*it, SocketManager::READ))
 	{
 //	  102 $Login
 //	  this->addUser(name, *it);

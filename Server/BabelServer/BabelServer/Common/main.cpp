@@ -8,6 +8,7 @@
 
 # include "ASocket.hh"
 # include "SocketManager.hh"
+# include "UserManager.hh"
 # include <iostream>
 # include <vector>
 
@@ -23,7 +24,6 @@ int main(int ac, char **av)
   SocketManager sm((short) atoi(av[1]));
   ASocket *newConnection;
   UserManager um;
-  int i = -1;
 
   while (sm.Select() != -1)
   {

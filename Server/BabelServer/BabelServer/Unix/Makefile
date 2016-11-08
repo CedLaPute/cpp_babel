@@ -9,12 +9,11 @@
 ##
 
 SRC			= ../Common/main.cpp \
-			../Common/AUser.cpp \
+			../Common/User.cpp \
 			../Common/UserManager.cpp \
 			../Common/ASocket.cpp \
 			../Common/SocketManager.cpp \
-			LinSocket.cpp \
-			LinUser.cpp
+			LinSocket.cpp 
 
 OBJ 		= $(SRC:.cpp=.o)
 

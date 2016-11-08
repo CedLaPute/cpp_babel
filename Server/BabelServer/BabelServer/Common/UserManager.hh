@@ -6,7 +6,7 @@
 #define CPP_BABEL_USERMANAGER_HH
 
 #include "SocketManager.hh"
-#include "AUser.hh"
+#include "User.hh"
 
 class UserManager
 {

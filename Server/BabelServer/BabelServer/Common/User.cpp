@@ -2,12 +2,12 @@
 // Created by lemonti on 11/3/16.
 //
 
-#include "AUser.hh"
+#include "User.hh"
 
 User::User(const std::string &name, ASocket *socket)
 {
   this->_name = name;
-  if (this->_socket = socket)
+  if ((this->_socket = socket))
     this->_isOnline = true;
   else
     this->_isOnline = false;

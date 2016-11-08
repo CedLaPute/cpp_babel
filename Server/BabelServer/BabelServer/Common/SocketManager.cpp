@@ -35,7 +35,8 @@ unsigned int SocketManager::_fillFDSet(FDSetType set)
   maxfd = this->_listener->getSocket();
   for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
   {
-	FD_SET((tmp = (*it)->getSocket()), &(this->_sets[set]));
+	tmp = (*it)->getSocket();
+	FD_SET(tmp, &(this->_sets[set]));
 	if (tmp > maxfd)
 	  maxfd = tmp;
   }
@@ -45,9 +46,8 @@ unsigned int SocketManager::_fillFDSet(FDSetType set)
 int SocketManager::Select()
 {
   unsigned int nfd;
-  ASocket *newSocket = NULL;
 
-  nfd = this->_fillFDSet(&(this->_sets[READ])) + 1;
+  nfd = this->_fillFDSet(READ) + 1;
   return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), &(this->_sets[ERR]), NULL));
 }
 
@@ -55,14 +55,14 @@ ASocket *SocketManager::tryNewConnection()
 {
   ASocket *newSocket;
 
-  if (FD_ISSET(this->_listener->getSocket(), this->_read))
+  newSocket = NULL;
+  if (FD_ISSET(this->_listener->getSocket(), &(this->_sets[READ])))
   {
 	newSocket = this->_listener->Accept();
 	this->_sockList.push_back(newSocket);
 	this->addToFDSet(newSocket, WRITE);
-	return (newSocket);
   }
-  return (NULL);
+  return (newSocket);
 }
 
 void SocketManager::addToFDSet(ASocket *socket, FDSetType set)
