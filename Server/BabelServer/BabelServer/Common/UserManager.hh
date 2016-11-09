@@ -18,6 +18,8 @@ class UserManager
 	User *getUser(const std::string &name);
 	void addPendingAuth(ASocket *socket);
 	void handlePendingAuth(SocketManager &sm);
+	void handleReceive(SocketManager &sm);
+	void handleSend(SocketManager &sm);
 
   private:
 	std::vector<ASocket *> _pendingAuth;

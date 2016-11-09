@@ -20,11 +20,14 @@ class User
 	void goOnline(ASocket *socket);
 	void goOffline();
 	const ASocket *getSocket() const;
+	void addCommand(const char *command);
+	const char *getCommand();
 
   protected:
 	std::string _name;
 	ASocket *_socket;
 	bool _isOnline;
+	std::vector<const char *> _pendingCommands;
 	std::vector<std::string> _contactList;
 };
 

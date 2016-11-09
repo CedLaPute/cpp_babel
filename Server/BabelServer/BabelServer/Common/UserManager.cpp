@@ -61,15 +61,43 @@ void UserManager::handlePendingAuth(SocketManager &sm)
 	return;
   for (auto it = this->_pendingAuth.begin(); it != this->_pendingAuth.end(); it++)
   {
-    /* USELESS - On check que le read, et on renvoie une réponses lorsque nécessaire
-  	if (sm.isSocketAvailable(*it, SocketManager::WRITE))
-    {
-    }*/
-  	if (sm.isSocketAvailable(*it, SocketManager::READ))
-  	{
-      char *buff = (*it)->Receive();
+	if (sm.isSocketAvailable(*it, SocketManager::WRITE))
+	{
 
-      std::cout << buff << std::endl;
-	  }
+	}
+	if (sm.isSocketAvailable(*it, SocketManager::READ))
+	{
+	  char *buff = (*it)->Receive();
+
+	  std::cout << buff << std::endl;
+	}
+  }
+}
+
+void UserManager::handleReceive(SocketManager &sm)
+{
+  const char *cmd;
+
+  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
+  {
+	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::READ)
+	{
+	  cmd = (*it)->getSocket()->Receive();
+	  std::cout << "command : " << cmd << std::endl;
+	  /*
+	   * l'interpretation des commandes se fera dans UserManager (pour avoir accès aux users) avec des methodes privées
+	   */
+	}
+  }
+}
+
+void UserManager::handleSend(SocketManager &sm)
+{
+  const char *cmd;
+
+  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
+  {
+	while (sm.isSocketAvailable((*it)->getSocket(), SocketManager::WRITE) && (cmd = (*it)->getCommand()))
+	  (*it)->getSocket()->Send(cmd);
   }
 }

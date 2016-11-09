@@ -8,9 +8,9 @@ User::User(const std::string &name, ASocket *socket)
 {
   this->_name = name;
   if ((this->_socket = socket))
-    this->_isOnline = true;
+	this->_isOnline = true;
   else
-    this->_isOnline = false;
+	this->_isOnline = false;
 }
 
 User::~User()
@@ -56,4 +56,21 @@ void User::goOffline()
 const ASocket *User::getSocket() const
 {
   return (this->_socket);
+}
+
+void User::addCommand(const char *command)
+{
+  this->_pendingCommands.push_back(command);
+}
+
+const char *User::sendCommand()
+{
+  const char *cmd;
+
+  if (!this->_pendingCommands.size())
+	return (NULL);
+  cmd = *(this->_pendingCommands.front());
+  this->_pendingCommands.erase(this->_pendingCommands.front());
+
+  return (cmd);
 }

@@ -27,11 +27,8 @@ int main(int ac, char **av)
 
   while (sm.Select() != -1)
   {
-
-	/*
-	 * command handling here
-	 */
-
+	um.handleSend(sm);
+	um.handleReceive(sm);
 	um.handlePendingAuth(sm);
 	newConnection = sm.tryNewConnection();
 	if (newConnection)
@@ -40,22 +37,5 @@ int main(int ac, char **av)
 	  newConnection = NULL;
 	}
   }
-//	try
-//	{
-//		std::vector<ASocket *>	_sockets; // TEST
-//
-//		ASocket *absSocket = ASocket::getNewSocket(4);
-//
-//		if (absSocket == NULL)
-//			throw "getSocket failed";
-//
-//		printf("getSocket ok\n");
-//
-//		absSocket->Listen();
-//		_sockets.push_back(absSocket);
-//	}
-//	catch (const std::string &err)
-//	{
-//		std::cerr << err << std::endl;
-//	}
+  return (0);
 }
