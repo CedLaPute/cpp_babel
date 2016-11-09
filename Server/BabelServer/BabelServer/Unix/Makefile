@@ -5,10 +5,12 @@
 ## Login   <montav_c@epitech.eu>
 ## 
 ## Started on  Sat Nov  5 16:52:52 2016 Cedric MONTAVON
-## Last update Tue Nov  8 08:11:45 2016 Cedric MONTAVON
+## Last update Wed Nov  9 13:33:05 2016 Cedric MONTAVON
 ##
 
 SRC			= ../Common/main.cpp \
+			../Common/Buffer.cpp \
+			../Common/Command.cpp \
 			../Common/User.cpp \
 			../Common/UserManager.cpp \
 			../Common/ASocket.cpp \
