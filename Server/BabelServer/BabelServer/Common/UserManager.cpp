@@ -2,13 +2,8 @@
 // Created by lemonti on 11/3/16.
 //
 
-#ifdef _WIN32
-# include "../Windows/WinUser.hh"
-#elif __linux__
-# include "../Unix/LinUser.hh"
-#endif
-
 #include "UserManager.hh"
+#include <iostream>
 
 UserManager::UserManager()
 {
@@ -18,19 +13,9 @@ UserManager::~UserManager()
 {
 }
 
-AUser *UserManager::addUser(const std::string &name)
+User *UserManager::addUser(const std::string &name, ASocket *socket)
 {
-  AUser *newUser;
-
-  #ifdef _WIN32
-
-  newUser = new WinUser(name);
-
-  #elif __linux__
-
-  newUser = new LinUser(name);
-
-  #endif
+  User *newUser = new User(name, socket);
 
   this->_users.push_back(newUser);
   return (newUser);
@@ -52,7 +37,7 @@ void UserManager::removeUser(const std::string &name)
   }
 }
 
-AUser *UserManager::getUser(const std::string &name)
+User *UserManager::getUser(const std::string &name)
 {
   auto it = this->_users.begin();
 
@@ -63,4 +48,28 @@ AUser *UserManager::getUser(const std::string &name)
 	it++;
   }
   return (*it);
+}
+
+void UserManager::addPendingAuth(ASocket *socket)
+{
+  this->_pendingAuth.push_back(socket);
+}
+
+void UserManager::handlePendingAuth(SocketManager &sm)
+{
+  if (!this->_pendingAuth.size())
+	return;
+  for (auto it = this->_pendingAuth.begin(); it != this->_pendingAuth.end(); it++)
+  {
+    /* USELESS - On check que le read, et on renvoie une réponses lorsque nécessaire
+  	if (sm.isSocketAvailable(*it, SocketManager::WRITE))
+    {
+    }*/
+  	if (sm.isSocketAvailable(*it, SocketManager::READ))
+  	{
+      char *buff = (*it)->Receive();
+
+      std::cout << buff << std::endl;
+	  }
+  }
 }

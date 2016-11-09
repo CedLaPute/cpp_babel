@@ -119,10 +119,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Common\Sources\main.cpp" />
+    <ClCompile Include="Windows\Sources\WinNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common\Headers\INetwork.hh" />
     <ClInclude Include="Unix\Headers\Unix.h" />
     <ClInclude Include="Windows\Headers\Windows.h" />
+    <ClInclude Include="Windows\Headers\WinNetwork.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

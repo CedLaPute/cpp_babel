@@ -8,11 +8,13 @@
 
 # include "ASocket.hh"
 # include "SocketManager.hh"
+# include "UserManager.hh"
 # include <iostream>
 # include <vector>
 
 int main(int ac, char **av)
 {
+
   if (ac != 2)
   {
 	std::cout << "usage: ./babel_server port" << std::endl;
@@ -20,11 +22,24 @@ int main(int ac, char **av)
   }
 
   SocketManager sm((short) atoi(av[1]));
-  int i = -1;
+  ASocket *newConnection;
+  UserManager um;
 
-  while (++i < 5)
-	sm.Select();
+  while (sm.Select() != -1)
+  {
 
+	/*
+	 * command handling here
+	 */
+
+	um.handlePendingAuth(sm);
+	newConnection = sm.tryNewConnection();
+	if (newConnection)
+	{
+	  um.addPendingAuth(newConnection);
+	  newConnection = NULL;
+	}
+  }
 //	try
 //	{
 //		std::vector<ASocket *>	_sockets; // TEST
@@ -43,6 +58,4 @@ int main(int ac, char **av)
 //	{
 //		std::cerr << err << std::endl;
 //	}
-
-  return (0);
 }

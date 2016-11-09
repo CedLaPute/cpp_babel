@@ -2,61 +2,58 @@
 // Created by lemonti on 11/3/16.
 //
 
-#include "../Headers/User.hh"
+#include "User.hh"
 
-User::User()
+User::User(const std::string &name, ASocket *socket)
 {
-  this->_fd = -1;
-  this->_name = "undefined";
-}
-
-User::User(int fd)
-{
-  this->_fd = fd;
-  this->_name = "undefined";
-}
-
-User::User(int fd, const std::string name)
-{
-  this->_fd = fd;
   this->_name = name;
+  if ((this->_socket = socket))
+    this->_isOnline = true;
+  else
+    this->_isOnline = false;
 }
 
 User::~User()
 {
 }
 
-int   User::addContact(const std::string contact)
+int User::addContact(const std::string contact)
 {
   auto it = this->_contactList.begin();
 
   while (it != this->_contactList.end())
   {
-    if (*it == contact)
-      return (1);
-    it++;
+	if (*it == contact)
+	  return (1);
+	it++;
   }
   this->_contactList.push_back(contact);
   return (0);
 }
 
-std::string		User::getName() const
+std::string User::getName() const
 {
   return (this->_name);
 }
 
-void			User::setName(const std::string name)
+void User::setName(const std::string name)
 {
   this->_name = name;
 }
 
-int 			User::getFD() const
+void User::goOnline(ASocket *socket)
 {
-  return (this->_fd);
+  this->_isOnline = true;
+  this->_socket = socket;
 }
 
-void			User::setFD(int fd)
+void User::goOffline()
 {
-  this->_fd = fd;
+  this->_isOnline = false;
+  this->_socket = NULL;
 }
 
+const ASocket *User::getSocket() const
+{
+  return (this->_socket);
+}

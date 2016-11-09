@@ -14,9 +14,10 @@
 class LinSocket : public ASocket
 {
   public:
-	LinSocket(short port);
+	LinSocket(short port, const char *protocol);
 	LinSocket(int fd, struct sockaddr_in *saddr);
 	virtual ~LinSocket();
+	virtual bool Bind();
 	virtual bool Listen();
 	virtual ASocket *Accept();
 	virtual bool Connect(const std::string& ip, short port);

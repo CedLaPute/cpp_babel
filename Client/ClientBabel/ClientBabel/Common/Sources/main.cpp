@@ -1,7 +1,7 @@
-#include <INetwork.hh>
+#include "../ASocket.hh"
 
 #ifdef _WIN32
-#include <WinNetwork.hh>
+#include "../../Windows/WinSocket.hh"
 
 #elif __linux__
 #include <LinNetwork.hh>
@@ -9,13 +9,14 @@
 
 int	main(int , char **)
 {
-  LinNetwork	*tmp = new LinNetwork;
-
-  tmp->connection("2727", "10.14.59.65");
+	ASocket *tmp;
+  
+	tmp = ASocket::getNewSocket(2728);
+ 	tmp->Connect("10.14.58.115", 2728);
 
   while (1)
     {
-      tmp->loop();
+      tmp->Loop();
     }
   return 0;
 }
