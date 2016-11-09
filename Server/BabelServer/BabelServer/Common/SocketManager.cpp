@@ -35,7 +35,7 @@ void SocketManager::addSocket(ASocket *socket)
   this->_sockList.push_back(socket);
 }
 
-bool SocketManager::removeSocket(ASocket *socket)
+void SocketManager::removeSocket(const ASocket *socket)
 {
   for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
   {
@@ -98,7 +98,7 @@ void SocketManager::addToFDSet(ASocket *socket, FDSetType set)
   FD_SET(socket->getSocket(), &(this->_sets[set]));
 }
 
-bool SocketManager::isSocketAvailable(ASocket *socket, FDSetType set) const
+bool SocketManager::isSocketAvailable(const ASocket *socket, FDSetType set) const
 {
   if (!socket)
 	return (false);

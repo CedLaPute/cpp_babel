@@ -63,14 +63,13 @@ void User::addCommand(const char *command)
   this->_pendingCommands.push_back(command);
 }
 
-const char *User::sendCommand()
+const char *User::getCommand()
 {
   const char *cmd;
 
   if (!this->_pendingCommands.size())
 	return (NULL);
-  cmd = *(this->_pendingCommands.front());
-  this->_pendingCommands.erase(this->_pendingCommands.front());
-
+  cmd = (this->_pendingCommands.front());
+  this->_pendingCommands.erase(this->_pendingCommands.begin());
   return (cmd);
 }

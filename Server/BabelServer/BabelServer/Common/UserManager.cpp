@@ -80,7 +80,7 @@ void UserManager::handleReceive(SocketManager &sm)
 
   for (auto it = this->_users.begin(); it != this->_users.end(); it++)
   {
-	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::READ)
+	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::READ))
 	{
 	  cmd = (*it)->getSocket()->Receive();
 	  std::cout << "command : " << cmd << std::endl;

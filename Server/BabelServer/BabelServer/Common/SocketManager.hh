@@ -28,11 +28,11 @@ class SocketManager
 	SocketManager(short port);
 	~SocketManager();
 	void addSocket(ASocket *socket);
-	bool removeSocket();
+	void removeSocket(const ASocket *socket);
 	int Select();
 	ASocket *tryNewConnection();
 	void addToFDSet(ASocket *socket, FDSetType set);
-	bool isSocketAvailable(ASocket *socket, FDSetType set) const;
+	bool isSocketAvailable(const ASocket *socket, FDSetType set) const;
 
   private:
 	unsigned int _fillFDSet(FDSetType set);
