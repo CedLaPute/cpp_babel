@@ -11,18 +11,8 @@
 
 WinSocket::WinSocket(short port, const char *protocol)
 {
-  int i;
-  WSAData wsaData;
   std::ostringstream oss;
   std::string portString;
-
-  i = WSAStartup(MAKEWORD(2, 2), &wsaData);
-  if (i != 0)
-  {
-	throw "WSAStartup failed";
-  }
-
-  std::cout << "WSAStartup ok" << std::endl;
 
   ZeroMemory(&(this->_resources), sizeof(this->_resources));
   this->_resources.ai_family = AF_INET;
