@@ -7,6 +7,15 @@
 
 SocketManager::SocketManager(short port)
 {
+  #ifdef _WIN32
+
+  WSAData wsaData;
+  if (WSAStartup(MAKEWORD(2, 2), &wsaData))
+	throw "WSAStartup failed";
+  std::cout << "WSAStartup ok" << std::endl;
+
+  #endif
+
   this->_listener = ASocket::getNewSocket(port, "TCP");
   this->_listener->Bind();
   this->_listener->Listen();
@@ -14,6 +23,11 @@ SocketManager::SocketManager(short port)
 
 SocketManager::~SocketManager()
 {
+  #ifdef _WIN32
+
+  WSACleanup();
+
+  #endif
 }
 
 void SocketManager::addSocket(ASocket *socket)
@@ -21,9 +35,16 @@ void SocketManager::addSocket(ASocket *socket)
   this->_sockList.push_back(socket);
 }
 
-bool SocketManager::removeSocket()
+bool SocketManager::removeSocket(ASocket *socket)
 {
-  return (true);
+  for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
+  {
+	if (*it == socket)
+	{
+	  this->_sockList.erase(it);
+	  delete (socket);
+	}
+  }
 }
 
 unsigned int SocketManager::_fillFDSet(FDSetType set)
