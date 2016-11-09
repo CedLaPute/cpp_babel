@@ -42,6 +42,7 @@ void SocketManager::removeSocket(const ASocket *socket)
   {
 	if (*it == socket)
 	{
+	  this->removeFromFDSet(socket, READ);
 	  this->_sockList.erase(it);
 	  delete (socket);
 	}
@@ -71,7 +72,6 @@ int SocketManager::Select()
   unsigned int nfd;
 
   nfd = this->_fillFDSet(READ) + 1;
-  this->_fillFDSet(WRITE);
   return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), &(this->_sets[ERR]), NULL));
 }
 

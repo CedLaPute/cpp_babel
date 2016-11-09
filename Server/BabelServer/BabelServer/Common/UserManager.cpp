@@ -25,9 +25,7 @@ User *UserManager::addUser(const std::string &name, ASocket *socket)
 
 void UserManager::removeUser(const std::string &name)
 {
-  auto it = this->_users.begin();
-
-  while (it != this->_users.end())
+  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
   {
 	if ((*it)->getName() == name)
 	{
@@ -35,7 +33,19 @@ void UserManager::removeUser(const std::string &name)
 	  this->_users.erase(it);
 	  break;
 	}
-	it++;
+  }
+}
+
+void UserManager::removeUser(const User *user)
+{
+  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
+  {
+	if (*it == user)
+	{
+	  delete (*it);
+	  this->_users.erase(it);
+	  break;
+	}
   }
 }
 
@@ -91,6 +101,11 @@ void UserManager::handleReceive(SocketManager &sm)
 	   */
 	   if (cmd != NULL)
 		   (*it)->addCommand(_command->analyse(cmd, (*it)));
+	  else
+	   {
+		 sm.removeSocket((*it)->getSocket());
+		 (*it)->goOffline();
+	   }
 	}
   }
 }

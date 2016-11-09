@@ -26,6 +26,7 @@ LinSocket::LinSocket(int fd, struct sockaddr_in *saddr)
 
 LinSocket::~LinSocket()
 {
+  close(this->_fd);
 }
 
 bool LinSocket::Bind()

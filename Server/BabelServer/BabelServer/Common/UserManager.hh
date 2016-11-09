@@ -16,6 +16,7 @@ class UserManager
 	~UserManager();
 	User *addUser(const std::string &name, ASocket *socket);
 	void removeUser(const std::string &name);
+	void removeUser(const User *user);
 	User *getUser(const std::string &name);
 	std::string getUserList() const;
 	void addPendingAuth(ASocket *socket);

@@ -51,7 +51,7 @@ WinSocket::WinSocket(SOCKET sock, struct addrinfo *saddr)
 
 WinSocket::~WinSocket()
 {
-  WSACleanup();
+  close(this->_socket);
 }
 
 bool WinSocket::Bind()
