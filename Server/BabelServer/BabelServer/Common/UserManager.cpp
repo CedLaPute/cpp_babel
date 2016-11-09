@@ -97,7 +97,12 @@ void UserManager::handleSend(SocketManager &sm)
 
   for (auto it = this->_users.begin(); it != this->_users.end(); it++)
   {
-	while (sm.isSocketAvailable((*it)->getSocket(), SocketManager::WRITE) && (cmd = (*it)->getCommand()))
-	  (*it)->getSocket()->Send(cmd);
+	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::WRITE))
+	{
+	  while ((cmd = (*it)->getCommand()))
+		(*it)->getSocket()->Send(cmd);
+	  sm.removeFromFDSet((*it)->getSocket(), SocketManager::WRITE);
+	}
+
   }
 }

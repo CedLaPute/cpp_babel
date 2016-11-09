@@ -81,21 +81,26 @@ ASocket *SocketManager::tryNewConnection()
   newSocket = NULL;
   if (FD_ISSET(this->_listener->getSocket(), &(this->_sets[READ])))
   {
-	  newSocket = this->_listener->Accept();
-    if (newSocket != NULL)
-    {
-	   this->_sockList.push_back(newSocket);
-	   this->addToFDSet(newSocket, WRITE);
-    }
+	newSocket = this->_listener->Accept();
+	if (newSocket != NULL)
+	{
+	  this->_sockList.push_back(newSocket);
+	  this->addToFDSet(newSocket, WRITE);
+	}
   }
   return (newSocket);
 }
 
-void SocketManager::addToFDSet(ASocket *socket, FDSetType set)
+void SocketManager::addToFDSet(const ASocket *socket, FDSetType set)
 {
-  if (!socket)
-	throw "null pointer";
-  FD_SET(socket->getSocket(), &(this->_sets[set]));
+  if (socket)
+	FD_SET(socket->getSocket(), &(this->_sets[set]));
+}
+
+void SocketManager::removeFromFDSet(const ASocket *socket, FDSetType set)
+{
+  if (socket)
+	FD_CLR(socket->getSocket(), &(this->_sets[set]));
 }
 
 bool SocketManager::isSocketAvailable(const ASocket *socket, FDSetType set) const

@@ -31,7 +31,8 @@ class SocketManager
 	void removeSocket(const ASocket *socket);
 	int Select();
 	ASocket *tryNewConnection();
-	void addToFDSet(ASocket *socket, FDSetType set);
+	void addToFDSet(const ASocket *socket, FDSetType set);
+	void removeFromFDSet(const ASocket *socket, FDSetType set);
 	bool isSocketAvailable(const ASocket *socket, FDSetType set) const;
 
   private:
