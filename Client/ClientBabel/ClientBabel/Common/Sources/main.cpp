@@ -1,10 +1,10 @@
-#include "../ASocket.hh"
+#include "../Headers/ASocket.hh"
 
 #ifdef _WIN32
-#include "../../Windows/WinSocket.hh"
+#include "../../Windows/Headers/WinSocket.hh"
 
 #elif __linux__
-#include <LinNetwork.hh>
+#include "../../Unix/Headers/LinSocket.hh"
 #endif
 
 int	main(int , char **)
