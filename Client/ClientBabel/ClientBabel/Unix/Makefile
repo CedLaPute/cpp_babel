@@ -1,4 +1,5 @@
-SRC		= Sources/LinNetwork.cpp \
+SRC		= LinSocket.cpp \
+		  ../Common/ASocket.cpp \
 		  ../Common/Sources/main.cpp
 
 OBJ		= $(SRC:.cpp=.o)

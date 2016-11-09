@@ -49,6 +49,7 @@ int SocketManager::Select()
   unsigned int nfd;
 
   nfd = this->_fillFDSet(READ) + 1;
+  this->_fillFDSet(WRITE);
   return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), &(this->_sets[ERR]), NULL));
 }
 
@@ -59,9 +60,12 @@ ASocket *SocketManager::tryNewConnection()
   newSocket = NULL;
   if (FD_ISSET(this->_listener->getSocket(), &(this->_sets[READ])))
   {
-	newSocket = this->_listener->Accept();
-	this->_sockList.push_back(newSocket);
-	this->addToFDSet(newSocket, WRITE);
+	  newSocket = this->_listener->Accept();
+    if (newSocket != NULL)
+    {
+	   this->_sockList.push_back(newSocket);
+	   this->addToFDSet(newSocket, WRITE);
+    }
   }
   return (newSocket);
 }

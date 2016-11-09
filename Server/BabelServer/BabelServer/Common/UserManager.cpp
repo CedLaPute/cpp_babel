@@ -3,6 +3,7 @@
 //
 
 #include "UserManager.hh"
+#include <iostream>
 
 UserManager::UserManager()
 {
@@ -60,13 +61,15 @@ void UserManager::handlePendingAuth(SocketManager &sm)
 	return;
   for (auto it = this->_pendingAuth.begin(); it != this->_pendingAuth.end(); it++)
   {
-	if (sm.isSocketAvailable(*it, SocketManager::WRITE)){}
-	  // 101 "Hello"
-	else if (sm.isSocketAvailable(*it, SocketManager::READ))
-	{
-//	  102 $Login
-//	  this->addUser(name, *it);
-//	  this->_pendingAuth.erase(it);
-	}
+    /* USELESS - On check que le read, et on renvoie une réponses lorsque nécessaire
+  	if (sm.isSocketAvailable(*it, SocketManager::WRITE))
+    {
+    }*/
+  	if (sm.isSocketAvailable(*it, SocketManager::READ))
+  	{
+      char *buff = (*it)->Receive();
+
+      std::cout << buff << std::endl;
+	  }
   }
 }

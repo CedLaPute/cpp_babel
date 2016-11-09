@@ -6,7 +6,9 @@
 #define CPP_BABEL_LINSOCKET_HH
 
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <arpa/inet.h>
+#include <sys/time.h>
 #include <netdb.h>
 #include <unistd.h>
 #include "../Common/ASocket.hh"
@@ -24,10 +26,17 @@ class LinSocket : public ASocket
 	virtual bool Send(const char *message) const;
 	virtual unsigned int getSocket() const;
 
+	void Reset();
+	virtual void Loop();
+
   private:
 	struct sockaddr_in _saddr;
 	int _fd;
 	short _port;
+
+	fd_set	_fdread;
+	fd_set 	_fdwrite;
+	struct timeval _tv;
 };
 
 

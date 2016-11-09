@@ -10,15 +10,9 @@
 int	main(int , char **)
 {
 	ASocket *tmp;
-
-
-  #ifdef _WIN32
-	tmp = ASocket::getNewSocket(2727);
-  #elif __linux__
-    LinNetwork *tmp = new LinNetwork;
-  #endif
-
-  tmp->Connect("10.14.58.115", 2727);
+  
+	tmp = ASocket::getNewSocket(2728);
+ 	tmp->Connect("10.14.58.115", 2728);
 
   while (1)
     {

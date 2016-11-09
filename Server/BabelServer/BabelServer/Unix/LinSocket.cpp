@@ -86,7 +86,12 @@ char *LinSocket::Receive() const
   memset(buff, 0, 44000);
   if ((i = read(this->_fd, buff, 43999)) < 0)
 	throw "read failed";
-  return buff;
+  else if (i > 0)
+  {
+    std::cout << buff << std::endl;
+    return buff;
+  }
+  return NULL;
 }
 
 bool LinSocket::Send(const char *message) const
