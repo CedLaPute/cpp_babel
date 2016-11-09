@@ -9,6 +9,7 @@
 //
 
 # include <iostream>
+# include <sstream>
 # include <cstring>
 # include "Command.hh"
 
@@ -16,11 +17,11 @@ Command::Command()
 {
 }
 
-char 	*Command::_noData()
+char 	*Command::_unknownCommand()
 {
 	char *str = new char[sizeof(Buff)];
 
-	Buffer::getCmd(str, 0, 231, "");
+	Buffer::getCmd(str, 0, 240, "");
 	return str;
 }
 
@@ -32,8 +33,53 @@ char	*Command::_loginNotFree()
 	return str;
 }
 
-char 	*Command::_listLogin()
+char 	*Command::_noData()
 {
+	char *str = new char[sizeof(Buff)];
+
+	Buffer::getCmd(str, 0, 231, "");
+	return str;
+}
+
+char 	*Command::_loginNotMatching()
+{
+	char *str = new char[sizeof(Buff)];
+
+	Buffer::getCmd(str, 0, 232, "");
+	return str;
+}
+
+char 	*Command::_loginTooLong()
+{
+	char *str = new char[sizeof(Buff)];
+
+	Buffer::getCmd(str, 0, 237, "");
+	return str;
+}
+
+char 	*Command::_listLogin(Buff *_entry, User *user)
+{
+	if (_entry->size == 0)
+		return _noData();
+
+	std::string s((char *)_entry->data);
+	std::string _logins;
+	std::stringstream ss;
+
+	for (auto it = this->_users.begin(); it != this->_users.end(); ++it)
+	{
+		if ((*it)->getName().compare(s) == 0)
+			return _loginNotFree();
+	}
+
+	user->setName(s);
+
+	for (auto it = this->_users.begin(); it != this->_users.end(); ++it)
+	{
+		ss << (*it)->getName() << "/";
+	}
+	_logins = ss.str();
+
 	int size = _logins.size();
 	char *str = new char[sizeof(Buff) + size];
 
@@ -41,20 +87,46 @@ char 	*Command::_listLogin()
 	return str;
 }
 
-char 	*Command::analyse(char *str)
+char 	*Command::_getUserInfo(Buff *_entry, User *)
 {
-	std::cout << "in analyse" << std::endl;
-	std::cout << str << std::endl;
+	if (_entry->size == 0)
+		return _noData();
 
+	std::string s((char *)_entry->data);
+	std::size_t separator = s.find("/");
+	std::string arg1 = s.substr(0, separator - 1);
+	std::string arg2 = s.substr(separator + 1);
+
+	for (auto it = this->_users.begin(); it != this->_users.end(); ++it)
+	{
+		if ((*it)->getName().compare(arg2) == 0)
+		{
+			// do something
+		}
+	}
+
+	return _loginNotMatching();
+
+}
+
+char 	*Command::analyse(char *str, User *user)
+{
 	Buff 	*_entry = new Buff();
 
 	_entry = Buffer::getValue(str);
-	std::cout << "---" << std::endl;
-	std::cout << _entry->magic << std::endl;
-	std::cout << _entry->size << std::endl;
-	std::cout << _entry->cmd << std::endl;
-	std::cout << _entry->data << std::endl;
-	return (char *)_entry->data;
+	std::cout << (int)_entry->cmd << std::endl;
+	switch ((int)_entry->cmd)
+	{
+		case 102:
+			return _listLogin(_entry, user);
+			break;
+		case 111:
+			return _getUserInfo(_entry, user);
+			break;
+		default:
+			return _unknownCommand();
+			break;
+	}
 }
 
 char 	*Command::sayHello()
@@ -65,7 +137,7 @@ char 	*Command::sayHello()
 	return str;
 }
 
-void 	Command::setLogins(std::string const &logins)
+void 	Command::setLogins(std::vector<User *> users)
 {
-	_logins = logins;
+	_users = users;
 }

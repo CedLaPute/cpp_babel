@@ -12,27 +12,32 @@
 # define COMMAND_HH_
 
 # include "Buffer.hh"
+# include "User.hh"
+# include <vector>
 
 class Command
 {
 private:
-	std::string _logins;
+	std::vector<User *> _users;
 
 	/* Fonctions de création de commande en local */
 	char 	*_unknownCommand();
 	char 	*_noData();
+	char	*_loginNotMatching();
 	char 	*_loginNotFree();
-	char 	*_listLogin();
+	char 	*_loginTooLong();
+	char 	*_listLogin(Buff *, User *);
+	char	*_getUserInfo(Buff *, User *);
 
 public:
 	Command();
 	~Command() {};
 
-	char 	*analyse(char *);
+	char 	*analyse(char *, User *);
 
 	/* Fonctions de création des commandes */
 	char 	*sayHello(); // Fonction qui sera appelée lors de la connexion d'un client
-	void 	setLogins(std::string const &logins);
+	void 	setLogins(std::vector<User *>);
 };
 
 #endif /* !COMMAND_HH_ */

@@ -7,6 +7,7 @@
 
 #include "SocketManager.hh"
 #include "User.hh"
+#include "Command.hh"
 
 class UserManager
 {
@@ -16,6 +17,7 @@ class UserManager
 	User *addUser(const std::string &name, ASocket *socket);
 	void removeUser(const std::string &name);
 	User *getUser(const std::string &name);
+	std::string getUserList() const;
 	void addPendingAuth(ASocket *socket);
 	void handlePendingAuth(SocketManager &sm);
 	void handleReceive(SocketManager &sm);
@@ -24,6 +26,7 @@ class UserManager
   private:
 	std::vector<ASocket *> _pendingAuth;
 	std::vector<User *> _users;
+	Command *_command;
 };
 
 

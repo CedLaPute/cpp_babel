@@ -9,18 +9,11 @@
 # include "ASocket.hh"
 # include "SocketManager.hh"
 # include "UserManager.hh"
-# include "Command.hh" // test
 # include <iostream>
 # include <vector>
 
 int main(int ac, char **av)
 {
-
-	Command *c = new Command();
-
-	
-	c->analyse(c->sayHello());
-
   if (ac != 2)
   {
 	std::cout << "usage: ./babel_server port" << std::endl;
@@ -39,6 +32,7 @@ int main(int ac, char **av)
 	newConnection = sm.tryNewConnection();
 	if (newConnection)
 	{
+	  um.addUser("", newConnection);
 	  um.addPendingAuth(newConnection);
 	  newConnection = NULL;
 	}

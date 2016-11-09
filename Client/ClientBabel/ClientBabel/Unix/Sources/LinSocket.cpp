@@ -10,6 +10,8 @@ LinSocket::LinSocket(short port)
 {
   struct protoent *pe;
 
+  _command = new Command();
+  _command->setName("Kaaris");
   _tv.tv_sec = 0;
   _tv.tv_usec = 1;
   if ((pe = getprotobyname("TCP")) == NULL)
@@ -85,7 +87,6 @@ char *LinSocket::Receive() const
   	throw "read failed";
   else if (i > 0)
   {
-    std::cout << buff << std::endl;
     return buff;
   }
   return NULL;
@@ -93,7 +94,7 @@ char *LinSocket::Receive() const
 
 bool LinSocket::Send(const char *message) const
 {
-  if (write(this->_fd, message, strlen(message)) < 0)
+  if (write(this->_fd, message, 44000) < 0)
 	throw "write failed";
   return (true);
 }
@@ -117,6 +118,9 @@ void  LinSocket::Reset()
 
 void  LinSocket::Loop()
 {
+  char  *str;
+  char  *toSend;
+
   Reset();
 
   if (select(_fd + 1, &_fdread, &_fdwrite, NULL, &_tv) == -1)
@@ -124,10 +128,10 @@ void  LinSocket::Loop()
 
   if (FD_ISSET(_fd, &_fdread))
   {
-    if (Receive() != NULL)
+    str = Receive();
+    if ((toSend = _command->analyse(str)) != NULL)
     {
-      std::cout << "I received something" << std::endl;
-      Send("95 C LA CHAMPIONS LEAGUE");
+      Send(toSend);
     }
   }
 }

@@ -12,7 +12,7 @@ int	main(int , char **)
 	ASocket *tmp;
   
 	tmp = ASocket::getNewSocket(2728);
- 	tmp->Connect("10.14.58.115", 2728);
+ 	tmp->Connect("192.168.1.91", 2728);
 
   while (1)
     {

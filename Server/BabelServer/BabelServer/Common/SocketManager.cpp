@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "SocketManager.hh"
+#include "Command.hh"
 
 SocketManager::SocketManager(short port)
 {

@@ -12,6 +12,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include "../../Common/Headers/ASocket.hh"
+#include "../../Common/Headers/Command.hh"
 
 class LinSocket : public ASocket
 {
@@ -37,6 +38,8 @@ class LinSocket : public ASocket
 	fd_set	_fdread;
 	fd_set 	_fdwrite;
 	struct timeval _tv;
+
+	Command 	*_command;
 };
 
 

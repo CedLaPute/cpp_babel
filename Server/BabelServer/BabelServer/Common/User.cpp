@@ -3,6 +3,7 @@
 //
 
 #include "User.hh"
+#include <iostream>
 
 User::User(const std::string &name, ASocket *socket)
 {
@@ -69,6 +70,7 @@ const char *User::getCommand()
 
   if (!this->_pendingCommands.size())
 	return (NULL);
+std::cout << "sending command" << std::endl;
   cmd = (this->_pendingCommands.front());
   this->_pendingCommands.erase(this->_pendingCommands.begin());
   return (cmd);

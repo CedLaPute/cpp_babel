@@ -7,6 +7,7 @@
 
 UserManager::UserManager()
 {
+	_command = new Command();
 }
 
 UserManager::~UserManager()
@@ -17,6 +18,7 @@ User *UserManager::addUser(const std::string &name, ASocket *socket)
 {
   User *newUser = new User(name, socket);
 
+  newUser->addCommand(_command->sayHello());
   this->_users.push_back(newUser);
   return (newUser);
 }
@@ -67,26 +69,28 @@ void UserManager::handlePendingAuth(SocketManager &sm)
 	}
 	if (sm.isSocketAvailable(*it, SocketManager::READ))
 	{
-	  char *buff = (*it)->Receive();
+	  /*char *buff = (*it)->Receive();
 
-	  std::cout << buff << std::endl;
+	  std::cout << buff << std::endl;*/
 	}
   }
 }
 
 void UserManager::handleReceive(SocketManager &sm)
 {
-  const char *cmd;
+  char *cmd;
 
+  _command->setLogins(this->_users);
   for (auto it = this->_users.begin(); it != this->_users.end(); it++)
   {
 	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::READ))
 	{
 	  cmd = (*it)->getSocket()->Receive();
-	  std::cout << "command : " << cmd << std::endl;
 	  /*
 	   * l'interpretation des commandes se fera dans UserManager (pour avoir accès aux users) avec des methodes privées
 	   */
+	   if (cmd != NULL)
+		   (*it)->addCommand(_command->analyse(cmd, (*it)));
 	}
   }
 }
@@ -100,7 +104,10 @@ void UserManager::handleSend(SocketManager &sm)
 	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::WRITE))
 	{
 	  while ((cmd = (*it)->getCommand()))
+	  {
+	  	_command->analyse((char *)cmd, (*it));
 		(*it)->getSocket()->Send(cmd);
+	  }
 	  sm.removeFromFDSet((*it)->getSocket(), SocketManager::WRITE);
 	}
 

@@ -1,5 +1,7 @@
 SRC		= Sources/LinSocket.cpp \
 		  ../Common/Sources/ASocket.cpp \
+		  ../Common/Sources/Buffer.cpp \
+		  ../Common/Sources/Command.cpp \
 		  ../Common/Sources/main.cpp
 
 OBJ		= $(SRC:.cpp=.o)

@@ -88,7 +88,6 @@ char *LinSocket::Receive() const
 	throw "read failed";
   else if (i > 0)
   {
-    std::cout << buff << std::endl;
     return buff;
   }
   return NULL;
@@ -96,7 +95,7 @@ char *LinSocket::Receive() const
 
 bool LinSocket::Send(const char *message) const
 {
-  if (write(this->_fd, message, strlen(message)) < 0)
+  if (write(this->_fd, message, 44000) < 0)
 	throw "write failed";
   return (true);
 }
