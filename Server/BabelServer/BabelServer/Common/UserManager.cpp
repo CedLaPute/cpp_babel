@@ -3,11 +3,12 @@
 //
 
 #include "UserManager.hh"
+#include "Buffer.hh"
 #include <iostream>
+#include <sstream>
 
 UserManager::UserManager()
 {
-  _command = new Command();
 }
 
 UserManager::~UserManager()
@@ -58,76 +59,69 @@ User *UserManager::getUser(const std::string &name)
 	  return (*it);
 	it++;
   }
-  return (*it);
+  return (NULL);
 }
 
 void UserManager::addPendingAuth(ASocket *socket)
 {
   this->_pendingAuth.push_back(socket);
+  this->_sayHello(socket);
 }
 
 void UserManager::handlePendingAuth(SocketManager &sm)
 {
   char *cmd;
-  char *toSend;
-  User *newUser;
+  std::vector<std::vector<ASocket *>::iterator> clearedAuth;
 
   if (!this->_pendingAuth.size())
 	return;
+  std::cout << "pending auth" << std::endl;
   for (auto it = this->_pendingAuth.begin(); it != this->_pendingAuth.end(); it++)
   {
+	std::cout << "pending auth loop" << std::endl;
 	if (sm.isSocketAvailable(*it, SocketManager::READ))
 	{
 	  cmd = (*it)->Receive();
 	  if (cmd != NULL)
-	  {
-		newUser = this->addUser("", *it);
-		toSend = _command->analyse(cmd, newUser);
-		if (toSend != NULL)
-		{
-		  std::cout << "adding command to client" << std::endl;
-		  newUser->addCommand(toSend);
-		}
-	  }
+		this->_newClient(cmd, (*it));
 	  else
 		sm.removeSocket(*it);
+	  clearedAuth.push_back(it);
 	}
-	else
-	  (*it)->Send(_command->sayHello());
-
   }
+  for (auto it = clearedAuth.begin(); it != clearedAuth.end(); it++)
+	this->_pendingAuth.erase(*it);
 }
 
-void UserManager::handleReceive(SocketManager &sm)
+void UserManager::handleReceive(SocketManager &)
 {
-  char *cmd;
-  char *toSend;
-
-  _command->setLogins(this->_users);
-  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
-  {
-	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::READ))
-	{
-	  cmd = (*it)->getSocket()->Receive();
-	  /*
-	   * l'interpretation des commandes se fera dans UserManager (pour avoir accès aux users) avec des methodes privées
-	   */
-	  if (cmd != NULL)
-	  {
-		toSend = _command->analyse(cmd, (*it));
-		if (toSend != NULL)
-		{
-		  std::cout << "adding command to client" << std::endl;
-		  (*it)->addCommand(toSend);
-		}
-	  }
-	  /*else
-	   {
-		 sm.removeSocket((*it)->getSocket());
-		 (*it)->goOffline();
-	   }*/
-	}
-  }
+//  char *cmd;
+//  char *toSend;
+//
+//  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
+//  {
+//	if (sm.isSocketAvailable((*it)->getSocket(), SocketManager::READ))
+//	{
+//	  cmd = (*it)->getSocket()->Receive();
+//	  /*
+//	   * l'interpretation des commandes se fera dans UserManager (pour avoir accès aux users) avec des methodes privées
+//	   */
+//	  if (cmd != NULL)
+//	  {
+//		toSend = _command->analyse(cmd, (*it));
+//		if (toSend != NULL)
+//		{
+//		  std::cout << "adding command to client" << std::endl;
+//		  (*it)->addCommand(toSend);
+//		}
+//	  }
+//	  /*else
+//	   {
+//		 sm.removeSocket((*it)->getSocket());
+//		 (*it)->goOffline();
+//	   }*/
+//	}
+//  }
 }
 
 void UserManager::handleSend(SocketManager &sm)
@@ -141,9 +135,59 @@ void UserManager::handleSend(SocketManager &sm)
 	  while ((cmd = (*it)->getCommand()))
 	  {
 		(*it)->getSocket()->Send(cmd);
+		delete[] (cmd);
 	  }
 	  sm.removeFromFDSet((*it)->getSocket(), SocketManager::WRITE);
 	}
-
   }
+}
+
+void UserManager::_handleCommand(User *sender, char *cmd)
+{
+  Buff *cmdBuff;
+
+  (void) sender;
+  cmdBuff = Buffer::getValue(cmd);
+  switch (cmdBuff->cmd)
+  {
+	default:
+	  std::cout << "unknown command or not implemented yet" << std::endl;
+	  break;
+  }
+}
+
+void UserManager::_sayHello(ASocket *socket)
+{
+  char *str;
+
+  Buffer::getCmd(&str, 5, 101, "Hello");
+  socket->Send(str);
+  std::cout << Buffer::getValue(str)->data << std::endl;
+  delete[] (str);
+}
+
+void UserManager::_newClient(char *cmd, ASocket *socket)
+{
+  User *newUser;
+  Buff *cmdBuff;
+
+  cmdBuff = Buffer::getValue(cmd);
+  if (!this->getUser(reinterpret_cast<char *>(cmdBuff->data)))
+  {
+	newUser = this->addUser(reinterpret_cast<char *>(cmdBuff->data), socket);
+	newUser->addCommand(this->_listLogin());
+  }
+}
+
+char *UserManager::_listLogin()
+{
+  char *cmd;
+  std::stringstream ss;
+
+  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
+  {
+	ss << (*it)->getName() << "/";
+  }
+  Buffer::getCmd(&cmd, static_cast<int>(ss.str().size()), 103, ss.str().c_str());
+  return (cmd);
 }

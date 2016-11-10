@@ -10,7 +10,6 @@
 
 SRC			= ../Common/main.cpp \
 			../Common/Buffer.cpp \
-			../Common/Command.cpp \
 			../Common/User.cpp \
 			../Common/UserManager.cpp \
 			../Common/ASocket.cpp \
@@ -21,7 +20,7 @@ OBJ 		= $(SRC:.cpp=.o)
 
 NAME 		= babel_server
 
-CXXFLAGS 	= -W -Wall -Wextra -Werror -std=c++11
+CXXFLAGS 	= -W -Wall -Wextra -Werror -std=c++11 -g
 
 all: $(NAME)
 

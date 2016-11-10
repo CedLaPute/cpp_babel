@@ -10,22 +10,23 @@ Buffer::~Buffer()
 {
 }
 
-void		Buffer::getCmd(char *str, int const size, int const cmd, char const *data)
+void Buffer::getCmd(char **str, int const size, int const cmd, char const *data)
 {
-  Buff		*b = new Buff();
+  Buff *b;
+  *str = new char[sizeof(Buff) + size];
+  b = reinterpret_cast<Buff *>(*str);
 
   b->magic = MAGIC;
   b->size = size;
   b->cmd = cmd;
-  std::strcpy((char *)(b->data), data);
-
-  std::memcpy(str, b, sizeof(Buff) + size);
+  std::strcpy((char *) (b->data), data);
+  std::cout << (int)b->cmd << " " << b->data << std::endl;
 }
 
-Buff		*Buffer::getValue(char *str)
+Buff *Buffer::getValue(char *str)
 {
-  Buff		*b = new Buff();
-  
+  Buff *b;
+
   b = reinterpret_cast<Buff *>(str);
   return b;
 }

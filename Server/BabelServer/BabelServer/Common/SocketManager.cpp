@@ -40,12 +40,15 @@ void SocketManager::removeSocket(const ASocket *socket)
 {
   for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
   {
+	std::cout << "loop" << std::endl;
 	if (*it == socket)
 	{
 	  if (this->isSocketAvailable(socket, READ))
 		this->removeFromFDSet(socket, READ);
-	  this->_sockList.erase(it);
+	  if (this->isSocketAvailable(socket, WRITE))
+		this->removeFromFDSet(socket, WRITE);
 	  delete (socket);
+	  this->_sockList.erase(it);
 	}
   }
 }

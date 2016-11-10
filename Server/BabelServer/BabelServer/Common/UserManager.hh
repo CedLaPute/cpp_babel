@@ -25,9 +25,13 @@ class UserManager
 	void handleSend(SocketManager &sm);
 
   private:
+	void _handleCommand(User *sender, char *cmd);
+	void _sayHello(ASocket *socket);
+	void _newClient(char *name, ASocket *socket);
+	char *_listLogin();
+
 	std::vector<ASocket *> _pendingAuth;
 	std::vector<User *> _users;
-	Command *_command;
 };
 
 
