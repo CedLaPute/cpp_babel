@@ -7,7 +7,7 @@
 
 UserManager::UserManager()
 {
-	_command = new Command();
+  _command = new Command();
 }
 
 UserManager::~UserManager()
@@ -18,7 +18,6 @@ User *UserManager::addUser(const std::string &name, ASocket *socket)
 {
   User *newUser = new User(name, socket);
 
-  newUser->addCommand(_command->sayHello());
   this->_users.push_back(newUser);
   return (newUser);
 }
@@ -69,20 +68,31 @@ void UserManager::addPendingAuth(ASocket *socket)
 
 void UserManager::handlePendingAuth(SocketManager &sm)
 {
+  char *cmd;
+  char *toSend;
+  User *newUser;
+
   if (!this->_pendingAuth.size())
 	return;
   for (auto it = this->_pendingAuth.begin(); it != this->_pendingAuth.end(); it++)
   {
-	if (sm.isSocketAvailable(*it, SocketManager::WRITE))
-	{
-
-	}
 	if (sm.isSocketAvailable(*it, SocketManager::READ))
 	{
-	  /*char *buff = (*it)->Receive();
-
-	  std::cout << buff << std::endl;*/
+	  cmd = (*it)->Receive();
+	  if (cmd != NULL)
+	  {
+		newUser = this->addUser("", *it);
+		toSend = _command->analyse(cmd, newUser);
+		if (toSend != NULL)
+		{
+		  std::cout << "adding command to client" << std::endl;
+		  newUser->addCommand(toSend);
+		}
+	  }
 	}
+	else
+	  (*it)->Send(_command->sayHello());
+
   }
 }
 
@@ -100,15 +110,15 @@ void UserManager::handleReceive(SocketManager &sm)
 	  /*
 	   * l'interpretation des commandes se fera dans UserManager (pour avoir accès aux users) avec des methodes privées
 	   */
-	   if (cmd != NULL)
-	   {
-	   		toSend = _command->analyse(cmd, (*it));
-	   		if (toSend != NULL)
-	   		{
-	   			std::cout << "adding command to client" << std::endl;
-			   (*it)->addCommand(toSend);
-	   		}
-	   }
+	  if (cmd != NULL)
+	  {
+		toSend = _command->analyse(cmd, (*it));
+		if (toSend != NULL)
+		{
+		  std::cout << "adding command to client" << std::endl;
+		  (*it)->addCommand(toSend);
+		}
+	  }
 	  /*else
 	   {
 		 sm.removeSocket((*it)->getSocket());

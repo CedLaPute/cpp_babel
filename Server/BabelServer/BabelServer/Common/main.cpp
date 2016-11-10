@@ -32,7 +32,6 @@ int main(int ac, char **av)
 	newConnection = sm.tryNewConnection();
 	if (newConnection)
 	{
-	  um.addUser("", newConnection);
 	  um.addPendingAuth(newConnection);
 	  newConnection = NULL;
 	}
