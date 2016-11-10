@@ -74,6 +74,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -97,6 +98,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -121,20 +123,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Common\ASocket.cpp" />
-    <ClCompile Include="Common\AUser.cpp" />
+    <ClCompile Include="Common\Buffer.cpp" />
+    <ClCompile Include="Common\Command.cpp" />
     <ClCompile Include="Common\main.cpp" />
     <ClCompile Include="Common\SocketManager.cpp" />
+    <ClCompile Include="Common\User.cpp" />
     <ClCompile Include="Common\UserManager.cpp" />
     <ClCompile Include="Windows\WinSocket.cpp" />
-    <ClCompile Include="Windows\WinUser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\ASocket.hh" />
-    <ClInclude Include="Common\AUser.hh" />
+    <ClInclude Include="Common\Buffer.hh" />
+    <ClInclude Include="Common\Command.hh" />
     <ClInclude Include="Common\SocketManager.hh" />
+    <ClInclude Include="Common\User.hh" />
     <ClInclude Include="Common\UserManager.hh" />
     <ClInclude Include="Windows\WinSocket.hh" />
-    <ClInclude Include="Windows\WinUser.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

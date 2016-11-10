@@ -17,12 +17,12 @@ ASocket *ASocket::getNewSocket(short port)
 
   #ifdef _WIN32
 
-  ptr = new WinSocket(port);
+  ptr = new WinSocket(port, "TCP");
 
   #elif __linux__
 
   printf("__linux__ detected, initializing LinSocket\n");
-  ptr = new LinSocket(port);
+  ptr = new LinSocket(port, "TCP");
 
   #endif
 

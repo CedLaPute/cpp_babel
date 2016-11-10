@@ -13,6 +13,7 @@ WinSocket::WinSocket(short port, const char *protocol)
 {
   std::ostringstream oss;
   std::string portString;
+  int i;
 
   ZeroMemory(&(this->_resources), sizeof(this->_resources));
   this->_resources.ai_family = AF_INET;
@@ -51,7 +52,7 @@ WinSocket::WinSocket(SOCKET sock, struct addrinfo *saddr)
 
 WinSocket::~WinSocket()
 {
-  close(this->_socket);
+	WSACleanup();
 }
 
 bool WinSocket::Bind()
