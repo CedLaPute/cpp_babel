@@ -14,6 +14,7 @@ WinSocket::WinSocket(short port)
   int	i;
   WSAData wsaData;
 
+  _command = new Command();
   i = WSAStartup(MAKEWORD(2, 2), &wsaData);
   if (i != 0)
   {
@@ -100,7 +101,6 @@ char *WinSocket::Receive() const
 	throw "read failed";
   else if (i > 0)
   {
-	  std::cout << buff << std::endl;
 	  return (buff);
   }
   return ("");
@@ -118,7 +118,7 @@ unsigned int WinSocket::getSocket() const
 	return (unsigned int)this->_socket;
 }
 
-void		WinSocket::reset()
+void		WinSocket::Reset()
 {
 	FD_ZERO(&_fdread);
 	FD_ZERO(&_fdwrite);
@@ -132,14 +132,20 @@ void		WinSocket::reset()
 
 void		WinSocket::Loop()
 {
-	reset();
+	char  *str;
+  	char  *toSend;
+
+	Reset();
 
 	if (select(_socket + 1, &_fdread, &_fdwrite, NULL, &_tv) == -1)
 		return;
 
 	if (FD_ISSET(_socket, &_fdread))
 	{
-		if (Receive() != "")
-			Send("95 C LA CHAMPIONS LEAGUE");
+		str = Receive();
+	    if ((toSend = _command->analyse(str)) != NULL)
+	    {
+	      Send(toSend);
+	    }
 	}
 }

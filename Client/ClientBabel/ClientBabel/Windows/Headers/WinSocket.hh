@@ -18,7 +18,8 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
-#include "../Common/ASocket.hh"
+#include "../../Common/Headers/Command.hh"
+#include "../Common/Sources/ASocket.hh"
 
 class WinSocket : public ASocket
 {
@@ -33,7 +34,7 @@ class WinSocket : public ASocket
 	bool Send(const char *message) const;
 	unsigned int getSocket() const;
 
-	void				reset();
+	void				Reset();
 	void				Loop();
 
   private:
@@ -45,6 +46,8 @@ class WinSocket : public ASocket
 	fd_set	_fdread;
 	fd_set	_fdwrite;
 	struct timeval _tv;
+
+	Command 	*_command;
 };
 
 
