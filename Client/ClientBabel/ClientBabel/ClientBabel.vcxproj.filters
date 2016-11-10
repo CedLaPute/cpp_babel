@@ -18,21 +18,30 @@
     <ClCompile Include="Common\Sources\main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\Sources\WinNetwork.cpp">
+    <ClCompile Include="Common\Sources\ASocket.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Sources\Buffer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Sources\Command.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\Sources\WinSocket.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Windows\Headers\Windows.h">
+    <ClInclude Include="Common\Headers\ASocket.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Unix\Headers\Unix.h">
+    <ClInclude Include="Common\Headers\Buffer.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Windows\Headers\WinNetwork.hh">
+    <ClInclude Include="Common\Headers\Command.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Headers\INetwork.hh">
+    <ClInclude Include="Windows\Headers\WinSocket.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
