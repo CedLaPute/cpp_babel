@@ -89,6 +89,8 @@ void UserManager::handlePendingAuth(SocketManager &sm)
 		  newUser->addCommand(toSend);
 		}
 	  }
+	  else
+		sm.removeSocket(*it);
 	}
 	else
 	  (*it)->Send(_command->sayHello());

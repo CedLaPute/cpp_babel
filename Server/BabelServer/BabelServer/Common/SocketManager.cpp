@@ -42,7 +42,8 @@ void SocketManager::removeSocket(const ASocket *socket)
   {
 	if (*it == socket)
 	{
-	  this->removeFromFDSet(socket, READ);
+	  if (this->isSocketAvailable(socket, READ))
+		this->removeFromFDSet(socket, READ);
 	  this->_sockList.erase(it);
 	  delete (socket);
 	}
