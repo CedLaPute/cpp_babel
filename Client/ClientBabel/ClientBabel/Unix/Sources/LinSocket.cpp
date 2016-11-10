@@ -10,8 +10,6 @@ LinSocket::LinSocket(short port, const char *protocol)
 {
   struct protoent *pe;
 
-  _command = new Command();
-  _command->setName("Kaaris");
   _tv.tv_sec = 0;
   _tv.tv_usec = 1;
   if ((pe = getprotobyname(protocol)) == NULL)
@@ -95,39 +93,3 @@ unsigned int LinSocket::getSocket() const
   return (this->_fd);
 }
 
-void  LinSocket::Reset()
-{
-  FD_ZERO(&_fdread);
-  FD_ZERO(&_fdwrite);
-
-  if (_fd != -1)
-  {
-    FD_SET(_fd, &_fdread);
-    FD_SET(_fd, &_fdwrite);
-  }
-}
-
-void  LinSocket::Loop()
-{
-  char  *str;
-  char  *toSend;
-
-  Reset();
-
-  if (select(_fd + 1, &_fdread, &_fdwrite, NULL, &_tv) == -1)
-    return ;
-
-  if (FD_ISSET(_fd, &_fdread))
-  {
-    str = Receive();
-    if ((toSend = _command->analyse(str)) != NULL)
-    {
-      Send(toSend);
-    }
-    else
-    {
-      close(this->_fd);
-      exit(0);
-    }
-  }
-}

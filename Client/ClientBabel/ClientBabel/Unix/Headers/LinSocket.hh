@@ -29,20 +29,12 @@ class LinSocket : public ASocket
 	virtual bool Send(char *message) const;
 	virtual unsigned int getSocket() const;
 
-	void Reset();
-	virtual void Loop();
-
   private:
 	struct sockaddr_in _saddr;
 	int _fd;
 	int _callFd;
 	short _port;
-
-	fd_set	_fdread;
-	fd_set 	_fdwrite;
 	struct timeval _tv;
-
-	Command 	*_command;
 };
 
 

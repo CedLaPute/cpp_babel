@@ -112,6 +112,6 @@ bool SocketManager::isSocketAvailable(const ASocket *socket, FDSetType set) cons
 {
   if (!socket)
 	return (false);
-  return (FD_ISSET(socket->getSocket(), &(this->_sets[set])));
+  return (FD_ISSET(socket->getSocket(), &(this->_sets[set])) != 0);
 }
 

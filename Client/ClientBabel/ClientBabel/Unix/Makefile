@@ -1,12 +1,11 @@
 SRC		= Sources/LinSocket.cpp \
 		  ../Common/Sources/ASocket.cpp \
 		  ../Common/Sources/Buffer.cpp \
-		  ../Common/Sources/Command.cpp \
 		  ../Common/Sources/main.cpp
 
 OBJ		= $(SRC:.cpp=.o)
 
-CXXFLAGS	= -I./Headers/ -I../Windows/Headers/ -I../Common/Headers/ -W -Wall -Wextra -Werror -std=c++11
+CXXFLAGS	= -I./Headers/ -I../Windows/Headers/ -I../Common/Headers/ -W -Wall -Wextra -Werror -std=c++11 -g
 
 NAME		= Babel
 

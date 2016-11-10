@@ -37,20 +37,12 @@ class WinSocket : public ASocket
 	bool Send(char *message) const;
 	unsigned int getSocket() const;
 
-	void				Reset();
-	void				Loop();
-
   private:
 	short	_port;
 	struct addrinfo _resources;
 	struct addrinfo *_result;
 	SOCKET _socket;
-
-	fd_set	_fdread;
-	fd_set	_fdwrite;
 	struct timeval _tv;
-
-	Command 	*_command;
 };
 
 

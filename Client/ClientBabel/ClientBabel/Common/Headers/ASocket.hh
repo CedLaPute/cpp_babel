@@ -19,7 +19,6 @@ class ASocket
 	virtual char *Receive() const = 0;
 	virtual bool Send(char *message) const = 0;
 	virtual unsigned int getSocket() const = 0;
-	virtual void Loop() = 0;
 	static ASocket *getNewSocket(short port);
 };
 

@@ -14,7 +14,6 @@ WinSocket::WinSocket(short port, const char *protocol)
   int	i;
   WSAData wsaData;
 
-  _command = new Command();
   i = WSAStartup(MAKEWORD(2, 2), &wsaData);
   if (i != 0)
   {
@@ -134,41 +133,4 @@ bool WinSocket::Send(char *message) const
 unsigned int WinSocket::getSocket() const
 {
 	return (unsigned int)this->_socket;
-}
-
-void		WinSocket::Reset()
-{
-	FD_ZERO(&_fdread);
-	FD_ZERO(&_fdwrite);
-
-	if (_socket != INVALID_SOCKET)
-	{
-		FD_SET(_socket, &_fdread);
-		FD_SET(_socket, &_fdwrite);
-	}
-}
-
-void		WinSocket::Loop()
-{
-	char  *str;
-  	char  *toSend;
-
-	Reset();
-
-	if (select(_socket + 1, &_fdread, &_fdwrite, NULL, &_tv) == -1)
-		return;
-
-	if (FD_ISSET(_socket, &_fdread))
-	{
-		str = Receive();
-	    if ((toSend = _command->analyse(str)) != NULL)
-	    {
-	      Send(toSend);
-	    }
-	    else
-	    {
-	    	WSACleanup();
-	    	exit(0);
-	    }
-	}
 }
