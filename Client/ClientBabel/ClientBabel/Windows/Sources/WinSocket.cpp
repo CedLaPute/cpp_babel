@@ -9,7 +9,7 @@
 #include "../../Common/Headers/ASocket.hh"
 #include "../Headers/WinSocket.hh"
 
-WinSocket::WinSocket(short port)
+WinSocket::WinSocket(short port, const char *protocol)
 {
   int	i;
   WSAData wsaData;
@@ -26,7 +26,7 @@ WinSocket::WinSocket(short port)
   ZeroMemory(&(this->_resources), sizeof(this->_resources));
   this->_resources.ai_family = AF_UNSPEC;
   this->_resources.ai_socktype = SOCK_STREAM;
-  this->_resources.ai_protocol = IPPROTO_TCP;
+  this->_resources.ai_protocol = getprotobyname(protocol)->p_proto;
   
   this->_tv.tv_sec = 0;
   this->_tv.tv_usec = 1;
@@ -43,6 +43,14 @@ WinSocket::~WinSocket()
 	WSACleanup();
 }
 
+bool WinSocket::Bind()
+{
+	if (bind(this->_socket, this->_result->ai_addr, this->_result->ai_addrlen) == SOCKET_ERROR)
+	throw "bind failed";
+	  std::cout << "bind ok" << std::endl;
+	return (true);
+}
+
 bool WinSocket::Listen()
 {
   return (true);
@@ -50,17 +58,6 @@ bool WinSocket::Listen()
 
 ASocket *WinSocket::Accept()
 {
-/*  ASocket *newSocket = NULL;
-  struct addrinfo *saddr = NULL;
-  SOCKET client = INVALID_SOCKET;
-
-  if ((client = accept(this->_socket, NULL, NULL)) < 0)
-	  throw "Accept failed";
-  if (client != INVALID_SOCKET)
-  {
-	  newSocket = new WinSocket(client, NULL);
-	  return newSocket;
-  }*/
   return (NULL);
 }
 
@@ -146,6 +143,11 @@ void		WinSocket::Loop()
 	    if ((toSend = _command->analyse(str)) != NULL)
 	    {
 	      Send(toSend);
+	    }
+	    else
+	    {
+	    	WSACleanup();
+	    	exit(0);
 	    }
 	}
 }

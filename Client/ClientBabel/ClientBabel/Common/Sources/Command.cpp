@@ -31,25 +31,25 @@ char 	*Command::analyse(char *str)
 	Buff 	*_entry = new Buff();
 
 	_entry = Buffer::getValue(str);
-	std::cout << (int)_entry->cmd;
+	std::cout << "cmd : " << (int)_entry->cmd;
+	
 	switch ((int)_entry->cmd)
 	{
 		case 101:
-			std::cout << "sending login" << std::endl;
+			std::cout << " sending login" << std::endl;
 			return _login();
 			break;
 		case 103:
-			std::cout << "command 103 : ";
 			std::cout << _entry->data << std::endl;
 			break;
 		case 230:
-			std::cout << "Login deja existant" << std::endl;
+			std::cout << " Login deja existant" << std::endl;
 			break;
 		case 231:
-			std::cout << "Pas de data transmise" << std::endl;
+			std::cout << " Pas de data transmise" << std::endl;
 			break;
 		case 240:
-			std::cout << "Commande inconnue" << std::endl;
+			std::cout << " Commande inconnue" << std::endl;
 		default: break;
 	}
 	return NULL;

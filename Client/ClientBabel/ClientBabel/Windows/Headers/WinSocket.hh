@@ -24,7 +24,7 @@
 class WinSocket : public ASocket
 {
   public:
-	WinSocket(short port);
+	WinSocket(short port, const char *protocol);
 	WinSocket(SOCKET sock, struct addrinfo *saddr);
 	virtual ~WinSocket();
 	bool Listen();

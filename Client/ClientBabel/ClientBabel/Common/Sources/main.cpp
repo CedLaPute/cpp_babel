@@ -11,8 +11,8 @@ int	main(int , char **)
 {
 	ASocket *tmp;
   
-	tmp = ASocket::getNewSocket(2727);
- 	tmp->Connect("10.14.58.135", 2727);
+	tmp = ASocket::getNewSocket(2728);
+ 	tmp->Connect("10.14.58.135", 2728);
 
   while (1)
     {

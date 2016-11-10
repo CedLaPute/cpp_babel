@@ -12,6 +12,7 @@ class ASocket
   public:
 	virtual ~ASocket() {};
 
+	virtual bool Bind() = 0;
 	virtual bool Listen() = 0;
 	virtual ASocket *Accept() = 0;
 	virtual bool Connect(const std::string &ip, short port) = 0;
