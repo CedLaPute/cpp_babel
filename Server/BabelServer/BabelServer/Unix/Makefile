@@ -20,7 +20,7 @@ OBJ 		= $(SRC:.cpp=.o)
 
 NAME 		= babel_server
 
-CXXFLAGS 	= -W -Wall -Wextra -Werror -std=c++11 -g
+CXXFLAGS 	= -W -Wall -Wextra -Werror -std=c++11 -g -I../Common/
 
 all: $(NAME)
 

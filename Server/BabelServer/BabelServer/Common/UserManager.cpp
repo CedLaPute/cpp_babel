@@ -79,11 +79,12 @@ void UserManager::handlePendingAuth(SocketManager &sm)
   {
 	if (sm.isSocketAvailable(*it, SocketManager::READ))
 	{
-		std::cout << "Read is set" << std::endl;
 	  cmd = (*it)->Receive();
-	  std::cout << Buffer::getValue(cmd)->data << std::endl;
 	  if (cmd != NULL)
+	  {
+		std::cout << Buffer::getValue(cmd)->data << std::endl;
 		this->_newClient(cmd, (*it));
+	  }
 	  else
 		sm.removeSocket(*it);
 	  clearedAuth.push_back(it);

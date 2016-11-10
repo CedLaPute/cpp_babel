@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <iostream>
+#include <sstream>
 #include <LinSocket.hh>
 
 LinSocket::LinSocket(short port, const char *protocol)
@@ -13,7 +14,7 @@ LinSocket::LinSocket(short port, const char *protocol)
   _tv.tv_sec = 0;
   _tv.tv_usec = 1;
   if ((pe = getprotobyname(protocol)) == NULL)
-    return ;
+	return;
   this->_fd = socket(AF_INET, SOCK_STREAM, pe->p_proto);
   this->_port = port;
   if (this->_fd == -1)
@@ -39,7 +40,7 @@ bool LinSocket::Bind()
   saddr.sin_addr.s_addr = INADDR_ANY;
   saddr.sin_port = htons(this->_port);
   if (bind(this->_fd, reinterpret_cast<struct sockaddr *>(&saddr), sizeof(struct sockaddr_in)) < 0)
-  throw "bind failed";
+	throw "bind failed";
   std::cout << "bind ok" << std::endl;
   return (true);
 }
@@ -68,22 +69,25 @@ bool LinSocket::Connect(const std::string &ip, short port)
 
 char *LinSocket::Receive() const
 {
-  char *buff = new char[44000];
-  int   i;
+  char *buff = new char[sizeof(Buff)];
+  char *data;
+  int i;
 
-  memset(buff, 0, 44000);
-  if ((i = read(this->_fd, buff, 43999)) < 0)
-  	throw "read failed";
-  else if (i > 0)
+  if (read(this->_fd, buff, sizeof(Buff)) > 0)
   {
-    return buff;
+	data = new char[Buffer::getValue(buff)->size + sizeof(Buff)];
+	memcpy(data, buff, sizeof(Buff));
+	i = read(this->_fd, &data[sizeof(Buff)], Buffer::getValue(buff)->size);
+	data[i + sizeof(Buff)] = 0;
+	Buffer::getValue(data);
+	return (data);
   }
-  return NULL;
+  return (NULL);
 }
 
 bool LinSocket::Send(char *message) const
 {
-  if (write(this->_fd, message, 44000) < 0)
+  if (write(this->_fd, message, Buffer::getValue(message)->size + sizeof(Buff) - 3) < 0)
 	throw "write failed";
   return (true);
 }

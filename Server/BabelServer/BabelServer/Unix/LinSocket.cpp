@@ -5,6 +5,8 @@
 #include <string.h>
 #include <iostream>
 #include <sstream>
+#include <string>
+#include "Buffer.hh"
 #include "LinSocket.hh"
 
 LinSocket::LinSocket(short port, const char *protocol)
@@ -82,23 +84,24 @@ bool LinSocket::Connect(const std::string &ip, short port)
 
 char *LinSocket::Receive() const
 {
-  std::stringstream ss;
-  char *buff = new char[256];
+  char *buff = new char[sizeof(Buff)];
+  char *data;
   int i;
 
-  while ((i = read(this->_fd, buff, 255)) > 0)
+  if (read(this->_fd, buff, sizeof(Buff)) > 0)
   {
-	buff[i] = 0;
-	ss << buff;
+	data = new char[Buffer::getValue(buff)->size + sizeof(Buff)];
+	memcpy(data, buff, sizeof(Buff));
+	i = read(this->_fd, &data[sizeof(Buff)], Buffer::getValue(buff)->size);
+	data[i + sizeof(Buff)] = 0;
+	return (data);
   }
-  if (!i)
-	return (const_cast<char *>(ss.str().c_str()));
   return (NULL);
 }
 
 bool LinSocket::Send(char *message) const
 {
-  if (write(this->_fd, message, strlen(message)) < 0)
+  if (write(this->_fd, message, Buffer::getValue(message)->size + sizeof(Buff) - 3) < 0)
 	throw "write failed";
   return (true);
 }

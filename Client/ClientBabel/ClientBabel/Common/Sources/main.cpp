@@ -13,10 +13,10 @@
 int main(int, char **av)
 {
   ASocket *tmp;
-  char *str;
+
   tmp = ASocket::getNewSocket((short) atoi(av[2]));
   tmp->Connect(av[1], (short) atoi(av[2]));
-  str = tmp->Receive();
-  std::cout << Buffer::getValue(str)->data << "--" << std::endl;
+  tmp->Receive();
+  sleep(5);
   return 0;
 }

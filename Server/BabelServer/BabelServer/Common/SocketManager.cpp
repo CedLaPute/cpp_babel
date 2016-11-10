@@ -38,9 +38,9 @@ void SocketManager::addSocket(ASocket *socket)
 
 void SocketManager::removeSocket(const ASocket *socket)
 {
+  std::vector<std::vector<ASocket *>::iterator> clearAuth;
   for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
   {
-	std::cout << "loop" << std::endl;
 	if (*it == socket)
 	{
 	  if (this->isSocketAvailable(socket, READ))
@@ -48,9 +48,11 @@ void SocketManager::removeSocket(const ASocket *socket)
 	  if (this->isSocketAvailable(socket, WRITE))
 		this->removeFromFDSet(socket, WRITE);
 	  delete (socket);
-	  this->_sockList.erase(it);
+	  clearAuth.push_back(it);
 	}
   }
+  for (auto it = clearAuth.begin(); it != clearAuth.end(); it++)
+	this->_sockList.erase(*it);
 }
 
 unsigned int SocketManager::_fillFDSet(FDSetType set)
@@ -76,7 +78,7 @@ int SocketManager::Select()
   unsigned int nfd;
 
   nfd = this->_fillFDSet(READ) + 1;
-  return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), &(this->_sets[ERR]), NULL));
+  return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), NULL, NULL));
 }
 
 ASocket *SocketManager::tryNewConnection()
@@ -114,4 +116,3 @@ bool SocketManager::isSocketAvailable(const ASocket *socket, FDSetType set) cons
 	return (false);
   return (FD_ISSET(socket->getSocket(), &(this->_sets[set])) != 0);
 }
-
