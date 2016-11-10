@@ -61,7 +61,9 @@ const ASocket *User::getSocket() const
 
 void User::addCommand(const char *command)
 {
+  std::cout << "size of _pendingCommands before addCommand : " << this->_pendingCommands.size() << std::endl;
   this->_pendingCommands.push_back(command);
+  std::cout << "size of _pendingCommands after addCommand : " << this->_pendingCommands.size() << std::endl;
 }
 
 const char *User::getCommand()
@@ -70,8 +72,9 @@ const char *User::getCommand()
 
   if (!this->_pendingCommands.size())
 	return (NULL);
-std::cout << "sending command" << std::endl;
+  std::cout << "size of _pendingCommands before getCommand : " << this->_pendingCommands.size() << std::endl;
   cmd = (this->_pendingCommands.front());
   this->_pendingCommands.erase(this->_pendingCommands.begin());
+  std::cout << "size of _pendingCommands after getCommand : " << this->_pendingCommands.size() << std::endl;
   return (cmd);
 }

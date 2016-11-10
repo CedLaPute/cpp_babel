@@ -89,6 +89,7 @@ void UserManager::handlePendingAuth(SocketManager &sm)
 void UserManager::handleReceive(SocketManager &sm)
 {
   char *cmd;
+  char *toSend;
 
   _command->setLogins(this->_users);
   for (auto it = this->_users.begin(); it != this->_users.end(); it++)
@@ -100,12 +101,19 @@ void UserManager::handleReceive(SocketManager &sm)
 	   * l'interpretation des commandes se fera dans UserManager (pour avoir accès aux users) avec des methodes privées
 	   */
 	   if (cmd != NULL)
-		   (*it)->addCommand(_command->analyse(cmd, (*it)));
-	  else
+	   {
+	   		toSend = _command->analyse(cmd, (*it));
+	   		if (toSend != NULL)
+	   		{
+	   			std::cout << "adding command to client" << std::endl;
+			   (*it)->addCommand(toSend);
+	   		}
+	   }
+	  /*else
 	   {
 		 sm.removeSocket((*it)->getSocket());
 		 (*it)->goOffline();
-	   }
+	   }*/
 	}
   }
 }
@@ -120,7 +128,6 @@ void UserManager::handleSend(SocketManager &sm)
 	{
 	  while ((cmd = (*it)->getCommand()))
 	  {
-	  	_command->analyse((char *)cmd, (*it));
 		(*it)->getSocket()->Send(cmd);
 	  }
 	  sm.removeFromFDSet((*it)->getSocket(), SocketManager::WRITE);

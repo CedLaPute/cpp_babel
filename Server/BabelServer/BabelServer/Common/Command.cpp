@@ -83,6 +83,8 @@ char 	*Command::_listLogin(Buff *_entry, User *user)
 	int size = _logins.size();
 	char *str = new char[sizeof(Buff) + size];
 
+	std::cout << s << " / " << _logins << std::endl;
+
 	Buffer::getCmd(str, size, 103, _logins.c_str());
 	return str;
 }
@@ -114,7 +116,8 @@ char 	*Command::analyse(char *str, User *user)
 	Buff 	*_entry = new Buff();
 
 	_entry = Buffer::getValue(str);
-	std::cout << (int)_entry->cmd << std::endl;
+	if ((int)_entry->cmd <= 0)
+		return NULL;
 	switch ((int)_entry->cmd)
 	{
 		case 102:

@@ -97,17 +97,17 @@ bool WinSocket::Connect(const std::string &ip, short port)
 
 char *WinSocket::Receive() const
 {
-  char *buff = new char[256];
+  char *buff = new char[44000];
 
-  memset(buff, 0, 256);
-  if (recv(this->_socket, buff, 255, 0) < 0)
+  memset(buff, 0, 44000);
+  if (recv(this->_socket, buff, 43999, 0) < 0)
 	throw "read failed";
   return (buff);
 }
 
 bool WinSocket::Send(const char *message) const
 {
-  if (send(this->_socket, message, (int) strlen(message), 0) < 0)
+  if (send(this->_socket, message, 44000, 0) < 0)
 	throw "write failed";
   return (true);
 }

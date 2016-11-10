@@ -31,12 +31,15 @@ char 	*Command::analyse(char *str)
 	Buff 	*_entry = new Buff();
 
 	_entry = Buffer::getValue(str);
+	std::cout << (int)_entry->cmd;
 	switch ((int)_entry->cmd)
 	{
 		case 101:
+			std::cout << "sending login" << std::endl;
 			return _login();
 			break;
 		case 103:
+			std::cout << "command 103 : ";
 			std::cout << _entry->data << std::endl;
 			break;
 		case 230:
