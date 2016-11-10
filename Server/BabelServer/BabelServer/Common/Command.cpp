@@ -19,41 +19,41 @@ Command::Command()
 
 char 	*Command::_unknownCommand()
 {
-	char *str = new char[sizeof(Buff)];
+	char *str;
 
-	Buffer::getCmd(str, 0, 240, "");
+	Buffer::getCmd(&str, 0, 240, "");
 	return str;
 }
 
 char	*Command::_loginNotFree()
 {
-	char *str = new char[sizeof(Buff)];
+	char *str;
 
-	Buffer::getCmd(str, 0, 230, "");
+	Buffer::getCmd(&str, 0, 230, "");
 	return str;
 }
 
 char 	*Command::_noData()
 {
-	char *str = new char[sizeof(Buff)];
+	char *str;
 
-	Buffer::getCmd(str, 0, 231, "");
+	Buffer::getCmd(&str, 0, 231, "");
 	return str;
 }
 
 char 	*Command::_loginNotMatching()
 {
-	char *str = new char[sizeof(Buff)];
+	char *str;
 
-	Buffer::getCmd(str, 0, 232, "");
+	Buffer::getCmd(&str, 0, 232, "");
 	return str;
 }
 
 char 	*Command::_loginTooLong()
 {
-	char *str = new char[sizeof(Buff)];
+	char *str;
 
-	Buffer::getCmd(str, 0, 237, "");
+	Buffer::getCmd(&str, 0, 237, "");
 	return str;
 }
 
@@ -81,11 +81,11 @@ char 	*Command::_listLogin(Buff *_entry, User *user)
 	_logins = ss.str();
 
 	int size = _logins.size();
-	char *str = new char[sizeof(Buff) + size];
+	char *str;
 
 	std::cout << s << " / " << _logins << std::endl;
 
-	Buffer::getCmd(str, size, 103, _logins.c_str());
+	Buffer::getCmd(&str, size, 103, _logins.c_str());
 	return str;
 }
 
@@ -116,6 +116,13 @@ char 	*Command::analyse(char *str, User *user)
 	Buff 	*_entry = new Buff();
 
 	_entry = Buffer::getValue(str);
+
+	// test
+	std::cout << _entry->magic << " ";
+	std::cout << (int)_entry->cmd << " ";
+	std::cout << _entry->size << " ";
+	std::cout << _entry->data << std::endl;
+
 	if ((int)_entry->cmd <= 0)
 		return NULL;
 	switch ((int)_entry->cmd)
@@ -134,9 +141,9 @@ char 	*Command::analyse(char *str, User *user)
 
 char 	*Command::sayHello()
 {
-	char 	*str = new char[sizeof(Buff) + 5];
+	char 	*str;
 
-	Buffer::getCmd(str, 5, 101, "Hello");
+	Buffer::getCmd(&str, 5, 101, "Hello");
 	return str;
 }
 

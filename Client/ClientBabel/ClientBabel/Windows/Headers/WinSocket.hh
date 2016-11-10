@@ -20,6 +20,7 @@
 
 #include "../../Common/Headers/Command.hh"
 #include "../../Common/Headers/ASocket.hh"
+#include "../../Common/Headers/Buffer.hh"
 
 class WinSocket : public ASocket
 {
@@ -33,7 +34,7 @@ class WinSocket : public ASocket
 	ASocket *Accept();
 	bool Connect(const std::string& ip, short port);
 	char *Receive() const;
-	bool Send(const char *message) const;
+	bool Send(char *message) const;
 	unsigned int getSocket() const;
 
 	void				Reset();

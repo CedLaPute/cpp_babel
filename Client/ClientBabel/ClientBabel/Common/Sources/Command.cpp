@@ -20,9 +20,9 @@ Command::Command()
 
 char 	*Command::_login()
 {
-	char 	*str = new char[sizeof(Buff) + _name.size()];
+	char 	*str;
 
-	Buffer::getCmd(str, _name.size(), 102, _name.c_str());
+	Buffer::getCmd(&str, _name.size(), 102, _name.c_str());
 	return str;
 }
 
@@ -31,7 +31,12 @@ char 	*Command::analyse(char *str)
 	Buff 	*_entry = new Buff();
 
 	_entry = Buffer::getValue(str);
-	std::cout << "cmd : " << (int)_entry->cmd;
+
+	// test
+	std::cout << _entry->magic << " ";
+	std::cout << (int)_entry->cmd << " ";
+	std::cout << _entry->size << " ";
+	std::cout << _entry->data << std::endl;
 	
 	switch ((int)_entry->cmd)
 	{

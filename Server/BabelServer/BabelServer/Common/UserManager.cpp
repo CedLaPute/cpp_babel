@@ -75,13 +75,13 @@ void UserManager::handlePendingAuth(SocketManager &sm)
 
   if (!this->_pendingAuth.size())
 	return;
-  std::cout << "pending auth" << std::endl;
   for (auto it = this->_pendingAuth.begin(); it != this->_pendingAuth.end(); it++)
   {
-	std::cout << "pending auth loop" << std::endl;
 	if (sm.isSocketAvailable(*it, SocketManager::READ))
 	{
+		std::cout << "Read is set" << std::endl;
 	  cmd = (*it)->Receive();
+	  std::cout << Buffer::getValue(cmd)->data << std::endl;
 	  if (cmd != NULL)
 		this->_newClient(cmd, (*it));
 	  else
@@ -134,7 +134,7 @@ void UserManager::handleSend(SocketManager &sm)
 	{
 	  while ((cmd = (*it)->getCommand()))
 	  {
-		(*it)->getSocket()->Send(cmd);
+		(*it)->getSocket()->Send((char *)cmd);
 		delete[] (cmd);
 	  }
 	  sm.removeFromFDSet((*it)->getSocket(), SocketManager::WRITE);

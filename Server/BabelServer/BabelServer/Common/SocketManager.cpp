@@ -76,7 +76,6 @@ int SocketManager::Select()
   unsigned int nfd;
 
   nfd = this->_fillFDSet(READ) + 1;
-  this->_fillFDSet(WRITE);
   return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), &(this->_sets[ERR]), NULL));
 }
 

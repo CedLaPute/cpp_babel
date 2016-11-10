@@ -83,7 +83,7 @@ char *LinSocket::Receive() const
   return NULL;
 }
 
-bool LinSocket::Send(const char *message) const
+bool LinSocket::Send(char *message) const
 {
   if (write(this->_fd, message, 44000) < 0)
 	throw "write failed";

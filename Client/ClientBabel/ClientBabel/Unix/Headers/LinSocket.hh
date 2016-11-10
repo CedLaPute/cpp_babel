@@ -26,7 +26,7 @@ class LinSocket : public ASocket
 	virtual ASocket *Accept();
 	virtual bool Connect(const std::string& ip, short port);
 	virtual char *Receive() const;
-	virtual bool Send(const char *message) const;
+	virtual bool Send(char *message) const;
 	virtual unsigned int getSocket() const;
 
 	void Reset();

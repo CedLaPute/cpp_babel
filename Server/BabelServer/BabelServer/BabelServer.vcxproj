@@ -124,7 +124,6 @@
   <ItemGroup>
     <ClCompile Include="Common\ASocket.cpp" />
     <ClCompile Include="Common\Buffer.cpp" />
-    <ClCompile Include="Common\Command.cpp" />
     <ClCompile Include="Common\main.cpp" />
     <ClCompile Include="Common\SocketManager.cpp" />
     <ClCompile Include="Common\User.cpp" />
@@ -134,7 +133,6 @@
   <ItemGroup>
     <ClInclude Include="Common\ASocket.hh" />
     <ClInclude Include="Common\Buffer.hh" />
-    <ClInclude Include="Common\Command.hh" />
     <ClInclude Include="Common\SocketManager.hh" />
     <ClInclude Include="Common\User.hh" />
     <ClInclude Include="Common\UserManager.hh" />

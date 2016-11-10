@@ -17,7 +17,7 @@ class ASocket
 	virtual ASocket *Accept() = 0;
 	virtual bool Connect(const std::string &ip, short port) = 0;
 	virtual char *Receive() const = 0;
-	virtual bool Send(const char *message) const = 0;
+	virtual bool Send(char *message) const = 0;
 	virtual unsigned int getSocket() const = 0;
 	virtual void Loop() = 0;
 	static ASocket *getNewSocket(short port);

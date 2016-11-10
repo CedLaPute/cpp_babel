@@ -1,4 +1,5 @@
 #include "../Headers/ASocket.hh"
+# include <iostream>
 
 #ifdef _WIN32
 #include "../../Windows/Headers/WinSocket.hh"
@@ -10,13 +11,13 @@
 int	main(int , char **)
 {
 	ASocket *tmp;
-  
-	tmp = ASocket::getNewSocket(2728);
- 	tmp->Connect("10.14.58.135", 2728);
 
-  while (1)
-    {
-      tmp->Loop();
-    }
+	tmp = ASocket::getNewSocket(2727);
+ 	tmp->Connect("10.14.58.135", 2727);
+
+	while (1)
+	{
+		tmp->Loop();
+	}
   return 0;
 }

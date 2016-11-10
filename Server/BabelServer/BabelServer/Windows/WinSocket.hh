@@ -15,6 +15,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string>
+# include "../Common/Buffer.hh"
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -31,7 +32,7 @@ class WinSocket : public ASocket
 	ASocket *Accept();
 	bool Connect(const std::string& ip, short port);
 	char *Receive() const;
-	bool Send(const char *message) const;
+	bool Send(char *message) const;
 	unsigned int getSocket() const;
 
   private:

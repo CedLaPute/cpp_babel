@@ -20,7 +20,7 @@ public:
   Buffer();
   ~Buffer();
 
-  static void		getCmd(char *, int const, int const, char const *);
+  static void		getCmd(char **, int const, int const, char const *);
   static Buff		*getValue(char *);
 };
 
