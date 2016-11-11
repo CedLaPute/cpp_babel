@@ -11,8 +11,8 @@
 #include <sys/time.h>
 #include <netdb.h>
 #include <unistd.h>
-#include "../../Common/Headers/ASocket.hh"
-#include "../../Common/Headers/Command.hh"
+#include "../../ASocket.hh"
+#include "../../Command.hh"
 
 class LinSocket : public ASocket
 {

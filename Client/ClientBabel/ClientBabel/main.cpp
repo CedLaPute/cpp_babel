@@ -1,6 +1,6 @@
 #include "window.h"
 #include "ASocket.hh"
-#include <QtWidgets/QApplication>
+#include <QApplication>
 
 int main(int argc, char *av[])
 {
