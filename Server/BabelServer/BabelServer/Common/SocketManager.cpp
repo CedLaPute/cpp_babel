@@ -38,7 +38,8 @@ void SocketManager::addSocket(ASocket *socket)
 
 void SocketManager::removeSocket(const ASocket *socket)
 {
-  std::vector<std::vector<ASocket *>::iterator> clearAuth;
+  std::vector<ASocket *>::iterator toRemove = this->_sockList.end();
+
   for (auto it = this->_sockList.begin(); it != this->_sockList.end(); it++)
   {
 	if (*it == socket)
@@ -48,11 +49,11 @@ void SocketManager::removeSocket(const ASocket *socket)
 	  if (this->isSocketAvailable(socket, WRITE))
 		this->removeFromFDSet(socket, WRITE);
 	  delete (socket);
-	  clearAuth.push_back(it);
+	  toRemove = it;
 	}
   }
-  for (auto it = clearAuth.begin(); it != clearAuth.end(); it++)
-	this->_sockList.erase(*it);
+  if (toRemove != this->_sockList.end())
+	this->_sockList.erase(toRemove);
 }
 
 unsigned int SocketManager::_fillFDSet(FDSetType set)
@@ -90,10 +91,7 @@ ASocket *SocketManager::tryNewConnection()
   {
 	newSocket = this->_listener->Accept();
 	if (newSocket != NULL)
-	{
 	  this->_sockList.push_back(newSocket);
-	  this->addToFDSet(newSocket, WRITE);
-	}
   }
   return (newSocket);
 }

@@ -22,27 +22,27 @@ int main(int ac, char **av)
 
   try
   {
-	  SocketManager sm((short)atoi(av[1]));
-	  ASocket *newConnection;
-	  UserManager um;
+	SocketManager sm((short) atoi(av[1]));
+	ASocket *newConnection;
+	UserManager um;
 
-	  while (sm.Select() != -1)
+	while (sm.Select() != -1)
+	{
+	  um.handleSend(sm);
+	  um.handleReceive(sm);
+	  um.handlePendingAuth(sm);
+	  newConnection = sm.tryNewConnection();
+	  if (newConnection)
 	  {
-		  um.handleSend(sm);
-		  um.handleReceive(sm);
-		  um.handlePendingAuth(sm);
-		  newConnection = sm.tryNewConnection();
-		  if (newConnection)
-		  {
-			  um.addPendingAuth(newConnection);
-			  newConnection = NULL;
-		  }
+		um.addPendingAuth(newConnection);
+		newConnection = NULL;
 	  }
+	}
   }
   catch (const std::string &err)
   {
-	  std::cout << err << std::endl;
-	  exit(1);
+	std::cout << err << std::endl;
+	exit(1);
   }
   return (0);
 }

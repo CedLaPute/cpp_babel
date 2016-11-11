@@ -2,8 +2,9 @@
 // Created by lemonti on 11/3/16.
 //
 
-#include "User.hh"
 #include <iostream>
+#include "User.hh"
+#include "Buffer.hh"
 
 User::User(const std::string &name, ASocket *socket)
 {
@@ -61,20 +62,20 @@ const ASocket *User::getSocket() const
 
 void User::addCommand(const char *command)
 {
-  std::cout << "size of _pendingCommands before addCommand : " << this->_pendingCommands.size() << std::endl;
   this->_pendingCommands.push_back(command);
-  std::cout << "size of _pendingCommands after addCommand : " << this->_pendingCommands.size() << std::endl;
+  std::cout << "cmd added : --" << (int) Buffer::getValue(const_cast<char *>(command))->cmd
+			<< "--" << Buffer::getValue(const_cast<char *>(command))->data << "--" << std::endl;
 }
 
 const char *User::getCommand()
 {
-  const char *cmd;
+  const char *command;
 
   if (!this->_pendingCommands.size())
 	return (NULL);
-  std::cout << "size of _pendingCommands before getCommand : " << this->_pendingCommands.size() << std::endl;
-  cmd = (this->_pendingCommands.front());
+  command = (this->_pendingCommands.front());
   this->_pendingCommands.erase(this->_pendingCommands.begin());
-  std::cout << "size of _pendingCommands after getCommand : " << this->_pendingCommands.size() << std::endl;
-  return (cmd);
+  std::cout << "cmd got : --" << (int) Buffer::getValue(const_cast<char *>(command))->cmd
+			<< "--" << Buffer::getValue(const_cast<char *>(command))->data << "--" << std::endl;
+  return (command);
 }

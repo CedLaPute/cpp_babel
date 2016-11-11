@@ -20,7 +20,6 @@ void Buffer::getCmd(char **str, int const size, int const cmd, char const *data)
   b->size = size;
   b->cmd = cmd;
   std::strcpy((char *) (b->data), data);
-  std::cout << (int)b->cmd << " " << b->data << std::endl;
 }
 
 Buff *Buffer::getValue(char *str)

@@ -9,6 +9,13 @@
 #include "User.hh"
 #include "Command.hh"
 
+typedef struct
+{
+  char ip[20];
+  int port;
+  char login[128];
+} Data;
+
 class UserManager
 {
   public:
@@ -25,10 +32,11 @@ class UserManager
 	void handleSend(SocketManager &sm);
 
   private:
-	void _handleCommand(User *sender, char *cmd);
+	void _handleCommand(SocketManager &sm, User *sender, char *cmd);
 	void _sayHello(ASocket *socket);
-	void _newClient(char *name, ASocket *socket);
+	void _newClient(SocketManager &sm, char *name, ASocket *socket);
 	char *_listLogin();
+	User *_callCommand(User *sender, char *data);
 
 	std::vector<ASocket *> _pendingAuth;
 	std::vector<User *> _users;

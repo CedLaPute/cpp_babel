@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cstring>
 #include "Buffer.hh"
 #include "LinSocket.hh"
 
@@ -88,12 +89,15 @@ char *LinSocket::Receive() const
   char *data;
   int i;
 
+  std::memset(buff, 0, sizeof(Buff));
   if (read(this->_fd, buff, sizeof(Buff)) > 0)
   {
 	data = new char[Buffer::getValue(buff)->size + sizeof(Buff)];
-	memcpy(data, buff, sizeof(Buff));
+	std::memcpy(data, buff, sizeof(Buff));
 	i = read(this->_fd, &data[sizeof(Buff)], Buffer::getValue(buff)->size);
 	data[i + sizeof(Buff)] = 0;
+	std::cout << "receive : --" << (int)Buffer::getValue(data)->cmd << "--"
+			  << Buffer::getValue(data)->data << "--" << std::endl;
 	return (data);
   }
   return (NULL);
@@ -101,6 +105,8 @@ char *LinSocket::Receive() const
 
 bool LinSocket::Send(char *message) const
 {
+  std::cout << "send : --" << (int)Buffer::getValue(message)->cmd << "--"
+			<< Buffer::getValue(message)->data << "--" << std::endl;
   if (write(this->_fd, message, Buffer::getValue(message)->size + sizeof(Buff) - 3) < 0)
 	throw "write failed";
   return (true);
