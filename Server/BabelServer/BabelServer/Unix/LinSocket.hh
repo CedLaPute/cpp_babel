@@ -24,6 +24,8 @@ class LinSocket : public ASocket
 	virtual char *Receive() const;
 	virtual bool Send(char *message) const;
 	virtual unsigned int getSocket() const;
+	virtual char *getIP() const;
+	virtual int getPort() const;
 
   private:
 	struct sockaddr_in _saddr;

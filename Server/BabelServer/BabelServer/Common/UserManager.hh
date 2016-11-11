@@ -36,8 +36,20 @@ class UserManager
 	void _sayHello(ASocket *socket);
 	void _newClient(SocketManager &sm, char *name, ASocket *socket);
 	char *_listLogin();
-	User *_callCommand(User *sender, char *data);
-
+	User *_callRequest(User *sender, char *data);
+	User *_callAccepted(User *sender, char *data);
+	User *_callRefused(User *sender, char *data);
+	User *_callFailed(User *sender, char *data);
+	User *_callEnd(User *sender, char *data);
+	void _quit(SocketManager &sm, User *sender);
+	char *_errLoginTaken() const;
+	char *_errNoData() const;
+	char *_errNoSuchLogin() const;
+	char *_errLoginTooLong() const;
+	char *_errConnectionRefused() const;
+	char *_errConnectionFailed() const;
+	char *_errNotConnected() const;
+	char *_errUnknownCommand() const;
 	std::vector<ASocket *> _pendingAuth;
 	std::vector<User *> _users;
 };

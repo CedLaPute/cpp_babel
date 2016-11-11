@@ -96,7 +96,7 @@ char *LinSocket::Receive() const
 	std::memcpy(data, buff, sizeof(Buff));
 	i = read(this->_fd, &data[sizeof(Buff)], Buffer::getValue(buff)->size);
 	data[i + sizeof(Buff)] = 0;
-	std::cout << "receive : --" << (int)Buffer::getValue(data)->cmd << "--"
+	std::cout << "receive : --" << (int) Buffer::getValue(data)->cmd << "--"
 			  << Buffer::getValue(data)->data << "--" << std::endl;
 	return (data);
   }
@@ -105,7 +105,7 @@ char *LinSocket::Receive() const
 
 bool LinSocket::Send(char *message) const
 {
-  std::cout << "send : --" << (int)Buffer::getValue(message)->cmd << "--"
+  std::cout << "send : --" << (int) Buffer::getValue(message)->cmd << "--"
 			<< Buffer::getValue(message)->data << "--" << std::endl;
   if (write(this->_fd, message, Buffer::getValue(message)->size + sizeof(Buff) - 3) < 0)
 	throw "write failed";
@@ -115,4 +115,14 @@ bool LinSocket::Send(char *message) const
 unsigned int LinSocket::getSocket() const
 {
   return (this->_fd);
+}
+
+char *LinSocket::getIP() const
+{
+  return (inet_ntoa(this->_saddr.sin_addr));
+}
+
+int LinSocket::getPort() const
+{
+  return (this->_port);
 }

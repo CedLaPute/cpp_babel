@@ -22,10 +22,13 @@ class User
 	const ASocket *getSocket() const;
 	void addCommand(const char *command);
 	const char *getCommand();
+	void setInCallWith(User *user);
+	bool isInCall() const;
 
   protected:
 	std::string _name;
 	ASocket *_socket;
+	User *_calling;
 	bool _isOnline;
 	std::vector<const char *> _pendingCommands;
 	std::vector<std::string> _contactList;

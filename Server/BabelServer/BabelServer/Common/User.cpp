@@ -9,6 +9,7 @@
 User::User(const std::string &name, ASocket *socket)
 {
   this->_name = name;
+  this->_calling = NULL;
   if ((this->_socket = socket))
 	this->_isOnline = true;
   else
@@ -52,6 +53,7 @@ void User::goOnline(ASocket *socket)
 void User::goOffline()
 {
   this->_isOnline = false;
+  this->_calling = NULL;
   this->_socket = NULL;
 }
 
@@ -78,4 +80,14 @@ const char *User::getCommand()
   std::cout << "cmd got : --" << (int) Buffer::getValue(const_cast<char *>(command))->cmd
 			<< "--" << Buffer::getValue(const_cast<char *>(command))->data << "--" << std::endl;
   return (command);
+}
+
+bool User::isInCall() const
+{
+  return (this->_calling != NULL);
+}
+
+void User::setInCallWith(User *user)
+{
+  this->_calling = user;
 }
