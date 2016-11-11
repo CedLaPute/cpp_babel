@@ -6,8 +6,8 @@
 #include <sstream>
 #include <iostream>
 #include <sstream>
-#include "../../Common/Headers/ASocket.hh"
-#include "../Headers/WinSocket.hh"
+#include "ASocket.hh"
+#include "Windows/Headers/WinSocket.hh"
 
 WinSocket::WinSocket(short port, const char *protocol)
 {

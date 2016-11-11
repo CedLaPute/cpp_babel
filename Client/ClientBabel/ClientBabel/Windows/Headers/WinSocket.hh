@@ -18,9 +18,9 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
-#include "../../Common/Headers/Command.hh"
-#include "../../Common/Headers/ASocket.hh"
-#include "../../Common/Headers/Buffer.hh"
+#include "Command.hh"
+#include "ASocket.hh"
+#include "Buffer.hh"
 
 class WinSocket : public ASocket
 {
