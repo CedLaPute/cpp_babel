@@ -10,28 +10,59 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGridLayout>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
+#include <QFormLayout>
+#include <QString>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <QComboBox>
+#include <QSpinBox>
+
+#include <QVector>
 
 class window : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit window(QWidget *parent = 0);
+    explicit window(QWidget *parent = 0);
 
 signals:
 
-	public slots :
-		void changeIp();
-	void changeNickname();
+public slots:
+    void changeIp();
+    void changeNickname();
 
 private:
-	void        createMenu();
+    void        createMenu();
+    void        createInfo();
 
-	QPushButton *b_server;
-	QPushButton *b_nickname;
-	QLineEdit   *ln_server;
-	QLineEdit   *ln_nickname;
+    void        addBudy(QString);
+    void        removeBudy(QString);
 
-	QGroupBox  *personnal;
+
+
+    QPushButton *b_server;
+    QPushButton *b_nickname;
+    QLineEdit   *ln_server;
+    QLineEdit   *ln_nickname;
+
+    QLabel      *infoClient;
+
+    QMenu       *fileMenu;
+
+    QGroupBox   *menu;
+    QGroupBox   *info;
+
+    std::vector<QString>    users;
+
+    QGroupBox   *formGroupBox;
+    QFormLayout *formLayout;
+
+    QAction     *exitAction;
 };
 
 #endif // WINDOW_H
