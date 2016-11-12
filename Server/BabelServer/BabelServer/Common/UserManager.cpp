@@ -151,6 +151,8 @@ void UserManager::_handleCommand(SocketManager &sm, User *sender, char *cmd)
   }
   switch (cmdBuff->cmd)
   {
+	case 102:
+	  target = this->_updateLogin(sender, reinterpret_cast<char *>(cmdBuff->data));
 	case 111:
 	  target = this->_callRequest(sender, reinterpret_cast<char *>(cmdBuff->data));
 	  break;
@@ -193,7 +195,6 @@ void UserManager::_newClient(SocketManager &sm, char *cmd, ASocket *socket)
   char *str;
 
   cmdBuff = Buffer::getValue(cmd);
-  str = NULL;
   if (std::strlen(reinterpret_cast<const char *>(cmdBuff->data)) == 0)
   {
 	str = this->_errNoData();
@@ -236,10 +237,24 @@ char *UserManager::_listLogin()
   for (auto it = this->_users.begin(); it != this->_users.end(); it++)
   {
 	if ((*it)->getSocket())
-	  ss << (*it)->getName() << "/";
+	  ss << (*it)->getName() << "\n";
   }
   Buffer::getCmd(&cmd, static_cast<int>(ss.str().size()), 103, ss.str().c_str());
   return (cmd);
+}
+
+User *UserManager::_updateLogin(User *sender, char *data)
+{
+  if (this->getUser(data) == NULL)
+  {
+	sender->setName(data);
+	sender->addCommand(this->_listLogin());
+  }
+  else if (this->getUser(data) == sender)
+	sender->addCommand(this->_listLogin());
+  else
+	sender->addCommand(this->_errLoginTaken());
+  return (sender);
 }
 
 User *UserManager::_callRequest(User *sender, char *data)
@@ -345,7 +360,7 @@ User *UserManager::_callEnd(User *sender, char *data)
   return (target);
 }
 
-void UserManager::_quit(SocketManager& sm, User *sender)
+void UserManager::_quit(SocketManager &sm, User *sender)
 {
   sm.removeSocket(sender->getSocket());
   sender->goOffline();

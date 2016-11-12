@@ -36,6 +36,7 @@ class UserManager
 	void _sayHello(ASocket *socket);
 	void _newClient(SocketManager &sm, char *name, ASocket *socket);
 	char *_listLogin();
+	User *_updateLogin(User *sender, char *data);
 	User *_callRequest(User *sender, char *data);
 	User *_callAccepted(User *sender, char *data);
 	User *_callRefused(User *sender, char *data);
