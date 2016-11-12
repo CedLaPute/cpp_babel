@@ -43,7 +43,7 @@ private:
     void        addBudy(QString);
     void        removeBudy(QString);
 
-
+    void        calling(QString);
 
     QPushButton *b_server;
     QPushButton *b_nickname;
