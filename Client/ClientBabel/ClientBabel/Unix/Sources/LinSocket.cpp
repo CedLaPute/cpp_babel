@@ -92,6 +92,20 @@ bool LinSocket::Send(char *message) const
   return (true);
 }
 
+void LinSocket::Loop()
+{
+	FD_ZERO(&_fdread);
+	FD_ZERO(&_fdwrite);
+
+	if (select(this->_fd, &_fdread, &_fdwrite, NULL, &_tv) < 0)
+		return;
+
+	if (FD_ISSET(this->_fd, &_fdread))
+	{
+		Receive();
+	}
+}
+
 unsigned int LinSocket::getSocket() const
 {
   return (this->_fd);

@@ -89,32 +89,20 @@ bool WinSocket::Connect(const std::string &ip, short port)
 
 char *WinSocket::Receive() const
 {
-  char *buff = new char[44000];
-  int i;
-  std::stringstream ss;
-  std::string s;
+	char *buff = new char[sizeof(Buff)];
+	char *data;
+	int i;
 
-  std::cout << "in receive" << std::endl;
-
-	memset(buff, '\0', 44000);
-	if ((i = recv(this->_socket, buff, 43999, 0)) < 0)
+	if (recv(this->_socket, buff, sizeof(Buff), 0) > 0)
 	{
-		std::cout << WSAGetLastError() << std::endl;
-		throw "recv failed";
+		data = new char[Buffer::getValue(buff)->size + sizeof(Buff)];
+		memcpy(data, buff, sizeof(Buff));
+		i = recv(this->_socket, &data[sizeof(Buff)], Buffer::getValue(buff)->size, 0);
+		data[i + sizeof(Buff)] = 0;
+		Buffer::getValue(data);
+		return (data);
 	}
-	else if (i > 0)
-	{
-		buff[i] = '\0';
-		ss << buff;
-	}
-
-  s = ss.str();
-  std::cout << s.size() << std::endl;
-  if (s.size() > 0)
-  {
-	  std::cout << Buffer::getValue((char *)s.c_str())->data << std::endl;
-  }
-  return ((char *)s.c_str());
+	return (NULL);
 }
 
 bool WinSocket::Send(char *message) const
@@ -129,6 +117,21 @@ bool WinSocket::Send(char *message) const
 	throw "write failed";
   return (true);
 }
+
+void WinSocket::Loop()
+{
+	FD_ZERO(&_fdread);
+	FD_ZERO(&_fdwrite);
+
+	if (select(this->_socket, &_fdread, &_fdwrite, NULL, &_tv) < 0)
+		return;
+
+	if (FD_ISSET(this->_socket, &_fdread))
+	{
+		Receive();
+	}
+}
+
 
 unsigned int WinSocket::getSocket() const
 {

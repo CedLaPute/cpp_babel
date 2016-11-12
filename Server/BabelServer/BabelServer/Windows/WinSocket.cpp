@@ -80,13 +80,17 @@ ASocket *WinSocket::Accept()
   ASocket *newSocket = NULL;
   SOCKET client = INVALID_SOCKET;
 
+  std::cout << "in accept" << std::endl;
   if ((client = accept(this->_socket, NULL, NULL)) < 0)
 	throw "Accept failed";
   if (client != INVALID_SOCKET)
   {
-	newSocket = new WinSocket(client, NULL);
-	return newSocket;
+	  std::cout << "NewSocket detected" << std::endl;
+	  newSocket = new WinSocket(client, NULL);
+	  return newSocket;
   }
+  else
+	  std::cout << "NULL" << std::endl;
   return (NULL);
 }
 
@@ -119,23 +123,20 @@ bool WinSocket::Connect(const std::string &ip, short port)
 
 char *WinSocket::Receive() const
 {
-	char *buff = new char[44000];
-	std::stringstream ss;
+	char *buff = new char[sizeof(Buff)];
+	char *data;
 	int i;
-	std::string s;
 
-		memset(buff, '\0', 44000);
-		if (( i = recv(this->_socket, buff, 43999, 0)) < 0)
-			throw "read failed";
-		if (i > 0)
-		{
-			buff[i] = '\0';
-			ss << buff;
-		}
-
-	s = ss.str();
-	std::cout << s.size() << std::endl;
-  return ((char *)s.c_str());
+	if (recv(this->_socket, buff, sizeof(Buff), 0) > 0)
+	{
+		data = new char[Buffer::getValue(buff)->size + sizeof(Buff)];
+		memcpy(data, buff, sizeof(Buff));
+		i = recv(this->_socket, &data[sizeof(Buff)], Buffer::getValue(buff)->size, 0);
+		data[i + sizeof(Buff)] = 0;
+		Buffer::getValue(data);
+		return (data);
+	}
+	return (NULL);
 }
 
 bool WinSocket::Send(char *message) const
@@ -146,8 +147,6 @@ bool WinSocket::Send(char *message) const
 
 	_entry = Buffer::getValue(message);
 	size = sizeof(Buff) + _entry->size;
-
-	std::cout << "in send" << std::endl;
 
 	if ((i = send(this->_socket, message, size, 0)) == SOCKET_ERROR)
 	{
@@ -160,4 +159,17 @@ bool WinSocket::Send(char *message) const
 unsigned int WinSocket::getSocket() const
 {
   return this->_socket;
+}
+
+char *WinSocket::getIP() const
+{
+	//struct sockaddr name;
+
+//	getpeername(this->_socket, &name, &);
+	return "";
+}
+
+int WinSocket::getPort() const
+{
+	return (this->_port);
 }

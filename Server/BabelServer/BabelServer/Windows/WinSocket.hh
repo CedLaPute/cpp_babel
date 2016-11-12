@@ -34,6 +34,8 @@ class WinSocket : public ASocket
 	char *Receive() const;
 	bool Send(char *message) const;
 	unsigned int getSocket() const;
+	char *getIP() const;
+	int getPort() const;
 
   private:
 	short	_port;

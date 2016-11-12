@@ -20,7 +20,6 @@ ASocket *ASocket::getNewSocket(short port, const char *protocol)
 
   #elif __linux__
 
-  printf("__linux__ detected, initializing LinSocket\n");
   ptr = new LinSocket(port, protocol);
 
   #endif

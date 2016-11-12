@@ -35,6 +35,7 @@ class WinSocket : public ASocket
 	bool Connect(const std::string& ip, short port);
 	char *Receive() const;
 	bool Send(char *message) const;
+	void Loop();
 	unsigned int getSocket() const;
 
   private:
@@ -43,6 +44,9 @@ class WinSocket : public ASocket
 	struct addrinfo *_result;
 	SOCKET _socket;
 	struct timeval _tv;
+
+	fd_set	_fdread;
+	fd_set	_fdwrite;
 };
 
 

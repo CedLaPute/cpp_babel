@@ -27,6 +27,7 @@ class LinSocket : public ASocket
 	virtual bool Connect(const std::string& ip, short port);
 	virtual char *Receive() const;
 	virtual bool Send(char *message) const;
+	virtual void Loop();
 	virtual unsigned int getSocket() const;
 
   private:
@@ -35,6 +36,9 @@ class LinSocket : public ASocket
 	int _callFd;
 	short _port;
 	struct timeval _tv;
+
+	fd_set	_fdread;
+	fd_set	_fdwrite;
 };
 
 

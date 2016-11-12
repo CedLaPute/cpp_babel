@@ -11,6 +11,7 @@
 	#include <WinSock2.h>
 #elif __linux__
 	#include <sys/select.h>
+	#include <sys/time.h>
 #endif
 
 #include "ASocket.hh"
@@ -38,6 +39,7 @@ class SocketManager
   private:
 	unsigned int _fillFDSet(FDSetType set);
 	fd_set _sets[3];
+	struct timeval _tv;
 	ASocket *_listener;
 	std::vector<ASocket *> _sockList;
 };

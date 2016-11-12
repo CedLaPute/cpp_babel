@@ -17,6 +17,8 @@ SocketManager::SocketManager(short port)
 
   #endif
 
+  this->_tv.tv_sec = 0;
+  this->_tv.tv_usec = 1;
   this->_listener = ASocket::getNewSocket(port, "TCP");
   this->_listener->Bind();
   this->_listener->Listen();
@@ -79,7 +81,7 @@ int SocketManager::Select()
   unsigned int nfd;
 
   nfd = this->_fillFDSet(READ) + 1;
-  return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), NULL, NULL));
+  return (select(nfd, &(this->_sets[READ]), &(this->_sets[WRITE]), NULL, &this->_tv));
 }
 
 ASocket *SocketManager::tryNewConnection()
@@ -89,6 +91,7 @@ ASocket *SocketManager::tryNewConnection()
   newSocket = NULL;
   if (FD_ISSET(this->_listener->getSocket(), &(this->_sets[READ])))
   {
+	  std::cout << "fd_read listener ok" << std::endl;
 	newSocket = this->_listener->Accept();
 	if (newSocket != NULL)
 	  this->_sockList.push_back(newSocket);
