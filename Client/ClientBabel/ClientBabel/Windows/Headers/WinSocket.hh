@@ -40,11 +40,16 @@ class WinSocket : public ASocket
 	void setName(std::string const &n);
 
   private:
+	SOCKET _socket;
 	short	_port;
+	std::string _name;
+	
+	/* Communication avec le serveur */
 	struct addrinfo _resources;
 	struct addrinfo *_result;
-	SOCKET _socket;
-	std::string _name;
+
+	/* Communication avec le client*/
+	struct sockaddr_in _other;
 };
 
 

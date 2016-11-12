@@ -1,7 +1,3 @@
-//
-// Created by lemonti on 11/7/16.
-//
-
 #include <string.h>
 #include <sstream>
 #include <iostream>
@@ -26,6 +22,7 @@ WinSocket::WinSocket(short port, const char *protocol)
   this->_resources.ai_family = AF_UNSPEC;
   this->_resources.ai_socktype = SOCK_STREAM;
   this->_resources.ai_protocol = getprotobyname(protocol)->p_proto;
+  this->_socket = INVALID_SOCKET;
 }
 
 WinSocket::WinSocket(SOCKET sock, struct addrinfo *saddr)
@@ -41,8 +38,33 @@ WinSocket::~WinSocket()
 
 bool WinSocket::Bind()
 {
+	int i;
+	std::ostringstream oss;
+	std::string portString;
+
+	oss << this->_port;
+	portString = oss.str();
+	if ((i = getaddrinfo(NULL, (char *)portString.c_str(), &(this->_resources), &(this->_result))) != 0)
+	{
+		WSACleanup();
+		return false;
+	}
+
+	std::cout << "getaddrinfo ok" << std::endl;
+
+	this->_socket = socket(this->_result->ai_family, this->_result->ai_socktype,
+		this->_result->ai_protocol);
+
+	std::cout << "socket ok" << std::endl;
+
+	if (this->_socket == SOCKET_ERROR)
+	{
+		WSACleanup();
+		return false;
+	}
+
 	if (bind(this->_socket, this->_result->ai_addr, this->_result->ai_addrlen) == SOCKET_ERROR)
-	throw "bind failed";
+		return false;
 	  std::cout << "bind ok" << std::endl;
 	return (true);
 }
@@ -75,13 +97,16 @@ bool WinSocket::Connect(const std::string &ip, short port)
 		WSACleanup();
 		return (false);
 	}
-	if (connect(_socket, _result->ai_addr, (int)_result->ai_addrlen) == SOCKET_ERROR)
+	if (_result->ai_protocol != getprotobyname("UDP")->p_proto)
 	{
-		WSACleanup();
-		return (false);
+		if (connect(_socket, _result->ai_addr, (int)_result->ai_addrlen) == SOCKET_ERROR)
+		{
+			WSACleanup();
+			return (false);
+		}
+		std::cout << "Connected to server" << std::endl;
 	}
-	std::cout << "Connected to server" << std::endl;
-  return (true);
+	return (true);
 }
 
 char *WinSocket::Receive() const

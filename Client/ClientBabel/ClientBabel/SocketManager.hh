@@ -23,14 +23,20 @@ typedef struct
 class SocketManager
 {
 private:
-	ASocket *_client;
-	ASocket *_call;
+	ASocket *_clientToServer;
+	ASocket *_clientToClient;
 	fd_set _fdread;
 	fd_set _fdwrite;
 	struct timeval _tv;
 
-	char *_login(const ASocket *);
-	void _fillCallInfo(Buff *cmdBuff);
+	/* Gestion des commandes */
+
+	std::vector<char *> _pendingCommandsToServer;
+	std::vector<char *> _pendingCommandsToClient;
+
+	void _login(const ASocket *);
+	void _acceptCall(Buff *cmdBuff);
+	void _connectCall(Buff *cmdBuff);
 
 public:
 	SocketManager(char *, short);
@@ -38,9 +44,14 @@ public:
 	unsigned int fillFDSet();
 	int Select();
 	void handleReceive();
+	void handleSend();
 	bool isSocketAvailable(const ASocket *, fd_set) const;
 
 	/* Gestion des commandes */
+	void addPendingCommandToServer(char *);
+	void addPendingCommandToClient(char *);
+	char *getPendingCommandToServer();
+	char *getPendingCommandToClient();
 	void handleCommand(ASocket *, char *);
 };
 

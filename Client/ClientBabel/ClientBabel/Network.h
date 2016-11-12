@@ -1,5 +1,5 @@
-#ifndef NETWORK_HH_
-# define NETWORK_HH_
+#ifndef NETWORK_H_
+# define NETWORK_H_
 
 #include <QThread>
 
@@ -14,4 +14,4 @@ signals:
   void		sig(QString const &);
 };
 
-#endif /* !NETWORK_HH_ */
+#endif /* !NETWORK_H_ */

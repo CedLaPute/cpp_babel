@@ -168,6 +168,9 @@ void UserManager::_handleCommand(SocketManager &sm, User *sender, char *cmd)
 	case 233:
 	  target = this->_callRefused(sender, reinterpret_cast<char *>(cmdBuff->data));
 	  break;
+	case 234:
+	  target = this->_callFailed(sender, reinterpret_cast<char *>(cmdBuff->data));
+	  break;
 	case 235:
 	  target = this->_callFailed(sender, reinterpret_cast<char *>(cmdBuff->data));
 	  break;

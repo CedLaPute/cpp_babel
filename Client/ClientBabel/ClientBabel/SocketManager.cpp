@@ -3,10 +3,10 @@
 
 SocketManager::SocketManager(char *ip, short port)
 {
-	this->_call = NULL;
-	this->_client = ASocket::getNewSocket(port, "TCP");
-	this->_client->Connect(ip, port);
-	this->_client->setName("Kaaaaaaaris");
+	this->_clientToClient = NULL;
+	this->_clientToServer = ASocket::getNewSocket(port, "TCP");
+	this->_clientToServer->Connect(ip, port);
+	this->_clientToServer->setName("Kaaaaaaaris");
 	this->_tv.tv_sec = 0;
 	this->_tv.tv_usec = 1;
 }
@@ -18,14 +18,14 @@ unsigned int SocketManager::fillFDSet()
 
 	FD_ZERO(&this->_fdread);
 	FD_ZERO(&this->_fdwrite);
-	FD_SET(this->_client->getSocket(), &this->_fdread);
-	FD_SET(this->_client->getSocket(), &this->_fdwrite);
-	maxfd = this->_client->getSocket();
-	if (this->_call)
+	FD_SET(this->_clientToServer->getSocket(), &this->_fdread);
+	FD_SET(this->_clientToServer->getSocket(), &this->_fdwrite);
+	maxfd = this->_clientToServer->getSocket();
+	if (this->_clientToClient)
 	{
-		tmp = this->_call->getSocket();
-		FD_SET(this->_call->getSocket(), &this->_fdread);
-		FD_SET(this->_call->getSocket(), &this->_fdwrite);
+		tmp = this->_clientToClient->getSocket();
+		FD_SET(this->_clientToClient->getSocket(), &this->_fdread);
+		FD_SET(this->_clientToClient->getSocket(), &this->_fdwrite);
 		if (tmp > maxfd)
 			maxfd = tmp;
 	}
@@ -40,19 +40,36 @@ int SocketManager::Select()
 	return (select(nfd, &this->_fdread, &this->_fdwrite, NULL, &this->_tv));
 }
 
+void SocketManager::handleSend()
+{
+	if (isSocketAvailable(this->_clientToServer, this->_fdwrite))
+	{
+		if (this->_pendingCommandsToServer.size())
+			this->_clientToServer->Send(getPendingCommandToServer());
+	}
+	if (this->_clientToClient)
+	{
+		if (isSocketAvailable(this->_clientToClient, this->_fdwrite))
+		{
+			if (this->_pendingCommandsToClient.size())
+				this->_clientToClient->Send(getPendingCommandToClient());
+		}
+	}
+}
+
 void SocketManager::handleReceive()
 {
 	char *cmd;
 
-	if (isSocketAvailable(this->_client, this->_fdread))
+	if (isSocketAvailable(this->_clientToServer, this->_fdread))
 	{
-		cmd = this->_client->Receive();
-		handleCommand(this->_client, cmd);
+		cmd = this->_clientToServer->Receive();
+		handleCommand(this->_clientToServer, cmd);
 	}
-	if (isSocketAvailable(this->_call, this->_fdread))
+	if (isSocketAvailable(this->_clientToClient, this->_fdread))
 	{
-		cmd = this->_call->Receive();
-		handleCommand(this->_call, cmd);
+		cmd = this->_clientToClient->Receive();
+		handleCommand(this->_clientToClient, cmd);
 	}
 }
 
@@ -64,6 +81,38 @@ bool SocketManager::isSocketAvailable(const ASocket *socket, fd_set set) const
 }
 
 /* Gestion des commandes */
+
+void SocketManager::addPendingCommandToServer(char *cmd)
+{
+	this->_pendingCommandsToServer.push_back(cmd);
+}
+
+void SocketManager::addPendingCommandToClient(char *cmd)
+{
+	this->_pendingCommandsToClient.push_back(cmd);
+}
+
+char *SocketManager::getPendingCommandToServer()
+{
+	char *cmd;
+
+	if (!this->_pendingCommandsToServer.size())
+		return NULL;
+	cmd = this->_pendingCommandsToServer.front();
+	this->_pendingCommandsToServer.erase(this->_pendingCommandsToServer.begin());
+	return cmd;
+}
+
+char *SocketManager::getPendingCommandToClient()
+{
+	char *cmd;
+
+	if (!this->_pendingCommandsToClient.size())
+		return NULL;
+	cmd = this->_pendingCommandsToClient.front();
+	this->_pendingCommandsToClient.erase(this->_pendingCommandsToClient.begin());
+	return cmd;
+}
 
 void SocketManager::handleCommand(ASocket *sender, char *cmd)
 {
@@ -81,16 +130,17 @@ void SocketManager::handleCommand(ASocket *sender, char *cmd)
 	switch ((int)cmdBuff->cmd)
 	{
 		case 101:
+			this->_login(sender);
 			std::cout << "sending login" << std::endl;
-			sender->Send(this->_login(sender));
 			break;
 		case 103:
 			std::cout << cmdBuff->data << std::endl;
 			break;
 		case 112:
+			this->_acceptCall(cmdBuff);
 			break;
 		case 114:
-			this->_fillCallInfo(cmdBuff);
+			this->_connectCall(cmdBuff);
 			break;
 		case 230:
 			std::cout << " Login deja existant" << std::endl;
@@ -113,19 +163,51 @@ void SocketManager::handleCommand(ASocket *sender, char *cmd)
 	}
 }
 
-char 	*SocketManager::_login(const ASocket *sender)
+void 	SocketManager::_login(const ASocket *sender)
 {
 	char 	*str;
 
 	Buffer::getCmd(&str, sender->getName().size(), 102, sender->getName().c_str());
-	return str;
+	addPendingCommandToServer(str);
 }
 
-void	SocketManager::_fillCallInfo(Buff *cmdBuff)
+void	SocketManager::_acceptCall(Buff *cmdBuff)
+{
+	char *str;
+	Data *connectionInfo;
+
+	connectionInfo = reinterpret_cast<Data *>(cmdBuff->data);
+	/* Si le client est deja en appel */
+	if (this->_clientToClient)
+	{
+		Buffer::getCmd(&str, sizeof(Data), 234, reinterpret_cast<char *>(connectionInfo));
+		addPendingCommandToServer(str);
+		return;
+	}
+
+	/* Demande au client d'accepter l'appel */
+	// Envoi du signal
+
+
+	/* Si l'user est d'accord */
+
+	this->_clientToClient = ASocket::getNewSocket(connectionInfo->port, "UDP");
+	if (!this->_clientToClient->Bind())
+	{
+		Buffer::getCmd(&str, sizeof(Data), 235, reinterpret_cast<char *>(connectionInfo));
+		addPendingCommandToServer(str);
+		return;
+	}
+	Buffer::getCmd(&str, sizeof(Data), 113, reinterpret_cast<char *>(connectionInfo));
+	addPendingCommandToServer(str);
+}
+
+void	SocketManager::_connectCall(Buff *cmdBuff)
 {
 	Data *connectionInfo;
 
 	connectionInfo = reinterpret_cast<Data *>(cmdBuff->data);
-	this->_call = ASocket::getNewSocket(connectionInfo->port, "UDP");
-	this->_call->Connect(connectionInfo->ip, connectionInfo->port);
+	this->_clientToClient = ASocket::getNewSocket(connectionInfo->port, "UDP");
+	if (!this->_clientToClient->Connect(connectionInfo->ip, connectionInfo->port))
+		return;
 }

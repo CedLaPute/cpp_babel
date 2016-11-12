@@ -1,4 +1,4 @@
-#include "Network.hh"
+#include "Network.h"
 #include "SocketManager.hh"
 #include <iostream>
 
@@ -12,10 +12,11 @@ void	Network::run()
 {
   try
     {
-      SocketManager manager("10.14.60.27", (short)2727);
+      SocketManager manager("192.168.1.91", (short)2727);
       
       while (manager.Select() != -1)
 	{
+		manager.handleSend();
 	  manager.handleReceive();
 	}
     }
@@ -23,6 +24,4 @@ void	Network::run()
     {
       std::cerr << err << std::endl;
     }
-  
-  emit sig(QString("lelelelele"));
 }

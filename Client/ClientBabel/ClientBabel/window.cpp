@@ -1,5 +1,5 @@
 #include "window.h"
-#include "Network.hh"
+#include "Network.h"
 
 window::window(QWidget *parent) : QWidget(parent)
 {

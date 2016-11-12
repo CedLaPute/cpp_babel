@@ -77,21 +77,20 @@ bool WinSocket::Listen()
 
 ASocket *WinSocket::Accept()
 {
-  ASocket *newSocket = NULL;
-  SOCKET client = INVALID_SOCKET;
+	ASocket *newSocket = NULL;
+	SOCKET client = INVALID_SOCKET;
 
-  std::cout << "in accept" << std::endl;
-  if ((client = accept(this->_socket, NULL, NULL)) < 0)
+	if ((client = accept(this->_socket, NULL, NULL)) < 0)
 	throw "Accept failed";
-  if (client != INVALID_SOCKET)
-  {
-	  std::cout << "NewSocket detected" << std::endl;
-	  newSocket = new WinSocket(client, NULL);
-	  return newSocket;
-  }
-  else
-	  std::cout << "NULL" << std::endl;
-  return (NULL);
+	if (client != INVALID_SOCKET)
+	{
+		std::cout << "NewSocket detected" << std::endl;
+		newSocket = new WinSocket(client, NULL);
+		return newSocket;
+	}
+	else
+		std::cout << "NULL" << std::endl;
+	return (NULL);
 }
 
 bool WinSocket::Connect(const std::string &ip, short port)
@@ -133,7 +132,6 @@ char *WinSocket::Receive() const
 		memcpy(data, buff, sizeof(Buff));
 		i = recv(this->_socket, &data[sizeof(Buff)], Buffer::getValue(buff)->size, 0);
 		data[i + sizeof(Buff)] = 0;
-		Buffer::getValue(data);
 		return (data);
 	}
 	return (NULL);
@@ -163,10 +161,12 @@ unsigned int WinSocket::getSocket() const
 
 char *WinSocket::getIP() const
 {
-	//struct sockaddr name;
+	char *str = new char[INET6_ADDRSTRLEN];
+	struct sockaddr_in *addr;
 
-//	getpeername(this->_socket, &name, &);
-	return "";
+	addr = reinterpret_cast<struct sockaddr_in *>(this->_result->ai_addr);
+	InetNtop(AF_INET, &(addr->sin_addr), str, INET6_ADDRSTRLEN);
+	return str;
 }
 
 int WinSocket::getPort() const
