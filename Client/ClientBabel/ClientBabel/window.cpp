@@ -1,18 +1,22 @@
 #include "window.h"
+#include "Network.hh"
 
 window::window(QWidget *parent) : QWidget(parent)
 {
-    createMenu();
-    createInfo();
+  Network	*net = new Network();
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-
-    mainLayout->addWidget(menu);
-    mainLayout->addWidget(info);
-
-    setLayout(mainLayout);
-
-    setWindowTitle(tr("Babel"));
+  net->start();
+  createMenu();
+  createInfo();
+  
+  QVBoxLayout *mainLayout = new QVBoxLayout;
+  
+  mainLayout->addWidget(menu);
+  mainLayout->addWidget(info);
+  
+  setLayout(mainLayout);
+  
+  setWindowTitle(tr("Babel"));
 }
 
 void    window::createInfo()
