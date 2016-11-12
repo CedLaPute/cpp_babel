@@ -11,8 +11,6 @@ LinSocket::LinSocket(short port, const char *protocol)
 {
   struct protoent *pe;
 
-  _tv.tv_sec = 0;
-  _tv.tv_usec = 1;
   if ((pe = getprotobyname(protocol)) == NULL)
 	return;
   this->_fd = socket(AF_INET, SOCK_STREAM, pe->p_proto);
@@ -92,22 +90,16 @@ bool LinSocket::Send(char *message) const
   return (true);
 }
 
-void LinSocket::Loop()
-{
-	FD_ZERO(&_fdread);
-	FD_ZERO(&_fdwrite);
-
-	if (select(this->_fd, &_fdread, &_fdwrite, NULL, &_tv) < 0)
-		return;
-
-	if (FD_ISSET(this->_fd, &_fdread))
-	{
-		Receive();
-	}
-}
-
 unsigned int LinSocket::getSocket() const
 {
   return (this->_fd);
 }
 
+std::string LinSocket::getName() const
+{
+	return this->_name;
+}
+void LinSocket::setName(std::string const &n)
+{
+	this->_name = n;
+}

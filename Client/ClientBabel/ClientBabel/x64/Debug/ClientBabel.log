@@ -1,4 +1,4 @@
-﻿La génération a démarré 12/11/2016 12:46:11.
+﻿La génération a démarré 12/11/2016 17:10:23.
      1>Projet "C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Client\ClientBabel\ClientBabel\ClientBabel.vcxproj" sur le nœud 2 (Rebuild cible(s)).
      1>CustomBuild:
          Moc'ing window.h...
@@ -7,12 +7,12 @@
      1>RCC : warning : No resources in 'C:\Users\h├®h├®h├®h├®h├®h├®h├®h├®\Documents\cpp_babel\Client\ClientBabel\ClientBabel\clientbabel.qrc'.
          
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IJ:\Qt\5.6\msvc2015_64\include /I.\GeneratedFiles\Debug /IJ:\Qt\5.6\msvc2015_64\include\QtCore /IJ:\Qt\5.6\msvc2015_64\include\QtGui /IJ:\Qt\5.6\msvc2015_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt ASocket.cpp Buffer.cpp Command.cpp GeneratedFiles\Debug\moc_window.cpp main.cpp window.cpp Windows\Sources\WinSocket.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IJ:\Qt\5.6\msvc2015_64\include /I.\GeneratedFiles\Debug /IJ:\Qt\5.6\msvc2015_64\include\QtCore /IJ:\Qt\5.6\msvc2015_64\include\QtGui /IJ:\Qt\5.6\msvc2015_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt ASocket.cpp Buffer.cpp GeneratedFiles\Debug\moc_window.cpp main.cpp SocketManager.cpp window.cpp Windows\Sources\WinSocket.cpp
          ASocket.cpp
          Buffer.cpp
-         Command.cpp
          moc_window.cpp
          main.cpp
+         SocketManager.cpp
          window.cpp
          WinSocket.cpp
          Génération de code en cours...
@@ -21,10 +21,10 @@
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Client\ClientBabel\x64\Debug\\ClientBabel.exe" /NOLOGO /LIBPATH:J:\Qt\5.6\msvc2015_64\lib qtmaind.lib Qt5Cored.lib Qt5Guid.lib Qt5Widgetsd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Client\ClientBabel\x64\Debug\ClientBabel.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Client\ClientBabel\x64\Debug\ClientBabel.lib" /MACHINE:X64 x64\Debug\ASocket.obj
          x64\Debug\Buffer.obj
-         x64\Debug\Command.obj
          x64\Debug\moc_window.obj
          x64\Debug\qrc_clientbabel.obj
          x64\Debug\main.obj
+         x64\Debug\SocketManager.obj
          x64\Debug\window.obj
          x64\Debug\WinSocket.obj
          ClientBabel.vcxproj -> C:\Users\héhéhéhéhéhéhéhé\Documents\cpp_babel\Client\ClientBabel\x64\Debug\ClientBabel.exe
@@ -32,4 +32,4 @@
 
 La génération a réussi.
 
-Temps écoulé 00:00:09.83
+Temps écoulé 00:00:06.25

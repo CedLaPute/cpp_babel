@@ -35,20 +35,16 @@ class WinSocket : public ASocket
 	bool Connect(const std::string& ip, short port);
 	char *Receive() const;
 	bool Send(char *message) const;
-	void Loop();
 	unsigned int getSocket() const;
+	std::string getName() const;
+	void setName(std::string const &n);
 
   private:
 	short	_port;
 	struct addrinfo _resources;
 	struct addrinfo *_result;
 	SOCKET _socket;
-	struct timeval _tv;
-
-	fd_set	_fdread;
-	fd_set	_fdwrite;
-
-	Command *_command;
+	std::string _name;
 };
 
 

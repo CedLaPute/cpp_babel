@@ -1,17 +1,25 @@
 #include "window.h"
 #include "ASocket.hh"
+#include "SocketManager.hh"
 #include <QApplication>
 
 int main(int argc, char *av[])
 {
+	try
+	{
+		SocketManager manager(av[1], (short)atoi(av[2]));
+
+		while (manager.Select() != -1)
+		{
+			manager.handleReceive();
+		}
+	}
+	catch (std::string const &err)
+	{
+		std::cerr << err << std::endl;
+	}
+
 	QApplication a(argc, av);
-
-	ASocket *tmp;
-
-	tmp = ASocket::getNewSocket((short)atoi(av[2]));
-	tmp->Connect(av[1], (short)atoi(av[2]));
-	tmp->Receive();
-	/* y avait un sleep(5) ici*/
 
 	window w;
 	w.show();

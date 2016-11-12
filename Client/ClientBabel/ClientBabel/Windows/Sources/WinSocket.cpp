@@ -26,12 +26,6 @@ WinSocket::WinSocket(short port, const char *protocol)
   this->_resources.ai_family = AF_UNSPEC;
   this->_resources.ai_socktype = SOCK_STREAM;
   this->_resources.ai_protocol = getprotobyname(protocol)->p_proto;
-  
-  this->_tv.tv_sec = 0;
-  this->_tv.tv_usec = 1;
-
-  this->_command = new Command();
-  this->_command->setName("Kaaris");
 }
 
 WinSocket::WinSocket(SOCKET sock, struct addrinfo *saddr)
@@ -102,7 +96,6 @@ char *WinSocket::Receive() const
 		memcpy(data, buff, sizeof(Buff));
 		i = recv(this->_socket, &data[sizeof(Buff)], Buffer::getValue(buff)->size, 0);
 		data[i + sizeof(Buff)] = 0;
-		Send(_command->analyse(data));
 		return (data);
 	}
 	return (NULL);
@@ -113,6 +106,9 @@ bool WinSocket::Send(char *message) const
 	int i;
 	int size;
 
+	if (message == NULL)
+		return (false);
+
 	Buff *_entry = Buffer::getValue(message);
 	size = sizeof(Buff) + _entry->size;
 
@@ -121,22 +117,16 @@ bool WinSocket::Send(char *message) const
   return (true);
 }
 
-void WinSocket::Loop()
-{
-	FD_ZERO(&_fdread);
-	FD_ZERO(&_fdwrite);
-
-	if (select(this->_socket, &_fdread, &_fdwrite, NULL, &_tv) < 0)
-		return;
-
-	if (FD_ISSET(this->_socket, &_fdread))
-	{
-		Receive();
-	}
-}
-
-
 unsigned int WinSocket::getSocket() const
 {
 	return (unsigned int)this->_socket;
+}
+
+std::string WinSocket::getName() const
+{
+	return this->_name;
+}
+void WinSocket::setName(std::string const &n)
+{
+	this->_name = n;
 }

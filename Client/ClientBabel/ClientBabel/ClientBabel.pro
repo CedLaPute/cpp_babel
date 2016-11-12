@@ -11,13 +11,13 @@ QMAKE_CXXFLAGS += -std=c++11
 # Input
 HEADERS += ASocket.hh \
            Buffer.hh \
-           Command.hh \
+		   SocketManager.hh \
            window.h \
            Unix/Headers/LinSocket.hh
 FORMS += clientbabel.ui
 SOURCES += ASocket.cpp \
            Buffer.cpp \
-           Command.cpp \
+		   SocketManager.hh \
            main.cpp \
            window.cpp \
            Unix/Sources/LinSocket.cpp

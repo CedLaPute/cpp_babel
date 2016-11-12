@@ -27,18 +27,16 @@ class LinSocket : public ASocket
 	virtual bool Connect(const std::string& ip, short port);
 	virtual char *Receive() const;
 	virtual bool Send(char *message) const;
-	virtual void Loop();
 	virtual unsigned int getSocket() const;
+	std::string getName() const;
+	void setName(std::string const &n);
 
   private:
 	struct sockaddr_in _saddr;
 	int _fd;
 	int _callFd;
 	short _port;
-	struct timeval _tv;
-
-	fd_set	_fdread;
-	fd_set	_fdwrite;
+	std::string _name;
 };
 
 

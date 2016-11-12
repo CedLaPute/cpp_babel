@@ -139,7 +139,6 @@
   <ItemGroup>
     <ClCompile Include="ASocket.cpp" />
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="Command.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_window.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -159,6 +158,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SocketManager.cpp" />
     <ClCompile Include="window.cpp" />
     <ClCompile Include="Windows\Sources\WinSocket.cpp" />
   </ItemGroup>
@@ -205,8 +205,8 @@
   <ItemGroup>
     <ClInclude Include="ASocket.hh" />
     <ClInclude Include="Buffer.hh" />
-    <ClInclude Include="Command.hh" />
     <ClInclude Include="GeneratedFiles\ui_clientbabel.h" />
+    <ClInclude Include="SocketManager.hh" />
     <ClInclude Include="Windows\Headers\WinSocket.hh" />
   </ItemGroup>
   <ItemGroup>

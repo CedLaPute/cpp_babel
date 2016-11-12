@@ -41,7 +41,7 @@ char 	*Command::analyse(char *str)
 	switch ((int)_entry->cmd)
 	{
 		case 101:
-			std::cout << " sending login" << std::endl;
+			std::cout << "sending login" << std::endl;
 			return _login();
 			break;
 		case 103:
@@ -52,6 +52,12 @@ char 	*Command::analyse(char *str)
 			break;
 		case 231:
 			std::cout << " Pas de data transmise" << std::endl;
+			break;
+		case 232:
+			std::cout << "Pas de login correspondant" << std::endl;
+			break;
+		case 234:
+			std::cout << "Deja en call" << std::endl;
 			break;
 		case 240:
 			std::cout << " Commande inconnue" << std::endl;

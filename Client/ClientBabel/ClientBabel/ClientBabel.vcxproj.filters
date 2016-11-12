@@ -56,10 +56,10 @@
     <ClCompile Include="Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
+    <ClCompile Include="Windows\Sources\WinSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\Sources\WinSocket.cpp">
+    <ClCompile Include="SocketManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,7 +80,7 @@
     </ClInclude>
     <ClInclude Include="ASocket.hh" />
     <ClInclude Include="Buffer.hh" />
-    <ClInclude Include="Command.hh" />
     <ClInclude Include="Windows\Headers\WinSocket.hh" />
+    <ClInclude Include="SocketManager.hh" />
   </ItemGroup>
 </Project>
