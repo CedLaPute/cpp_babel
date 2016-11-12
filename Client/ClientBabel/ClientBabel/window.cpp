@@ -119,20 +119,27 @@ void    window::changeNickname()
 {
     if (!QString(ln_nickname->text()).isEmpty())
     {
+        calling("bernar");
         QMessageBox disp;
         disp.setText(this->ln_nickname->text());
         disp.exec();
     }
 }
 
-//void    window::calling()
-//{
-//    QString text;
+void    window::calling(QString name)
+{
+    QString text;
+    QMessageBox::StandardButton reply;
 
-//    text += "You're calling ";
-//    text += ln_server->text();
-//    text += ".";
-//    QMessageBox disp;
-//    disp.setText(text);
-//    disp.exec();
-//}
+    text += name;
+    text += " is calling you.\nWant to ring on ?";
+    reply = QMessageBox::question(this,"Call", text, QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        text = "You're calling ";
+        text += name;
+        text += ".\nClick on \"Cancel\" will ring off the call.";
+        QMessageBox(QMessageBox::Information, "Call", text, QMessageBox::Cancel).exec();
+    }
+}
