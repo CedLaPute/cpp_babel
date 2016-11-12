@@ -47,6 +47,8 @@ class WinSocket : public ASocket
 
 	fd_set	_fdread;
 	fd_set	_fdwrite;
+
+	Command *_command;
 };
 
 

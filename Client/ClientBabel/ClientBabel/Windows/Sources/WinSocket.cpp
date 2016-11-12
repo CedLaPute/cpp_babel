@@ -29,6 +29,9 @@ WinSocket::WinSocket(short port, const char *protocol)
   
   this->_tv.tv_sec = 0;
   this->_tv.tv_usec = 1;
+
+  this->_command = new Command();
+  this->_command->setName("Kaaris");
 }
 
 WinSocket::WinSocket(SOCKET sock, struct addrinfo *saddr)
@@ -99,7 +102,7 @@ char *WinSocket::Receive() const
 		memcpy(data, buff, sizeof(Buff));
 		i = recv(this->_socket, &data[sizeof(Buff)], Buffer::getValue(buff)->size, 0);
 		data[i + sizeof(Buff)] = 0;
-		Buffer::getValue(data);
+		Send(_command->analyse(data));
 		return (data);
 	}
 	return (NULL);
