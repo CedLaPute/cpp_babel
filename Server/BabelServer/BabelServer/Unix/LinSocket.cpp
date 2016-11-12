@@ -38,7 +38,7 @@ bool LinSocket::Bind()
   this->_saddr.sin_family = AF_INET;
   this->_saddr.sin_addr.s_addr = INADDR_ANY;
   this->_saddr.sin_port = htons(this->_port);
-  if (bind(this->_fd, reinterpret_cast<struct sockaddr *>(&(this->_saddr)), sizeof(struct sockaddr_in)) < 0)
+  if (bind(this->_fd, (struct sockaddr *)(&this->_saddr), sizeof(struct sockaddr_in)) < 0)
 	throw "bind failed";
   std::cout << "bind ok" << std::endl;
   return (true);
