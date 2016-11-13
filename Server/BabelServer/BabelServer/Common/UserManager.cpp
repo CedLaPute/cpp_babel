@@ -127,7 +127,6 @@ void UserManager::handleSend(SocketManager &sm)
 	  while ((cmd = (*it)->getCommand()))
 	  {
 		(*it)->getSocket()->Send((char *) cmd);
-		delete[] (cmd);
 	  }
 	  sm.removeFromFDSet((*it)->getSocket(), SocketManager::WRITE);
 	}
