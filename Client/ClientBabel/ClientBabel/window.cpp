@@ -3,9 +3,6 @@
 
 window::window(QWidget *parent) : QWidget(parent)
 {
-  Network	*net = new Network();
-
-  net->start();
   createMenu();
   createInfo();
   
@@ -135,6 +132,7 @@ void    window::calling(QString name)
     QString text;
     QMessageBox::StandardButton reply;
 
+    emit sndName(QString("hope"));
     text += name;
     text += " is calling you.\nWant to ring on ?";
     reply = QMessageBox::question(this,"Call", text, QMessageBox::Yes | QMessageBox::No);
@@ -146,4 +144,9 @@ void    window::calling(QString name)
         text += ".\nClick on \"Cancel\" will ring off the call.";
         QMessageBox(QMessageBox::Information, "Call", text, QMessageBox::Cancel).exec();
     }
+}
+
+void	window::sig(QString const &s)
+{
+  std::cout << s.toStdString() << std::endl;
 }

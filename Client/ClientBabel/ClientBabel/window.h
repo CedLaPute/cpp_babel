@@ -26,20 +26,22 @@
 
 class window : public QWidget
 {
-    Q_OBJECT
-public:
-    explicit window(QWidget *parent = 0);
-
-signals:
-
-public slots:
+  Q_OBJECT
+ public:
+  explicit window(QWidget *parent = 0);
+  
+ signals:
+  void	sndName(QString const &);
+  void	endingCall();
+  private slots:
+    void	sig(QString const &);
     void changeIp();
     void changeNickname();
-
-private:
+    
+ private:
     void        createMenu();
     void        createInfo();
-
+    
     void        addBudy(QString);
     void        removeBudy(QString);
 

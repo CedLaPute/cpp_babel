@@ -10,6 +10,8 @@ public:
   Network();
 protected:
   void		run();
+  private slots:
+    void	rcvName(QString const &);
 signals:
   void		sig(QString const &);
 };

@@ -12,7 +12,8 @@ void	Network::run()
 {
   try
     {
-      SocketManager manager("192.168.1.91", (short)2727);
+      emit sig(QString("sds"));
+      SocketManager manager("192.168.0.37", (short)2727);
       
       while (manager.Select() != -1)
 	{
@@ -24,4 +25,10 @@ void	Network::run()
     {
       std::cerr << err << std::endl;
     }
+}
+
+void		Network::rcvName(QString const &s)
+{
+  std::cout << "dffeudnfusidbvuesdihbkvsdjkn" << std::endl;
+  std::cout << s.toStdString() << std::endl;
 }
