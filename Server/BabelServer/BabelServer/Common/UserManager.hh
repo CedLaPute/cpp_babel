@@ -35,7 +35,7 @@ class UserManager
 	void _handleCommand(SocketManager &sm, User *sender, char *cmd);
 	void _sayHello(ASocket *socket);
 	void _newClient(SocketManager &sm, char *name, ASocket *socket);
-	char *_listLogin();
+	char *_listLogin() const;
 	User *_updateLogin(User *sender, char *data);
 	User *_callRequest(User *sender, char *data);
 	User *_callAccepted(User *sender, char *data);
@@ -43,6 +43,7 @@ class UserManager
 	User *_callFailed(User *sender, char *data);
 	User *_callEnd(User *sender, char *data);
 	void _quit(SocketManager &sm, User *sender);
+	void _dispatchLoginList(SocketManager &sm) const;
 	char *_errLoginTaken() const;
 	char *_errNoData() const;
 	char *_errNoSuchLogin() const;
