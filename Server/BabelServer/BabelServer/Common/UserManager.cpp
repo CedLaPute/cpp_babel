@@ -153,6 +153,9 @@ void UserManager::_handleCommand(SocketManager &sm, User *sender, char *cmd)
   {
 	case 102:
 	  target = this->_updateLogin(sender, reinterpret_cast<char *>(cmdBuff->data));
+	  if (!target)
+		this->_dispatchLoginList(sm);
+	  break;
 	case 111:
 	  target = this->_callRequest(sender, reinterpret_cast<char *>(cmdBuff->data));
 	  break;
@@ -164,6 +167,7 @@ void UserManager::_handleCommand(SocketManager &sm, User *sender, char *cmd)
 	  break;
 	case 104:
 	  this->_quit(sm, sender);
+	  this->_dispatchLoginList(sm);
 	  break;
 	case 233:
 	  target = this->_callRefused(sender, reinterpret_cast<char *>(cmdBuff->data));
@@ -214,15 +218,13 @@ void UserManager::_newClient(SocketManager &sm, char *cmd, ASocket *socket)
   }
   if (!(newUser = this->getUser(reinterpret_cast<char *>(cmdBuff->data))))
   {
-	newUser = this->addUser(reinterpret_cast<char *>(cmdBuff->data), socket);
-	newUser->addCommand(this->_listLogin());
-	sm.addToFDSet(socket, SocketManager::WRITE);
+	this->addUser(reinterpret_cast<char *>(cmdBuff->data), socket);
+	this->_dispatchLoginList(sm);
   }
   else if (newUser->getSocket() == NULL)
   {
 	newUser->goOnline(socket);
-	newUser->addCommand(this->_listLogin());
-	sm.addToFDSet(socket, SocketManager::WRITE);
+	this->_dispatchLoginList(sm);
   }
   else
   {
@@ -232,7 +234,7 @@ void UserManager::_newClient(SocketManager &sm, char *cmd, ASocket *socket)
   }
 }
 
-char *UserManager::_listLogin()
+char *UserManager::_listLogin() const
 {
   char *cmd;
   std::stringstream ss;
@@ -251,7 +253,7 @@ User *UserManager::_updateLogin(User *sender, char *data)
   if (this->getUser(data) == NULL)
   {
 	sender->setName(data);
-	sender->addCommand(this->_listLogin());
+	return (NULL);
   }
   else if (this->getUser(data) == sender)
 	sender->addCommand(this->_listLogin());
@@ -367,6 +369,21 @@ void UserManager::_quit(SocketManager &sm, User *sender)
 {
   sm.removeSocket(sender->getSocket());
   sender->goOffline();
+}
+
+void UserManager::_dispatchLoginList(SocketManager &sm) const
+{
+  char *cmd;
+
+  cmd = this->_listLogin();
+  for (auto it = this->_users.begin(); it != this->_users.end(); it++)
+  {
+	if ((*it)->getSocket())
+	{
+	  (*it)->addCommand(cmd);
+	  sm.addToFDSet((*it)->getSocket(), SocketManager::WRITE);
+	}
+  }
 }
 
 char *UserManager::_errLoginTaken() const
