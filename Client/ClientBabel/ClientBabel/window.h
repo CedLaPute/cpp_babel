@@ -36,10 +36,12 @@ class window : public QWidget
    void		nameWrong();
    void		unknownName();
    void		callFailed();
+   void         listLogin(QLabel *);
    void		connectFailed();
      
-   void		changeIp();
    void		changeNickname();
+   void         calling(QString);
+   void         call();
 
  signals:
    void		newName(QString const &);
@@ -55,11 +57,10 @@ class window : public QWidget
     void        addBudy(QString);
     void        removeBudy(QString);
 
-    void        calling(QString);
 
-    QPushButton *b_server;
+    QPushButton *b_call;
     QPushButton *b_nickname;
-    QLineEdit   *ln_server;
+    QLineEdit   *ln_call;
     QLineEdit   *ln_nickname;
 
     QLabel      *infoClient;
