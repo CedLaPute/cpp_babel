@@ -2,6 +2,9 @@
 # define NETWORK_H_
 
 #include <QThread>
+#include <QEventLoop>
+#include <QTimer>
+#include "SocketManager.hh"
 
 class Network : public QThread
 {
@@ -25,6 +28,11 @@ public:
    void		unknownName();
    void		callFailed();
    void		connectFailed();
+  
+  private:
+    SocketManager *_sm;
+    QEventLoop *_loop;
+    QTimer *_timer;
 };
 
 #endif /* !NETWORK_H_ */

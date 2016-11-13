@@ -124,6 +124,7 @@ void    window::changeNickname()
         QMessageBox disp;
         disp.setText(this->ln_nickname->text());
         disp.exec();
+        emit newName(this->ln_nickname->text());
     }
 }
 
@@ -147,7 +148,6 @@ void    window::calling(QString name)
 
 void		window::nameTaken()
 {
-  emit newName(QString("pls"));
   std::cout << "name taken ma gueule" << std::endl;
 }
 
