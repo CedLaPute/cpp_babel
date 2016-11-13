@@ -1,10 +1,14 @@
 #include "Network.h"
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 Network::Network()
 {
   moveToThread(this);
+  _pa = new AudioPA();
+  _cod = new AudioCodec();
+  _isCalling = false;
 }
 
 void	Network::run()
@@ -20,6 +24,14 @@ void	Network::run()
     {      
       while (this->_sm->Select() != -1)
     	{
+	  if (_isCalling)
+	    {
+	      char		*tmp = (char *)(_cod->AudioEncode(_pa->getAudioFrames()));
+	      char		*str;
+
+	      Buffer::getCmd(&str, std::strlen(tmp), 131, tmp);
+	      _sm->addPendingCommandToClient(str);
+	    }
         this->_sm->setPendingSignal(NONE);
         this->_timer->start(0);
     	  this->_sm->handleSend();
@@ -50,7 +62,8 @@ void		Network::sndCall(QString const &)
 
 void		Network::acceptCall()
 {
-
+  _pa->startAudio();
+  _isCalling = true;
 }
 
 void		Network::refuseCall()
@@ -60,7 +73,8 @@ void		Network::refuseCall()
 
 void		Network::endCall()
 {
-
+  _pa->stopAudio();
+  _isCalling = false;
 }
 
 /////////////////////
