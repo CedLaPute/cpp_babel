@@ -134,6 +134,9 @@ void SocketManager::handleCommand(ASocket *, char *cmd)
 		case 122:
 			this->_stopCall();
 			break;
+		case 131:
+			this->_playAudio(cmdBuff);
+			break;
 		case 230:
 			this->setPendingSignal(LOGINNOTFREE);
 			std::cout << " Login deja existant" << std::endl;
@@ -200,6 +203,11 @@ void SocketManager::_stopCall()
 	this->_clientToClient = NULL;
 }
 
+void SocketManager::_playAudio(Buff *)
+{
+	// Appel de portaudio ici
+}
+
 /* Gestion de la communication avec Qt */
 
 void SocketManager::setName(const std::string &name)
@@ -227,6 +235,7 @@ void SocketManager::setLogins(char *str)
 			this->_logins.push_back(s);
 		}
 	}
+	std::cout << "logins size : " << this->_logins.size() << std::endl;
 }
 
 void SocketManager::signalAskCall(const std::string &target)

@@ -56,6 +56,7 @@ private:
 	void _acceptCall(Buff *cmdBuff);
 	void _connectCall(Buff *cmdBuff);
 	void _stopCall();
+	void _playAudio(Buff *cmdBuff);
 
 	Data *_pendingCallInformation;
 
