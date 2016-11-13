@@ -19,7 +19,7 @@ void Buffer::getCmd(char **str, int const size, int const cmd, char const *data)
   b->magic = MAGIC;
   b->size = size;
   b->cmd = cmd;
-  std::strcpy((char *) (b->data), data);
+  std::memcpy((char *) (b->data), (char *)data, size);
 }
 
 Buff *Buffer::getValue(char *str)
