@@ -26,10 +26,11 @@ void	Network::run()
     	{
 	  if (_isCalling)
 	    {
-	      char		*tmp = (char *)(_cod->AudioEncode(_pa->getAudioFrames()));
+	      unsigned char		*tmp = (_cod->AudioEncode(_pa->getAudioFrames()));
 	      char		*str;
 
-	      Buffer::getCmd(&str, std::strlen(tmp), 131, tmp);
+        std::cout << "audioencode(getAudioFrames) ok" << std::endl;
+	      Buffer::getCmd(&str, std::strlen((char *)tmp), 131, (char *)tmp);
 	      _sm->addPendingCommandToClient(str);
 	    }
         this->_sm->setPendingSignal(NONE);
@@ -62,8 +63,9 @@ void		Network::sndCall(QString const &s)
 
 void		Network::acceptCall()
 {
+  this->_sm->signalAcceptCall();
   _pa->startAudio();
-  _isCalling = true;
+//  _isCalling = true;
 }
 
 void		Network::refuseCall()
@@ -97,6 +99,9 @@ void  Network::getSignalFromSocketManager()
       }
       label->setText(QString(ss.str().c_str()));
       emit listLogin(label);
+      break;
+    case SENDCALL:
+      emit calling(QString("Lol"));
       break;
     default: break;
   }

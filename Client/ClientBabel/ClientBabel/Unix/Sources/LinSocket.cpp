@@ -10,14 +10,21 @@
 LinSocket::LinSocket(short port, const char *protocol)
 {
   struct protoent *pe;
+  std::string s((char *)protocol);
 
   if ((pe = getprotobyname(protocol)) == NULL)
 	return;
-  this->_fd = socket(AF_INET, SOCK_STREAM, pe->p_proto);
+  if (s.compare("TCP") == 0)
+  {
+    this->_fd = socket(AF_INET, SOCK_STREAM, pe->p_proto);
+  }
+  else
+  {
+    this->_fd = socket(PF_INET, SOCK_DGRAM, pe->p_proto);
+  };
   this->_port = port;
   if (this->_fd == -1)
 	throw "socket failed";
-  std::cout << "socket ok" << std::endl;
 }
 
 LinSocket::LinSocket(int fd, struct sockaddr_in *saddr)
@@ -34,7 +41,7 @@ bool LinSocket::Bind()
 {
   struct sockaddr_in saddr;
 
-  saddr.sin_family = AF_INET;
+  saddr.sin_family = PF_INET;
   saddr.sin_addr.s_addr = INADDR_ANY;
   saddr.sin_port = htons(this->_port);
   if (bind(this->_fd, reinterpret_cast<struct sockaddr *>(&saddr), sizeof(struct sockaddr_in)) < 0)
@@ -57,11 +64,12 @@ bool LinSocket::Connect(const std::string &ip, short port)
 {
   struct sockaddr_in saddr;
 
-  saddr.sin_family = AF_INET;
+  saddr.sin_family = PF_INET;
   saddr.sin_addr.s_addr = inet_addr(ip.c_str());
   saddr.sin_port = htons(port);
   if (connect(this->_fd, reinterpret_cast<struct sockaddr *>(&(saddr)), sizeof(struct sockaddr_in)) < 0)
 	throw "connect failed";
+  std::cout << "connect ok on port " << port << std::endl;
   return (true);
 }
 
@@ -73,11 +81,11 @@ char *LinSocket::Receive() const
 
   if (read(this->_fd, buff, sizeof(Buff)) > 0)
   {
-	data = new char[Buffer::getValue(buff)->size + sizeof(Buff)];
-	memcpy(data, buff, sizeof(Buff));
-	i = read(this->_fd, &data[sizeof(Buff)], Buffer::getValue(buff)->size);
-	data[i + sizeof(Buff)] = 0;
-	return (data);
+  	data = new char[Buffer::getValue(buff)->size + sizeof(Buff)];
+  	memcpy(data, buff, sizeof(Buff));
+  	i = read(this->_fd, &data[sizeof(Buff)], Buffer::getValue(buff)->size);
+  	data[i + sizeof(Buff)] = 0;
+  	return (data);
   }
   return (NULL);
 }

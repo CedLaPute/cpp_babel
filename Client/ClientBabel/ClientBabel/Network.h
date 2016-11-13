@@ -32,6 +32,7 @@ public:
  signals:
    void   listLogin(QLabel *);
    void		nameTaken();
+   void   calling(QString);
    void		sndFailed();
    void		nameWrong();
    void		unknownName();
