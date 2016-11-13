@@ -96,6 +96,7 @@ void    window::changeNickname()
         disp.setText(this->ln_nickname->text());
         emit newName(this->ln_nickname->text());
         disp.exec();
+        emit newName(this->ln_nickname->text());
     }
 }
 
@@ -122,10 +123,14 @@ void    window::calling(QString name)
 
 void		window::nameTaken()
 {
+<<<<<<< HEAD
     QMessageBox disp;
     disp.setIcon(QMessageBox::Critical);
     disp.setText("This name is already taken.");
     disp.exec();
+=======
+  std::cout << "name taken ma gueule" << std::endl;
+>>>>>>> 5608c71992187ef462e8d656490e751804399fba
 }
 
 void		window::sndFailed()

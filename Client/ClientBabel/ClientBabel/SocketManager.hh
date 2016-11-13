@@ -1,6 +1,7 @@
 #ifndef SOCKETMANAGER_HH_
 # define SOCKETMANAGER_HH_
 
+#include <string>
 #include <vector>
 
 #ifdef _WIN32
@@ -13,8 +14,12 @@
 # include "ASocket.hh"
 # include "Buffer.hh"
 
+// Port client-client
+# define PORTPTP 5956
+
 enum SIGFORQT
 {
+	SENDCALL,
 	LOGINNOTFREE,
 	NODATA,
 	LOGINTOOLONG,
@@ -48,9 +53,11 @@ private:
 	std::vector<char *> _pendingCommandsToServer;
 	std::vector<char *> _pendingCommandsToClient;
 
-	void _login(const ASocket *);
 	void _acceptCall(Buff *cmdBuff);
 	void _connectCall(Buff *cmdBuff);
+	void _stopCall();
+
+	Data *_pendingCallInformation;
 
 	/* Gestion de la communication avec Qt */
 	SIGFORQT _pendingSignal;
@@ -73,7 +80,14 @@ public:
 	void handleCommand(ASocket *, char *);
 
 	/* Gestion de la communication avec Qt */
+	void setName(const std::string &);
 	void setLogins(char *);
+
+	void signalAskCall(const std::string &);
+	void signalAcceptCall();
+	void signalRefuseCall();
+	void signalStopCall();
+	
 	void setPendingSignal(const SIGFORQT);
 	SIGFORQT getPendingSignal() const;
 	std::vector<std::string> getLogins() const;

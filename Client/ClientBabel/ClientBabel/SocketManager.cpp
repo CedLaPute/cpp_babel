@@ -1,4 +1,6 @@
 # include <iostream>
+# include <sstream>
+# include <cstring>
 # include "SocketManager.hh"
 
 SocketManager::SocketManager(char *ip, short port)
@@ -57,12 +59,14 @@ void SocketManager::handleReceive()
 	if (isSocketAvailable(this->_clientToServer, this->_fdread))
 	{
 		cmd = this->_clientToServer->Receive();
-		handleCommand(this->_clientToServer, cmd);
+		if (cmd != NULL)
+			handleCommand(this->_clientToServer, cmd);
 	}
 	if (isSocketAvailable(this->_clientToClient, this->_fdread))
 	{
 		cmd = this->_clientToClient->Receive();
-		handleCommand(this->_clientToClient, cmd);
+		if (cmd != NULL)
+			handleCommand(this->_clientToClient, cmd);
 	}
 }
 
@@ -107,7 +111,7 @@ char *SocketManager::getPendingCommandToClient()
 	return cmd;
 }
 
-void SocketManager::handleCommand(ASocket *sender, char *cmd)
+void SocketManager::handleCommand(ASocket *, char *cmd)
 {
 	Buff *cmdBuff;
 	cmdBuff = Buffer::getValue(cmd);
@@ -115,17 +119,20 @@ void SocketManager::handleCommand(ASocket *sender, char *cmd)
 	switch ((int)cmdBuff->cmd)
 	{
 		case 101:
-			this->_login(sender);
-			std::cout << "sending login" << std::endl;
+			std::cout << "Hello" << std::endl;
 			break;
 		case 103:
-			std::cout << cmdBuff->data << std::endl;
+			this->setPendingSignal(LISTLOGINS);
+			this->setLogins(reinterpret_cast<char *>(cmdBuff->data));
 			break;
 		case 112:
 			this->_acceptCall(cmdBuff);
 			break;
 		case 114:
 			this->_connectCall(cmdBuff);
+			break;
+		case 122:
+			this->_stopCall();
 			break;
 		case 230:
 			this->setPendingSignal(LOGINNOTFREE);
@@ -140,23 +147,19 @@ void SocketManager::handleCommand(ASocket *sender, char *cmd)
 			std::cout << "Pas de login correspondant" << std::endl;
 			break;
 		case 234:
+			this->_pendingCallInformation = NULL;
+			this->setPendingSignal(INCALLORREFUSED);
 			std::cout << "Deja en call" << std::endl;
 			break;
 		case 235:
+			this->setPendingSignal(ERRORSOCKET);
 			std::cout << "Erreur lors de l'ouverture de la socket du client" << std::endl;
 			break;
 		case 240:
+			this->setPendingSignal(UNDEFINEDCOMMAND);
 			std::cout << " Commande inconnue" << std::endl;
 		default: break;
 	}
-}
-
-void 	SocketManager::_login(const ASocket *sender)
-{
-	char 	*str;
-
-	Buffer::getCmd(&str, sender->getName().size(), 102, sender->getName().c_str());
-	addPendingCommandToServer(str);
 }
 
 void	SocketManager::_acceptCall(Buff *cmdBuff)
@@ -168,26 +171,17 @@ void	SocketManager::_acceptCall(Buff *cmdBuff)
 	/* Si le client est deja en appel */
 	if (this->_clientToClient)
 	{
-		Buffer::getCmd(&str, sizeof(Data), 234, reinterpret_cast<char *>(connectionInfo));
+		Buffer::getCmd(&str, sizeof(Data), 233, connectionInfo->login);
 		addPendingCommandToServer(str);
 		return;
 	}
 
 	/* Demande au client d'accepter l'appel */
+	// Sauvegarde des informations
+	this->_pendingCallInformation = connectionInfo;
+
 	// Envoi du signal
-
-
-	/* Si l'user est d'accord */
-
-	this->_clientToClient = ASocket::getNewSocket(connectionInfo->port, "UDP");
-	if (!this->_clientToClient->Bind())
-	{
-		Buffer::getCmd(&str, sizeof(Data), 235, reinterpret_cast<char *>(connectionInfo));
-		addPendingCommandToServer(str);
-		return;
-	}
-	Buffer::getCmd(&str, sizeof(Data), 113, reinterpret_cast<char *>(connectionInfo));
-	addPendingCommandToServer(str);
+	this->setPendingSignal(SENDCALL);
 }
 
 void	SocketManager::_connectCall(Buff *cmdBuff)
@@ -198,18 +192,104 @@ void	SocketManager::_connectCall(Buff *cmdBuff)
 	this->_clientToClient = ASocket::getNewSocket(connectionInfo->port, "UDP");
 	if (!this->_clientToClient->Connect(connectionInfo->ip, connectionInfo->port))
 		return;
+	this->_clientToClient->setName(this->_pendingCallInformation->login);
+}
+
+void SocketManager::_stopCall()
+{
+	this->_clientToClient = NULL;
 }
 
 /* Gestion de la communication avec Qt */
 
-void SocketManager::setLogins(char *)
+void SocketManager::setName(const std::string &name)
 {
+	char 	*str;
 
+	if (!this->_clientToServer)
+		return ;
+	this->_clientToServer->setName(name);
+	Buffer::getCmd(&str, this->_clientToServer->getName().size(), 102, this->_clientToServer->getName().c_str());
+	addPendingCommandToServer(str);
 }
 
-void SocketManager::setPendingSignal(const SIGFORQT)
+void SocketManager::setLogins(char *str)
 {
+	std::stringstream ss(str);
+	std::string s;
 
+	std::cout << "103 : " << str << std::endl;
+	this->_logins.clear();
+	if (str != NULL)
+	{
+		while (std::getline(ss, s, '\n'))
+		{
+			this->_logins.push_back(s);
+		}
+	}
+}
+
+void SocketManager::signalAskCall(const std::string &target)
+{
+	Data 	*connectionInfo = new Data();
+	char *cmd;
+
+	connectionInfo->port = PORTPTP;
+    std::memset(&connectionInfo->login[0], 0, 128);
+    std::strncpy(&connectionInfo->login[0], target.c_str(), target.size());
+    Buffer::getCmd(&cmd, sizeof(Data), 111, reinterpret_cast<char *>(connectionInfo));
+    addPendingCommandToServer(cmd);
+    this->_pendingCallInformation = connectionInfo;
+}
+
+void SocketManager::signalAcceptCall()
+{
+	char *str;
+
+	/* Si l'user est d'accord pour décrocher */
+
+	if (this->_pendingCallInformation)
+	{
+		this->_clientToClient = ASocket::getNewSocket(this->_pendingCallInformation->port, "UDP");
+		if (!this->_clientToClient->Bind())
+		{
+			Buffer::getCmd(&str, sizeof(Data), 235, this->_pendingCallInformation->login);
+			addPendingCommandToServer(str);
+			return;
+		}
+		this->_clientToClient->setName(this->_pendingCallInformation->login);
+		Buffer::getCmd(&str, sizeof(Data), 113, reinterpret_cast<char *>(this->_pendingCallInformation));
+		addPendingCommandToServer(str);
+	}
+}
+
+void SocketManager::signalRefuseCall()
+{
+	char *str;
+
+	if (this->_pendingCallInformation)
+	{
+		Buffer::getCmd(&str, sizeof(Data), 233, this->_pendingCallInformation->login);
+		addPendingCommandToServer(str);
+		this->_pendingCallInformation = NULL;
+		return;
+	}
+}
+
+void SocketManager::signalStopCall()
+{
+	char *str;
+
+	if (this->_clientToClient)
+	{
+		Buffer::getCmd(&str, sizeof(Data), 121, this->_clientToClient->getName().c_str());
+		addPendingCommandToServer(str);
+	}
+}
+
+void SocketManager::setPendingSignal(const SIGFORQT pendingSignal)
+{
+	this->_pendingSignal = pendingSignal;
 }
 
 SIGFORQT SocketManager::getPendingSignal() const

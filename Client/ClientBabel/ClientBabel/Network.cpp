@@ -1,5 +1,4 @@
 #include "Network.h"
-#include "SocketManager.hh"
 #include <iostream>
 
 Network::Network()
@@ -9,19 +8,22 @@ Network::Network()
 
 void	Network::run()
 {
+  this->_loop = new QEventLoop();
+  this->_timer = new QTimer();
 
-  emit nameTaken();
-  exec();
+  this->_timer->setSingleShot(true);
+  connect(this->_timer, SIGNAL(timeout()), this->_loop, SLOT(quit()));
+  
+  this->_sm = new SocketManager("10.14.58.135", (short)2728);
   try
-    {
-      SocketManager manager("10.45.14.249", (short)2727);
-      
-      while (manager.Select() != -1)
-	{
-	  manager.handleSend();
-	  manager.handleReceive();
-	}
-      std::cout << "out" << std::endl;
+    {      
+      while (this->_sm->Select() != -1)
+    	{
+        this->_timer->start(0);
+    	  this->_sm->handleSend();
+    	  this->_sm->handleReceive();
+        this->_loop->exec();
+    	}
     }
   catch (std::string const &err)
     {
@@ -31,7 +33,7 @@ void	Network::run()
 
 void		Network::newName(QString const &s)
 {
-  std::cout << s.toStdString() << std::endl;
+  this->_sm->setName(s.toStdString());
 }
 
 void		Network::sndCall(QString const &)
