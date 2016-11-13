@@ -202,6 +202,7 @@ void	SocketManager::_connectCall(Buff *cmdBuff)
 	if (!this->_clientToClient->Connect(connectionInfo->ip, connectionInfo->port))
 		return;
 	this->_clientToClient->setName(this->_pendingCallInformation->login);
+	this->setPendingSignal(CALLACCEPTED);
 }
 
 void SocketManager::_stopCall()

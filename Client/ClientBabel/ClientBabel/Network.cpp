@@ -103,6 +103,9 @@ void  Network::getSignalFromSocketManager()
     case SENDCALL:
       emit calling(QString("Lol"));
       break;
+    case CALLACCEPTED:
+      _isCalling = true;
+      break;
     default: break;
   }
 }
