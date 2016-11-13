@@ -7,7 +7,7 @@ TARGET =
 DEPENDPATH += . Unix/Headers Unix/Sources Windows/Headers Windows/Sources
 INCLUDEPATH += . Windows/Headers Unix/Headers
 QMAKE_CXXFLAGS += -std=c++11
-QMAKE_LFLAGS          += -lrt -lm -lasound -pthread
+QMAKE_LIBS      += libportaudio.a -lrt -lm -lasound -lopus
 
 # Input
 HEADERS += ASocket.hh \
@@ -29,3 +29,4 @@ SOURCES += ASocket.cpp \
            AudioCodec.cpp \
            Unix/Sources/LinSocket.cpp
 RESOURCES += clientbabel.qrc
+
