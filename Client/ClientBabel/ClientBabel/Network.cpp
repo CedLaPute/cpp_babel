@@ -6,8 +6,6 @@
 Network::Network()
 {
   moveToThread(this);
-  _pa = new AudioPA();
-  _cod = new AudioCodec();
   _isCalling = false;
 }
 
@@ -24,15 +22,6 @@ void	Network::run()
     {      
       while (this->_sm->Select() != -1)
     	{
-	  if (_isCalling)
-	    {
-	      unsigned char		*tmp = (_cod->AudioEncode(_pa->getAudioFrames()));
-	      char		*str;
-
-        std::cout << "audioencode(getAudioFrames) ok" << std::endl;
-	      Buffer::getCmd(&str, std::strlen((char *)tmp), 131, (char *)tmp);
-	      _sm->addPendingCommandToClient(str);
-	    }
         this->_sm->setPendingSignal(NONE);
         this->_timer->start(0);
     	  this->_sm->handleSend();
@@ -64,8 +53,8 @@ void		Network::sndCall(QString const &s)
 void		Network::acceptCall()
 {
   this->_sm->signalAcceptCall();
-  _pa->startAudio();
-  _isCalling = true;
+/*  _pa->startAudio();
+  _isCalling = true;*/
 }
 
 void		Network::refuseCall()
@@ -75,7 +64,6 @@ void		Network::refuseCall()
 
 void		Network::endCall()
 {
-  _pa->stopAudio();
   _isCalling = false;
 }
 

@@ -266,6 +266,8 @@ User *UserManager::_callRequest(User *sender, char *data)
   char *tmp;
 
   connectionInfo = reinterpret_cast<Data *>(data);
+  std::cout << "in _callRequest" << std::endl;
+  std::cout << connectionInfo->login << " " << connectionInfo->port << std::endl;
   if (std::strlen(connectionInfo->login) == 0 || connectionInfo->port == 0)
   {
 	sender->addCommand(this->_errNoData());
@@ -288,6 +290,7 @@ User *UserManager::_callRequest(User *sender, char *data)
   std::strncpy(&connectionInfo->login[0], sender->getName().c_str(), sender->getName().size());
   Buffer::getCmd(&cmd, sizeof(Data), 112, reinterpret_cast<char *>(connectionInfo));
   target->addCommand(cmd);
+  std::cout << "_callRequest done" << std::endl;
   return (target);
 }
 

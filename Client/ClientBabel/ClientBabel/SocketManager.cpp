@@ -213,6 +213,8 @@ void SocketManager::_stopCall()
 void SocketManager::_playAudio(Buff *)
 {
 	// Appel de portaudio ici
+  //	std::cout << cmdBuff->cmd << " " << cmdBuff->size << std::endl;
+//	_pa->sendAudioFrames(this->_cod->AudioDecode(cmdBuff->data));
 }
 
 /* Gestion de la communication avec Qt */

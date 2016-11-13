@@ -6,15 +6,11 @@
 #include <QTimer>
 #include <QLabel>
 #include "SocketManager.hh"
-#include "AudioPA.hpp"
-#include "AudioCodec.hpp"
 
 class Network : public QThread
 {
   Q_OBJECT
  private:
-  AudioPA	*_pa;
-  AudioCodec	*_cod;
   bool		_isCalling;
 public:
   Network();

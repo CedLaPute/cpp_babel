@@ -15,8 +15,6 @@ HEADERS += ASocket.hh \
            SocketManager.hh \
            window.h \
            Network.h \
-           AudioPA.hpp \
-           AudioCodec.hpp \
            Unix/Headers/LinSocket.hh
 FORMS += clientbabel.ui
 SOURCES += ASocket.cpp \
@@ -25,8 +23,6 @@ SOURCES += ASocket.cpp \
            Network.cpp \
            main.cpp \
            window.cpp \
-           AudioPA.cpp \
-           AudioCodec.cpp \
            Unix/Sources/LinSocket.cpp
 RESOURCES += clientbabel.qrc
 
