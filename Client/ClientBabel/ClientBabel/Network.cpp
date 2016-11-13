@@ -25,8 +25,27 @@ void	Network::run()
     }
 }
 
-void		Network::rcvName(QString const &s)
+void		Network::newName(QString const &)
 {
-  std::cout << "name received : ";
-  std::cout << s.toStdString() << std::endl;
+
+}
+
+void		Network::sndCall(QString const &)
+{
+
+}
+
+void		Network::acceptCall()
+{
+
+}
+
+void		Network::refuseCall()
+{
+
+}
+
+void		Network::endCall()
+{
+
 }

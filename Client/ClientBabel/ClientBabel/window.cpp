@@ -118,8 +118,6 @@ void    window::changeIp()
 
 void    window::changeNickname()
 {
-    std::cout << "in change Nickname" << std::endl;
-    emit sndName(QString("hope"));
     if (!QString(ln_nickname->text()).isEmpty())
     {
         calling("bernar");
@@ -147,7 +145,32 @@ void    window::calling(QString name)
     }
 }
 
-void	window::sig(QString const &s)
+void		window::nameTaken()
 {
-  std::cout << s.toStdString() << std::endl;
+  
+}
+
+void		window::sndFailed()
+{
+  
+}
+
+void		window::nameWrong()
+{
+  
+}
+
+void		window::unknownName()
+{
+  
+}
+
+void		window::callFailed()
+{
+  
+}
+
+void		window::connectFailed()
+{
+  
 }

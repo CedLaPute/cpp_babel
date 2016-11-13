@@ -32,13 +32,23 @@ class window : public QWidget
   
 
  private slots:
-  void sig(QString const &);
-  void changeIp();
-  void changeNickname();
+   void		nameTaken();
+   void		sndFailed();
+   void		nameWrong();
+   void		unknownName();
+   void		callFailed();
+   void		connectFailed();
+     
+   void		changeIp();
+   void		changeNickname();
+
  signals:
-  void	sndName(QString const &);
-//  void	endingCall();
-    
+   void		newName(QString const &);
+   void		sndCall(QString const &);
+   void		acceptCall();
+   void		refuseCall();
+   void		endCall();
+
  private:
     void        createMenu();
     void        createInfo();
