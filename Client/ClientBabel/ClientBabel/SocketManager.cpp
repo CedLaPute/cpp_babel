@@ -6,7 +6,6 @@ SocketManager::SocketManager(char *ip, short port)
 	this->_clientToClient = NULL;
 	this->_clientToServer = ASocket::getNewSocket(port, "TCP");
 	this->_clientToServer->Connect(ip, port);
-	this->_clientToServer->setName("Kaaaaaaaris");
 	this->_tv.tv_sec = 0;
 	this->_tv.tv_usec = 1;
 }
@@ -36,7 +35,7 @@ int SocketManager::Select()
 {
 	unsigned int nfd;
 
-	nfd = fillFDSet();
+	nfd = fillFDSet() + 1;
 	return (select(nfd, &this->_fdread, &this->_fdwrite, NULL, &this->_tv));
 }
 
@@ -117,15 +116,7 @@ char *SocketManager::getPendingCommandToClient()
 void SocketManager::handleCommand(ASocket *sender, char *cmd)
 {
 	Buff *cmdBuff;
-	char *str;
-
 	cmdBuff = Buffer::getValue(cmd);
-
-	/* test */
-	std::cout << "magic : " << cmdBuff->magic << std::endl;
-	std::cout << "cmd : " << (int)cmdBuff->cmd << std::endl;
-	std::cout << "size : " << cmdBuff->size << std::endl;
-	std::cout << "data : " << cmdBuff->data << std::endl;
 
 	switch ((int)cmdBuff->cmd)
 	{

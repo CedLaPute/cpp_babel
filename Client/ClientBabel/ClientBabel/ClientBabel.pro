@@ -13,7 +13,7 @@ HEADERS += ASocket.hh \
            Buffer.hh \
            SocketManager.hh \
            window.h \
-           Network.hh \
+           Network.h \
            Unix/Headers/LinSocket.hh
 FORMS += clientbabel.ui
 SOURCES += ASocket.cpp \

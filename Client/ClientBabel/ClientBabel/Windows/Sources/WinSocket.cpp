@@ -97,15 +97,12 @@ bool WinSocket::Connect(const std::string &ip, short port)
 		WSACleanup();
 		return (false);
 	}
-	if (_result->ai_protocol != getprotobyname("UDP")->p_proto)
+	if (connect(_socket, _result->ai_addr, (int)_result->ai_addrlen) == SOCKET_ERROR)
 	{
-		if (connect(_socket, _result->ai_addr, (int)_result->ai_addrlen) == SOCKET_ERROR)
-		{
-			WSACleanup();
-			return (false);
-		}
-		std::cout << "Connected to server" << std::endl;
+		WSACleanup();
+		return (false);
 	}
+	std::cout << "Connected to server" << std::endl;
 	return (true);
 }
 
