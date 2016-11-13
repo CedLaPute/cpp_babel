@@ -65,7 +65,7 @@ void		Network::acceptCall()
 {
   this->_sm->signalAcceptCall();
   _pa->startAudio();
-//  _isCalling = true;
+  _isCalling = true;
 }
 
 void		Network::refuseCall()
