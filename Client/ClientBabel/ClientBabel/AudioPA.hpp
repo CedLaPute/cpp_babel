@@ -1,7 +1,7 @@
 #ifndef AUDIOPA_HPP
 #define AUDIOPA_HPP_
 
-#include "portaudio.h"
+#include <portaudio.h>
 typedef float SAMPLE;
 #define SAMPLE_RATE (24000)
 #define NUM_CHANNELS (2)
