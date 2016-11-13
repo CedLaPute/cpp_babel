@@ -235,7 +235,6 @@ void SocketManager::setLogins(char *str)
 			this->_logins.push_back(s);
 		}
 	}
-	std::cout << "logins size : " << this->_logins.size() << std::endl;
 }
 
 void SocketManager::signalAskCall(const std::string &target)

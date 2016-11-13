@@ -70,12 +70,14 @@ void		Network::endCall()
 void  Network::getSignalFromSocketManager()
 {
   std::stringstream ss;
+  std::vector<std::string> logins = this->_sm->getLogins();
+
   QLabel *label = new QLabel();
 
   switch (this->_sm->getPendingSignal())
   {
     case LISTLOGINS:
-      for (auto it = this->_sm->getLogins().begin(); it != this->_sm->getLogins().end(); ++it)
+      for (auto it = logins.begin(); it != logins.end(); ++it)
       {
         ss << (*it) << "\n";
       }
