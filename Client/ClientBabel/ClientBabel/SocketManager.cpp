@@ -41,18 +41,12 @@ int SocketManager::Select()
 
 void SocketManager::handleSend()
 {
-	if (isSocketAvailable(this->_clientToServer, this->_fdwrite))
-	{
-		if (this->_pendingCommandsToServer.size())
+	if (this->_pendingCommandsToServer.size())
 			this->_clientToServer->Send(getPendingCommandToServer());
-	}
 	if (this->_clientToClient)
 	{
-		if (isSocketAvailable(this->_clientToClient, this->_fdwrite))
-		{
-			if (this->_pendingCommandsToClient.size())
-				this->_clientToClient->Send(getPendingCommandToClient());
-		}
+		if (this->_pendingCommandsToClient.size())
+			this->_clientToClient->Send(getPendingCommandToClient());
 	}
 }
 

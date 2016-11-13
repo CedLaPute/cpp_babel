@@ -85,7 +85,7 @@ char *LinSocket::Receive() const
 
 bool LinSocket::Send(char *message) const
 {
-  if (write(this->_fd, message, Buffer::getValue(message)->size + sizeof(Buff) - 3) < 0)
+  if (write(this->_fd, message, Buffer::getValue(message)->size + sizeof(Buff)) < 0)
 	throw "write failed";
   return (true);
 }
