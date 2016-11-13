@@ -7,6 +7,7 @@ TARGET =
 DEPENDPATH += . Unix/Headers Unix/Sources Windows/Headers Windows/Sources
 INCLUDEPATH += . Windows/Headers Unix/Headers
 QMAKE_CXXFLAGS += -std=c++11
+QMAKE_LFLAGS          += -lrt -lm -lasound -pthread
 
 # Input
 HEADERS += ASocket.hh \
@@ -14,6 +15,8 @@ HEADERS += ASocket.hh \
            SocketManager.hh \
            window.h \
            Network.h \
+           AudioPA.hpp \
+           AudioCodec.hpp \
            Unix/Headers/LinSocket.hh
 FORMS += clientbabel.ui
 SOURCES += ASocket.cpp \
@@ -22,5 +25,7 @@ SOURCES += ASocket.cpp \
            Network.cpp \
            main.cpp \
            window.cpp \
+           AudioPA.cpp \
+           AudioCodec.cpp \
            Unix/Sources/LinSocket.cpp
 RESOURCES += clientbabel.qrc
