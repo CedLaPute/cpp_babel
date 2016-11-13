@@ -1,5 +1,6 @@
 #include "Network.h"
 #include <iostream>
+#include <sstream>
 
 Network::Network()
 {
@@ -19,9 +20,11 @@ void	Network::run()
     {      
       while (this->_sm->Select() != -1)
     	{
+        this->_sm->setPendingSignal(NONE);
         this->_timer->start(0);
     	  this->_sm->handleSend();
     	  this->_sm->handleReceive();
+        this->getSignalFromSocketManager();
         this->_loop->exec();
     	}
     }
@@ -30,6 +33,10 @@ void	Network::run()
       std::cerr << err << std::endl;
     }
 }
+
+/////////////////////
+    /* SLOTS */
+/////////////////////
 
 void		Network::newName(QString const &s)
 {
@@ -54,4 +61,27 @@ void		Network::refuseCall()
 void		Network::endCall()
 {
 
+}
+
+/////////////////////
+    /* SLOTS */
+/////////////////////
+
+void  Network::getSignalFromSocketManager()
+{
+  std::stringstream ss;
+  QLabel *label = new QLabel();
+
+  switch (this->_sm->getPendingSignal())
+  {
+    case LISTLOGINS:
+      for (auto it = this->_sm->getLogins().begin(); it != this->_sm->getLogins().end(); ++it)
+      {
+        ss << (*it) << "\n";
+      }
+      label->setText(QString(ss.str().c_str()));
+      emit listLogin(label);
+      break;
+    default: break;
+  }
 }

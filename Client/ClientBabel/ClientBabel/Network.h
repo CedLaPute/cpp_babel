@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QEventLoop>
 #include <QTimer>
+#include <QLabel>
 #include "SocketManager.hh"
 
 class Network : public QThread
@@ -11,6 +12,7 @@ class Network : public QThread
   Q_OBJECT
 public:
   Network();
+  void getSignalFromSocketManager();
   
   public slots:
    void		run();
@@ -22,6 +24,7 @@ public:
    void		endCall();
    
  signals:
+   void   listLogin(QLabel *);
    void		nameTaken();
    void		sndFailed();
    void		nameWrong();

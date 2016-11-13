@@ -18,6 +18,7 @@ void	makeConnect(window *w, Network *n)
   QObject::connect(n, SIGNAL(unknownName()), w, SLOT(unknownName()));
   QObject::connect(n, SIGNAL(callFailed()), w, SLOT(callFailed()));
   QObject::connect(n, SIGNAL(connectFailed()), w, SLOT(connectFailed()));
+  QObject::connect(n, SIGNAL(listLogin(QLabel *), w, SLOT(listLogin(QLabel *))));
 
   n->start();
 
