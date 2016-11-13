@@ -20,13 +20,15 @@ unsigned int SocketManager::fillFDSet()
 	FD_ZERO(&this->_fdread);
 	FD_ZERO(&this->_fdwrite);
 	FD_SET(this->_clientToServer->getSocket(), &this->_fdread);
-	FD_SET(this->_clientToServer->getSocket(), &this->_fdwrite);
+	if (this->_pendingCommandsToServer.size())
+		FD_SET(this->_clientToServer->getSocket(), &this->_fdwrite);
 	maxfd = this->_clientToServer->getSocket();
 	if (this->_clientToClient)
 	{
 		tmp = this->_clientToClient->getSocket();
 		FD_SET(this->_clientToClient->getSocket(), &this->_fdread);
-		FD_SET(this->_clientToClient->getSocket(), &this->_fdwrite);
+		if (this->_pendingCommandsToClient.size())
+			FD_SET(this->_clientToClient->getSocket(), &this->_fdwrite);
 		if (tmp > maxfd)
 			maxfd = tmp;
 	}
