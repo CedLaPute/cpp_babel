@@ -31,80 +31,51 @@ void    window::createMenu()
     menu = new QGroupBox(tr("Menu"));
     QGridLayout *layout = new QGridLayout;
 
-    b_server = new QPushButton("Call", this);
-    ln_server = new QLineEdit(this);
+    b_call = new QPushButton("Call", this);
+    ln_call = new QLineEdit(this);
     b_nickname = new QPushButton("Nickname", this);
     ln_nickname = new QLineEdit(this);
 
-    layout->addWidget(b_server, 1, 0);
+    layout->addWidget(b_call, 1, 0);
     layout->addWidget(b_nickname, 1, 1);
-    layout->addWidget(ln_server, 0, 0);
+    layout->addWidget(ln_call, 0, 0);
     layout->addWidget(ln_nickname, 0, 1);
     menu->setLayout(layout);
 
-    connect(b_server,SIGNAL(clicked()),this,SLOT(changeIp()));
+    connect(b_call,SIGNAL(clicked()),this,SLOT(call()));
     connect(b_nickname,SIGNAL(clicked()),this,SLOT(changeNickname()));
 }
 
-void    window::addBudy(QString name)
+void    window::listLogin(QLabel *list)
 {
-    if (!name.isEmpty())
-    {
-        QString list;
-        users.push_back (name);
-        for (unsigned i=0; i<users.size(); ++i)
-        {
-            list += users[i];
-            list += "\n";
-        }
-        infoClient->setText(list);
-    }
+    infoClient->setText(list);
 }
 
-void    window::removeBudy(QString name)
-{
-    if (!name.isEmpty())
-    {
-        QString list;
-        for (unsigned i=0; i<users.size(); ++i)
-        {
-            if (QString::compare(users[i], name, Qt::CaseInsensitive) == 0)
-            {
-                users.erase(users.begin()+i);
-            }
-        }
-        for (unsigned i=0; i<users.size(); ++i)
-        {
-            list += users[i];
-            list += "\n";
-        }
-        infoClient->setText(list);
-    }
-}
-
-void    window::changeIp()
+void    window::call()
 {
     bool    bl = false;
     QMessageBox disp;
     QString text;
 
-    if (!QString(ln_server->text()).isEmpty())
+    if (!QString(ln_call->text()).isEmpty())
     {
         unsigned int i = 0;
         while (i < users.size())
         {
-            if (QString::compare(users[i], ln_server->text(), Qt::CaseInsensitive) == 0)
+            if (QString::compare(users[i], ln_call->text(), Qt::CaseInsensitive) == 0)
                 bl = true;
             ++i;
         }
         if (bl == true)
         {
             text += "You're calling ";
-            text += ln_server->text();
+            text += ln_call->text();
             text += ".\nClick on \"Cancel\" will ring off the call.";
             disp.setText(text);
             disp.setStandardButtons(QMessageBox::Cancel);
+            emit sndCall(ln_call->text());
             disp.exec();
+            emit endCall();
         }
         else
         {
@@ -120,9 +91,10 @@ void    window::changeNickname()
 {
     if (!QString(ln_nickname->text()).isEmpty())
     {
-        calling("bernar");
         QMessageBox disp;
+        disp.setWindowTitle("New NickName");
         disp.setText(this->ln_nickname->text());
+        emit newName(this->ln_nickname->text());
         disp.exec();
     }
 }
@@ -141,37 +113,57 @@ void    window::calling(QString name)
         text = "You're calling ";
         text += name;
         text += ".\nClick on \"Cancel\" will ring off the call.";
+        emit acceptCall();
         QMessageBox(QMessageBox::Information, "Call", text, QMessageBox::Cancel).exec();
     }
+    else
+        emit refuseCall();
 }
 
 void		window::nameTaken()
 {
-  emit newName(QString("pls"));
-  std::cout << "name taken ma gueule" << std::endl;
+    QMessageBox disp;
+    disp.setIcon(QMessageBox::Critical);
+    disp.setText("This name is already taken.");
+    disp.exec();
 }
 
 void		window::sndFailed()
 {
-  
+    QMessageBox disp;
+    disp.setIcon(QMessageBox::Critical);
+    disp.setText("Signal send has failed.");
+    disp.exec();
 }
 
 void		window::nameWrong()
 {
-  
+    QMessageBox disp;
+    disp.setIcon(QMessageBox::Critical);
+    disp.setText("This name is invalide (too long).");
+    disp.exec();
 }
 
 void		window::unknownName()
 {
-  
+    QMessageBox disp;
+    disp.setIcon(QMessageBox::Critical);
+    disp.setText("This name is unknown.");
+    disp.exec();
 }
 
 void		window::callFailed()
 {
-  
+    QMessageBox disp;
+    disp.setIcon(QMessageBox::Critical);
+    disp.setText("The call has failed.");
+    disp.exec();
 }
 
 void		window::connectFailed()
 {
-  
+    QMessageBox disp;
+    disp.setIcon(QMessageBox::Critical);
+    disp.setText("The connexion has failed.");
+    disp.exec();
 }
