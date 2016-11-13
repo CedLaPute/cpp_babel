@@ -30,13 +30,14 @@ class window : public QWidget
  public:
   explicit window(QWidget *parent = 0);
   
+
+ private slots:
+  void sig(QString const &);
+  void changeIp();
+  void changeNickname();
  signals:
   void	sndName(QString const &);
-  void	endingCall();
-  private slots:
-    void	sig(QString const &);
-    void changeIp();
-    void changeNickname();
+//  void	endingCall();
     
  private:
     void        createMenu();

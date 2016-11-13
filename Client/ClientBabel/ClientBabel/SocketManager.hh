@@ -13,6 +13,20 @@
 # include "ASocket.hh"
 # include "Buffer.hh"
 
+enum SIGFORQT
+{
+	LOGINNOTFREE,
+	NODATA,
+	LOGINTOOLONG,
+	LISTLOGINS,
+	NOMATCHINGLOGIN,
+	INCALLORREFUSED,
+	ERRORSOCKET,
+	NOTCONNECTEDTOCLIENT,
+	UNDEFINEDCOMMAND,
+	NONE
+};
+
 typedef struct
 {
 	char ip[20];
@@ -38,6 +52,10 @@ private:
 	void _acceptCall(Buff *cmdBuff);
 	void _connectCall(Buff *cmdBuff);
 
+	/* Gestion de la communication avec Qt */
+	SIGFORQT _pendingSignal;
+	std::vector<std::string> _logins;
+
 public:
 	SocketManager(char *, short);
 	~SocketManager() {};
@@ -53,6 +71,12 @@ public:
 	char *getPendingCommandToServer();
 	char *getPendingCommandToClient();
 	void handleCommand(ASocket *, char *);
+
+	/* Gestion de la communication avec Qt */
+	void setLogins(char *);
+	void setPendingSignal(const SIGFORQT);
+	SIGFORQT getPendingSignal() const;
+	std::vector<std::string> getLogins() const;
 };
 
 #endif //SOCKETMANAGER_HH_

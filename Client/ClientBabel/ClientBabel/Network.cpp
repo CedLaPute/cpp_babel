@@ -4,7 +4,6 @@
 
 Network::Network()
 {
-  setParent(0);
   moveToThread(this);
 }
 
@@ -12,8 +11,7 @@ void	Network::run()
 {
   try
     {
-      emit sig(QString("sds"));
-      SocketManager manager("192.168.0.37", (short)2727);
+      SocketManager manager("192.168.1.91", (short)2728);
       
       while (manager.Select() != -1)
 	{
@@ -29,6 +27,6 @@ void	Network::run()
 
 void		Network::rcvName(QString const &s)
 {
-  std::cout << "dffeudnfusidbvuesdihbkvsdjkn" << std::endl;
+  std::cout << "name received : ";
   std::cout << s.toStdString() << std::endl;
 }

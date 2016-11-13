@@ -128,12 +128,15 @@ void SocketManager::handleCommand(ASocket *sender, char *cmd)
 			this->_connectCall(cmdBuff);
 			break;
 		case 230:
+			this->setPendingSignal(LOGINNOTFREE);
 			std::cout << " Login deja existant" << std::endl;
 			break;
 		case 231:
+			this->setPendingSignal(NODATA);
 			std::cout << " Pas de data transmise" << std::endl;
 			break;
 		case 232:
+			this->setPendingSignal(NOMATCHINGLOGIN);
 			std::cout << "Pas de login correspondant" << std::endl;
 			break;
 		case 234:
@@ -195,4 +198,26 @@ void	SocketManager::_connectCall(Buff *cmdBuff)
 	this->_clientToClient = ASocket::getNewSocket(connectionInfo->port, "UDP");
 	if (!this->_clientToClient->Connect(connectionInfo->ip, connectionInfo->port))
 		return;
+}
+
+/* Gestion de la communication avec Qt */
+
+void SocketManager::setLogins(char *)
+{
+
+}
+
+void SocketManager::setPendingSignal(const SIGFORQT)
+{
+
+}
+
+SIGFORQT SocketManager::getPendingSignal() const
+{
+	return this->_pendingSignal;
+}
+
+std::vector<std::string> SocketManager::getLogins() const
+{
+	return this->_logins;
 }

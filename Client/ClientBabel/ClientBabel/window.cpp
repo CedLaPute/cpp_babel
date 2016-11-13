@@ -118,6 +118,8 @@ void    window::changeIp()
 
 void    window::changeNickname()
 {
+    std::cout << "in change Nickname" << std::endl;
+    emit sndName(QString("hope"));
     if (!QString(ln_nickname->text()).isEmpty())
     {
         calling("bernar");
@@ -132,7 +134,6 @@ void    window::calling(QString name)
     QString text;
     QMessageBox::StandardButton reply;
 
-    emit sndName(QString("hope"));
     text += name;
     text += " is calling you.\nWant to ring on ?";
     reply = QMessageBox::question(this,"Call", text, QMessageBox::Yes | QMessageBox::No);

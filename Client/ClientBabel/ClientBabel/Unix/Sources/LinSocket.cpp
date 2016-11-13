@@ -17,7 +17,7 @@ LinSocket::LinSocket(short port, const char *protocol)
   this->_port = port;
   if (this->_fd == -1)
 	throw "socket failed";
-this->setName(protocol);
+  this->setName(protocol);
   std::cout << "socket ok" << std::endl;
 }
 
