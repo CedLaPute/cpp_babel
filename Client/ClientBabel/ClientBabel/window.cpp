@@ -147,7 +147,8 @@ void    window::calling(QString name)
 
 void		window::nameTaken()
 {
-  
+  emit newName(QString("pls"));
+  std::cout << "name taken ma gueule" << std::endl;
 }
 
 void		window::sndFailed()

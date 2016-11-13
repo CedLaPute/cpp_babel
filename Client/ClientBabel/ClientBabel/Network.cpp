@@ -9,15 +9,19 @@ Network::Network()
 
 void	Network::run()
 {
+
+  emit nameTaken();
+  exec();
   try
     {
-      SocketManager manager("192.168.1.91", (short)2728);
+      SocketManager manager("10.45.14.249", (short)2727);
       
       while (manager.Select() != -1)
 	{
-		manager.handleSend();
+	  manager.handleSend();
 	  manager.handleReceive();
 	}
+      std::cout << "out" << std::endl;
     }
   catch (std::string const &err)
     {
@@ -25,9 +29,9 @@ void	Network::run()
     }
 }
 
-void		Network::newName(QString const &)
+void		Network::newName(QString const &s)
 {
-
+  std::cout << s.toStdString() << std::endl;
 }
 
 void		Network::sndCall(QString const &)

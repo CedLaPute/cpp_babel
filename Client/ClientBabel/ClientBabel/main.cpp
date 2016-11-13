@@ -4,8 +4,10 @@
 
 void	makeConnect(window *w, Network *n)
 {
-  QObject::connect(w, SIGNAL(newName(QString const &)), n, SLOT(newName(QString const &)));
-  QObject::connect(w, SIGNAL(sndCall(QString const &)), n, SLOT(sndCall(QString const &)));
+  //QThread	*t = new QThread();
+  
+  QObject::connect(w, SIGNAL(newName(QString)), n, SLOT(newName(QString)));
+  QObject::connect(w, SIGNAL(sndCall(QString)), n, SLOT(sndCall(QString)));
   QObject::connect(w, SIGNAL(acceptCall()), n, SLOT(acceptCall()));
   QObject::connect(w, SIGNAL(refuseCall()), n, SLOT(refuseCall()));
   QObject::connect(w, SIGNAL(endCall()), n, SLOT(endCall()));
@@ -16,6 +18,13 @@ void	makeConnect(window *w, Network *n)
   QObject::connect(n, SIGNAL(unknownName()), w, SLOT(unknownName()));
   QObject::connect(n, SIGNAL(callFailed()), w, SLOT(callFailed()));
   QObject::connect(n, SIGNAL(connectFailed()), w, SLOT(connectFailed()));
+
+  n->start();
+
+  //QObject::connect(t, SIGNAL(started()), n, SLOT(run()));
+
+  //  n->moveToThread(t);
+  //  t->exec();
 }
 
 int main(int argc, char *av[])
@@ -26,6 +35,5 @@ int main(int argc, char *av[])
 
   makeConnect(&w, &net);
   w.show();
-  net.start();
   return a.exec();
 }

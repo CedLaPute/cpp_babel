@@ -30,8 +30,7 @@ class window : public QWidget
  public:
   explicit window(QWidget *parent = 0);
   
-
- private slots:
+ public slots:
    void		nameTaken();
    void		sndFailed();
    void		nameWrong();

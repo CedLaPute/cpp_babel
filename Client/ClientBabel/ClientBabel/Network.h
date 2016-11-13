@@ -8,10 +8,10 @@ class Network : public QThread
   Q_OBJECT
 public:
   Network();
- protected:
-  void		run();
+  
+  public slots:
+   void		run();
 
- private slots:
    void		newName(QString const &);
    void		sndCall(QString const &);
    void		acceptCall();
