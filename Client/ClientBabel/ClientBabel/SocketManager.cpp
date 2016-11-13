@@ -171,6 +171,10 @@ void	SocketManager::_acceptCall(Buff *cmdBuff)
 	Data *connectionInfo;
 
 	connectionInfo = reinterpret_cast<Data *>(cmdBuff->data);
+	
+	std::cout << "in _acceptCall" << std::endl;
+	std::cout << connectionInfo->ip << " " << connectionInfo->port << std::endl;
+
 	/* Si le client est deja en appel */
 	if (this->_clientToClient)
 	{
@@ -226,7 +230,6 @@ void SocketManager::setLogins(char *str)
 	std::stringstream ss(str);
 	std::string s;
 
-	std::cout << "103 : " << str << std::endl;
 	this->_logins.clear();
 	if (str != NULL)
 	{
@@ -239,15 +242,16 @@ void SocketManager::setLogins(char *str)
 
 void SocketManager::signalAskCall(const std::string &target)
 {
-	Data 	*connectionInfo = new Data();
+	Data 	connectionInfo;
 	char *cmd;
 
-	connectionInfo->port = PORTPTP;
-    std::memset(&connectionInfo->login[0], 0, 128);
-    std::strncpy(&connectionInfo->login[0], target.c_str(), target.size());
-    Buffer::getCmd(&cmd, sizeof(Data), 111, reinterpret_cast<char *>(connectionInfo));
+	connectionInfo.port = PORTPTP;
+    std::memset(connectionInfo.login, 0, 128);
+    std::memset(connectionInfo.ip, 0, 20);
+    std::strcpy((char *)(connectionInfo.login), target.c_str());
+    Buffer::getCmd(&cmd, sizeof(Data), 111, reinterpret_cast<char *>(&connectionInfo));
     addPendingCommandToServer(cmd);
-    this->_pendingCallInformation = connectionInfo;
+    this->_pendingCallInformation = &connectionInfo;
 }
 
 void SocketManager::signalAcceptCall()

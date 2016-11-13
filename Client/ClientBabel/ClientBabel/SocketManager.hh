@@ -32,13 +32,6 @@ enum SIGFORQT
 	NONE
 };
 
-typedef struct
-{
-	char ip[20];
-	int port;
-	char login[128];
-} Data;
-
 class SocketManager
 {
 private:

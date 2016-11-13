@@ -53,37 +53,18 @@ void    window::listLogin(QLabel *list)
 
 void    window::call()
 {
-    bool    bl = false;
     QMessageBox disp;
     QString text;
 
     if (!QString(ln_call->text()).isEmpty())
     {
-        unsigned int i = 0;
-        while (i < users.size())
-        {
-            if (QString::compare(users[i], ln_call->text(), Qt::CaseInsensitive) == 0)
-                bl = true;
-            ++i;
-        }
-        if (bl == true)
-        {
-            text += "You're calling ";
-            text += ln_call->text();
-            text += ".\nClick on \"Cancel\" will ring off the call.";
-            disp.setText(text);
-            disp.setStandardButtons(QMessageBox::Cancel);
-            emit sndCall(ln_call->text());
-            disp.exec();
-            emit endCall();
-        }
-        else
-        {
-            text += "This user isn't on the server.";
-            disp.setText(text);
-            disp.setStandardButtons(QMessageBox::Cancel);
-            disp.exec();
-        }
+        text += "You're calling ";
+        text += ln_call->text();
+        text += ".\nClick on \"Cancel\" will ring off the call.";
+        disp.setText(text);
+        disp.setStandardButtons(QMessageBox::Cancel);
+        emit sndCall(ln_call->text());
+        disp.exec();
     }
 }
 

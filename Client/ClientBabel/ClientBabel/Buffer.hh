@@ -13,6 +13,13 @@ typedef struct
   unsigned char		data[1];
 }			Buff;
 
+typedef struct
+{
+	char ip[20];
+	int port;
+	char login[128];
+} Data;
+
 class	Buffer
 {
 private:

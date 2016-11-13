@@ -55,9 +55,9 @@ void		Network::newName(QString const &s)
   this->_sm->setName(s.toStdString());
 }
 
-void		Network::sndCall(QString const &)
+void		Network::sndCall(QString const &s)
 {
-
+  this->_sm->signalAskCall(s.toStdString());
 }
 
 void		Network::acceptCall()
