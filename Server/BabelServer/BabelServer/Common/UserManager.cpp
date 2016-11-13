@@ -137,17 +137,9 @@ void UserManager::_handleCommand(SocketManager &sm, User *sender, char *cmd)
 {
   Buff *cmdBuff;
   User *target;
-  char *str;
 
   target = NULL;
   cmdBuff = Buffer::getValue(cmd);
-  if (std::strlen(reinterpret_cast<const char *>(cmdBuff->data)) == 0)
-  {
-	str = this->_errNoData();
-	sender->addCommand(str);
-	sm.addToFDSet(sender->getSocket(), SocketManager::WRITE);
-	return;
-  }
   switch (cmdBuff->cmd)
   {
 	case 102:
@@ -156,10 +148,12 @@ void UserManager::_handleCommand(SocketManager &sm, User *sender, char *cmd)
 		this->_dispatchLoginList(sm);
 	  break;
 	case 111:
-	  target = this->_callRequest(sender, reinterpret_cast<char *>(cmdBuff->data));
+	  if (cmdBuff->size == sizeof(Data))
+		target = this->_callRequest(sender, reinterpret_cast<char *>(cmdBuff->data));
 	  break;
 	case 113:
-	  target = this->_callAccepted(sender, reinterpret_cast<char *>(cmdBuff->data));
+	  if (cmdBuff->size == sizeof(Data))
+		target = this->_callAccepted(sender, reinterpret_cast<char *>(cmdBuff->data));
 	  break;
 	case 121:
 	  target = this->_callEnd(sender, reinterpret_cast<char *>(cmdBuff->data));
@@ -178,7 +172,8 @@ void UserManager::_handleCommand(SocketManager &sm, User *sender, char *cmd)
 	  target = this->_callFailed(sender, reinterpret_cast<char *>(cmdBuff->data));
 	  break;
 	default:
-	  std::cout << "unknown command or not implemented yet" << std::endl;
+	  sender->addCommand(this->_errUnknownCommand());
+	  target = sender;
 	  break;
   }
   if (target)
@@ -249,7 +244,9 @@ char *UserManager::_listLogin() const
 
 User *UserManager::_updateLogin(User *sender, char *data)
 {
-  if (this->getUser(data) == NULL)
+  if (std::strlen(data) == 0)
+	sender->addCommand(this->_errNoData());
+  else if (this->getUser(data) == NULL)
   {
 	sender->setName(data);
 	return (NULL);
@@ -269,6 +266,11 @@ User *UserManager::_callRequest(User *sender, char *data)
   char *tmp;
 
   connectionInfo = reinterpret_cast<Data *>(data);
+  if (std::strlen(connectionInfo->login) == 0 || connectionInfo->port == 0)
+  {
+	sender->addCommand(this->_errNoData());
+	return (sender);
+  }
   target = this->getUser(connectionInfo->login);
   if (!target)
   {
@@ -297,6 +299,11 @@ User *UserManager::_callAccepted(User *sender, char *data)
   char *tmp;
 
   connectionInfo = reinterpret_cast<Data *>(data);
+  if (std::strlen(connectionInfo->login) == 0 || connectionInfo->port == 0)
+  {
+	sender->addCommand(this->_errNoData());
+	return (sender);
+  }
   target = this->getUser(connectionInfo->login);
   if (!target)
   {
@@ -317,6 +324,11 @@ User *UserManager::_callRefused(User *sender, char *data)
 {
   User *target;
 
+  if (std::strlen(data) == 0)
+  {
+	sender->addCommand(this->_errNoData());
+	return (sender);
+  }
   target = this->getUser(data);
   if (!target)
   {
@@ -331,6 +343,11 @@ User *UserManager::_callFailed(User *sender, char *data)
 {
   User *target;
 
+  if (std::strlen(data) == 0)
+  {
+	sender->addCommand(this->_errNoData());
+	return (sender);
+  }
   target = this->getUser(data);
   if (!target)
   {
@@ -346,6 +363,11 @@ User *UserManager::_callEnd(User *sender, char *data)
   char *str;
   User *target;
 
+  if (std::strlen(data) == 0)
+  {
+	sender->addCommand(this->_errNoData());
+	return (sender);
+  }
   target = this->getUser(data);
   if (target == NULL)
   {
